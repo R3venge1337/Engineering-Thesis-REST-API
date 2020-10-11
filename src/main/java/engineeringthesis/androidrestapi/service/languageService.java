@@ -1,19 +1,20 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import engineeringthesis.androidrestapi.model.language;
+import engineeringthesis.androidrestapi.dto.LanguageDTO;
 
-public interface languageService {
+public interface LanguageService {
 	 
-	List<language> getAllLanguage();
+	List<LanguageDTO> getAllLanguage();
 	
-	language saveLanguage(language lang);
+	LanguageDTO saveLanguage(LanguageDTO lang);
 	
-	language getOneByName(String name);
+	LanguageDTO getOneByName(String name);
 	
-	Optional<language> getOneById(Integer languageId);
+	LanguageDTO getOneById(Integer languageId);
+	
+	LanguageDTO updateLanguage(Integer languageId,LanguageDTO lang);
 	
 	void deleteLanguage(Integer languageId);
 }

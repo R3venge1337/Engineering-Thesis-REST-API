@@ -1,19 +1,20 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import engineeringthesis.androidrestapi.model.account;
+import engineeringthesis.androidrestapi.dto.AccountDTO;
 
-public interface accountService  {
+public interface AccountService  {
 		
-	List<account> getAllAccounts();
+	List<AccountDTO> getAllAccounts();
 	
-	account saveAccount(account acc);
+	AccountDTO saveAccount(AccountDTO account);
 	
-	account getOneByName(String name);
+	AccountDTO getOneByName(String name);
 	
-	Optional<account> getOneById(Integer accountId);
+	AccountDTO getOneById(Integer accountId);
+	
+	AccountDTO updateAccount(Integer accountId,AccountDTO account);
 	
 	void deleteAccount(Integer accountId);
 }

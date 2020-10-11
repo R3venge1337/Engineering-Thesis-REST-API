@@ -1,54 +1,90 @@
 package engineeringthesis.androidrestapi.controller;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import engineeringthesis.androidrestapi.model.image;
-import engineeringthesis.androidrestapi.serviceImpl.imageServiceImpl;
+import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import engineeringthesis.androidrestapi.dto.ImageDTO;
+import engineeringthesis.androidrestapi.serviceImpl.ImageServiceImpl;
 
 @RestController
-public class imageController {
+@RequestMapping(value = "/api/images")
+public class ImageController {
 	
 	@Autowired
-    private imageServiceImpl imageServiceImpl;
+    private ImageServiceImpl imageServiceImpl;
 	
-	//@GetMapping
-    @RequestMapping(value="/images",method = RequestMethod.GET)
-    List<image> getAllImages()
+	private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
+	
+	@GetMapping
+    List<ImageDTO> getAllImages()
     {
 		return imageServiceImpl.getAllImages();
     }
     
-   // @GetMapping
-    @RequestMapping(value="/image/{imageId}",method = RequestMethod.GET)
-    Optional<image> getImageById(@PathVariable Integer imageId )
+   @GetMapping(value = "/{imageId}" )
+   	ImageDTO getImageById(@PathVariable Integer imageId )
     {
 		return imageServiceImpl.getOneById(imageId);
     }
     
-   // @PostMapping
-    @RequestMapping(value="/image",method =  RequestMethod.POST)
-    image saveImage(@ModelAttribute image imageObj)
+    @PostMapping
+    ImageDTO saveImage(@RequestParam("file") MultipartFile file)
     {
-    	return imageServiceImpl.saveImages(imageObj);
+    	return imageServiceImpl.saveImage(file);
     }
-    //@PutMapping
-    @RequestMapping(value="/image",method = RequestMethod.PUT)
-    image updateImage(@ModelAttribute image imageObj)
+    @PutMapping(value = "/{imageId}" )
+    ImageDTO updateImage(@RequestBody ImageDTO imageObj,
+    				 @PathVariable Integer imageId)
     {
-    	return imageServiceImpl.saveImages(imageObj);
+    	return imageServiceImpl.updateImage(imageId,imageObj);
     }
-    //@DeleteMapping
-    @RequestMapping(value="/image/{imageId}",method= RequestMethod.DELETE)
+    @DeleteMapping(value = "/{imageId}" )
     void deleteImage(@PathVariable Integer imageId)
     {
     	imageServiceImpl.deleteImage(imageId);
+    }
+    
+    @GetMapping("/downloadFile/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+        
+    	// Load file as Resource
+        Resource resource = imageServiceImpl.loadImageAsResource(fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            logger.info("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }

@@ -1,19 +1,20 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import engineeringthesis.androidrestapi.model.teacher;
+import engineeringthesis.androidrestapi.dto.TeacherDTO;
 
-public interface teacherService {
+public interface TeacherService {
 
-	List<teacher> getAllTeachers();
+	List<TeacherDTO> getAllTeachers();
 	
-	teacher saveTeacher(teacher teacherObj);
+	TeacherDTO saveTeacher(TeacherDTO teacherObj);
 	
-	teacher getOneByName(String name);
+	TeacherDTO getOneByName(String name);
 	
-	Optional<teacher> getOneById(Integer teacherId);
+	TeacherDTO getOneById(Integer teacherId);
+	
+	TeacherDTO updateTeacher(Integer teacherId,TeacherDTO teacherObj);
 	
 	void deleteTeacher(Integer teacherId);
 }

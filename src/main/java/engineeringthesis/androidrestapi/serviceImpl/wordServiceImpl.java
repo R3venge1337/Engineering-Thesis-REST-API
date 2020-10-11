@@ -4,44 +4,62 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import engineeringthesis.androidrestapi.model.word;
-import engineeringthesis.androidrestapi.repository.wordRepository;
-import engineeringthesis.androidrestapi.service.wordService;
+import engineeringthesis.androidrestapi.dto.WordDTO;
+import engineeringthesis.androidrestapi.entity.WordEntity;
+import engineeringthesis.androidrestapi.mapper.WordMapper;
+import engineeringthesis.androidrestapi.repository.WordRepository;
+import engineeringthesis.androidrestapi.service.WordService;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-public class wordServiceImpl implements wordService{
+@RequiredArgsConstructor
+public class WordServiceImpl implements WordService{
 
-		@Autowired
-		wordRepository wordRepo;
+		
+		private final WordRepository wordRepository;
+		private final WordMapper wordMapper;
 
 		@Override
-		public List<word> getAllWords() {
-			return  wordRepo.findAll();
+		public List<WordDTO> getAllWords() {
+			
+			return  wordMapper.mapOfCollection(wordRepository.findAll());
 		}
 
 		@Override
-		public word saveWord(word wordObj) {
-			return  wordRepo.save(wordObj);
+		public WordDTO saveWord(WordDTO wordObj) {
+			
+			WordEntity wordEntity = wordMapper.mapOfDTO(wordObj);
+			WordEntity savedEntity = wordRepository.save(wordEntity);
+			return wordMapper.mapOfEntity(savedEntity);
 		}
 
 		@Override
-		public word getOneByName(String name) {
+		public WordDTO getOneByName(String name) {
 			return null;
 		}
 
 		@Override
-		public Optional<word> getOneById(Integer wordId) {
-			return  wordRepo.findById(wordId);
+		public WordDTO getOneById(Integer wordId) {
+			
+			return  wordMapper.mapOfEntity(wordRepository.findById(wordId).get());
 		}
 
 		@Override
 		public void deleteWord(Integer wordId) {
-			 wordRepo.deleteById(wordId);
+			 
+			wordRepository.deleteById(wordId);
+		}
+
+		@Override
+		public WordDTO updateWord(Integer wordId, WordDTO word) {
 			
+			Optional<WordEntity> accountEntity = wordRepository.findById(wordId);
+			WordEntity savedEntity = accountEntity.get();
+			savedEntity.setWordName(word.getWordName());
+			wordRepository.save(savedEntity);
+			WordDTO dto = wordMapper.mapOfEntity(savedEntity);
+			return dto;
 		}
 }

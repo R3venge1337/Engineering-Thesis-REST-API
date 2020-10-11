@@ -3,9 +3,9 @@ package engineeringthesis.androidrestapi.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import engineeringthesis.androidrestapi.model.audio;
+import engineeringthesis.androidrestapi.entity.AudioEntity;
 
 @Repository
-public interface audioRepository extends JpaRepository<audio,Integer> {
+public interface AudioRepository extends JpaRepository<AudioEntity,Integer> {
 
 }

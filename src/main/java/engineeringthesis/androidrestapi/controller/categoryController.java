@@ -1,70 +1,66 @@
 package engineeringthesis.androidrestapi.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import engineeringthesis.androidrestapi.model.category;
-import engineeringthesis.androidrestapi.serviceImpl.categoryServiceImpl;
+import engineeringthesis.androidrestapi.dto.CategoryDTO;
+import engineeringthesis.androidrestapi.serviceImpl.CategoryServiceImpl;
 
 
 @RestController
-public class categoryController {
+@RequestMapping(value = "/api/categories")
+public class CategoryController {
 
     @Autowired
-    private categoryServiceImpl categoryService;
+    private CategoryServiceImpl categoryService;
     
-    //@GetMapping
-    @RequestMapping(value = {"/categories"}, method = RequestMethod.GET)
-    List<category> getAllCategories()
+    @GetMapping
+    List<CategoryDTO> getAllCategories()
     {
 		return categoryService.getAllCategories();
     }
     
-   // @GetMapping
-    @RequestMapping( value="/categories/{languageName}",method = RequestMethod.GET)
-    List<category> getAllCategoriesByLanguage(@PathVariable String languageName )
+    @GetMapping(value = "/languages/{languageName}")
+    List<CategoryDTO> getAllCategoriesByLanguage(@PathVariable String languageName )
     {
 		return categoryService.getAllCategoriesByLanguage(languageName);
     }
     
-   // @GetMapping
-    @RequestMapping(value="/category/{languageName}",method = RequestMethod.GET)
-    category getCategoryByName(@PathVariable String languageName )
+    @GetMapping(value = "/{categoryName}")
+    CategoryDTO getCategoryByName(@PathVariable String categoryName )
     {
-		return categoryService.getCategoryByName(languageName);
+		return categoryService.getCategoryByName(categoryName);
     }
     
-    //@GetMapping
-    @RequestMapping(value="/category/{categoryId}",method=RequestMethod.GET)
-    Optional<category> getCategoryById(@PathVariable Integer categoryId )
+    @GetMapping(value = "/{categoryId}")
+    CategoryDTO getCategoryById(@PathVariable Integer categoryId )
     {
 		return categoryService.getCategoryById(categoryId);
     }
-    //@PostMapping
-    @RequestMapping(value="/category",method = RequestMethod.POST)
-    category saveCategory(@ModelAttribute category cat)
+    
+    @PostMapping
+    CategoryDTO saveCategory(@ModelAttribute CategoryDTO cat)
     {
     	return categoryService.saveCategory(cat);
     }
-    @PutMapping
-    @RequestMapping(value="/category",method = RequestMethod.PUT)
-    category updateCategory(@ModelAttribute category cat)
+    
+    @PutMapping(value = "/{categoryId}")
+    CategoryDTO updateCategory(@ModelAttribute CategoryDTO cat,
+    		@PathVariable Integer categoryId)
     {
-    	return categoryService.saveCategory(cat);
+    	return categoryService.updateCategory(categoryId,cat);
     }
-    @DeleteMapping
-    @RequestMapping(value="/category/{id}",method = RequestMethod.DELETE)
-    void deleteCategory(@PathVariable Integer id)
+    
+    @DeleteMapping(value = "/{categoryId}")
+    void deleteCategory(@PathVariable Integer categoryId)
     {
-    	categoryService.deleteCategory(id);
+    	categoryService.deleteCategory(categoryId);
     }
 }

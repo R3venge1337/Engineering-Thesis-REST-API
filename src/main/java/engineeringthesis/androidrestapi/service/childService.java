@@ -1,20 +1,21 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import engineeringthesis.androidrestapi.model.child;
+import engineeringthesis.androidrestapi.dto.ChildDTO;
 
 
-public interface childService {
+public interface ChildService {
 	
-	List<child> getAllChild();
+	List<ChildDTO> getAllChild();
 	
-	child saveChild(child children);
+	ChildDTO saveChild(ChildDTO children);
 	
-	child getOneByName(String name);
+	ChildDTO getOneByName(String name);
 	
-	Optional<child> getOneById(Integer childId);
+	ChildDTO getOneById(Integer childId);
+	
+	ChildDTO updateChild(Integer childId,ChildDTO children);
 	
 	void deleteChild(Integer childId);
 }

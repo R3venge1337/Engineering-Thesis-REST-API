@@ -1,20 +1,26 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import engineeringthesis.androidrestapi.model.image;
+import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
-public interface imageService {
+import engineeringthesis.androidrestapi.dto.ImageDTO;
+
+public interface ImageService {
 	
 
-	List<image> getAllImages();
+	List<ImageDTO> getAllImages();
 	
-	image saveImages(image children);
+	ImageDTO saveImage(MultipartFile file);
 	
-	image getOneByName(String name);
+	ImageDTO getOneByName(String name);
 	
-	Optional<image> getOneById(Integer imageId);
+	ImageDTO getOneById(Integer imageId);
+	
+	ImageDTO updateImage(Integer imageId,ImageDTO imageObj);
+	
+	Resource loadImageAsResource(String imageName);
 	
 	void deleteImage(Integer imageId);
 }

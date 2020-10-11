@@ -1,53 +1,53 @@
 package engineeringthesis.androidrestapi.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import engineeringthesis.androidrestapi.model.word;
-import engineeringthesis.androidrestapi.serviceImpl.wordServiceImpl;
+import engineeringthesis.androidrestapi.dto.WordDTO;
+import engineeringthesis.androidrestapi.serviceImpl.WordServiceImpl;
 
 @RestController
-public class wordController {
+@RequestMapping(value="/api/words")
+public class WordController {
 
 		@Autowired
-		wordServiceImpl wordServiceImpl;
+		WordServiceImpl wordServiceImpl;
 		
-		  //@GetMapping
-	    @RequestMapping(value = {"/words"}, method = RequestMethod.GET)
-	    List<word> getAllWords()
+		@GetMapping
+	    List<WordDTO> getAllWords()
 	    {
 			return wordServiceImpl.getAllWords();
 	    }
 	    
-	    //@GetMapping
-	    @RequestMapping(value="/word/{wordId}",method = RequestMethod.GET)
-	    Optional<word> getWordById(@PathVariable Integer wordId )
+	    @GetMapping(value = "/{wordId}")
+	    WordDTO getWordById(@PathVariable Integer wordId )
 	    {
 			return wordServiceImpl.getOneById(wordId);
 	    }
-	    //@PostMapping
-	    @RequestMapping(value="/word",method = RequestMethod.POST)
-	    word saveWord(@ModelAttribute word wordObj)
+	    
+	    @PostMapping
+	    WordDTO saveWord(@RequestBody WordDTO wordObj)
 	    {
 	    	return wordServiceImpl.saveWord(wordObj);
 	    }
-	    @PutMapping
-	    @RequestMapping(value="/word",method = RequestMethod.PUT)
-	    word updateWord(@ModelAttribute word wordObj)
+	    
+	    @PutMapping(value = "/{wordId}")
+	    WordDTO updateWord(@RequestBody WordDTO wordObj,
+	    				@PathVariable Integer wordId)
 	    {
-	    	return wordServiceImpl.saveWord(wordObj);
+	    	return wordServiceImpl.updateWord(wordId,wordObj);
 	    }
-	    @DeleteMapping
-	    @RequestMapping(value="/word/{wordId}",method= RequestMethod.DELETE)
+	    
+	    @DeleteMapping(value = "/{wordId}")
 	    void deleteWordById(@PathVariable Integer wordId)
 	    {
 	    	wordServiceImpl.deleteWord(wordId);

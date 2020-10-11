@@ -1,18 +1,18 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
+import engineeringthesis.androidrestapi.dto.WordDTO;
 
-import engineeringthesis.androidrestapi.model.word;
-
-public interface wordService {
-	List<word> getAllWords();
+public interface WordService {
+	List<WordDTO> getAllWords();
 	
-	word saveWord(word wordName);
+	WordDTO saveWord(WordDTO word);
 	
-	word getOneByName(String name);
+	WordDTO getOneByName(String name);
 	
-	Optional<word> getOneById(Integer wordId);
+	WordDTO getOneById(Integer wordId);
+	
+	WordDTO updateWord(Integer wordId,WordDTO word);
 	
 	void deleteWord(Integer wordId);
 }

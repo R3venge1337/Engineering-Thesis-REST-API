@@ -2,45 +2,67 @@ package engineeringthesis.androidrestapi.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
-
 import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import engineeringthesis.androidrestapi.model.child;
-import engineeringthesis.androidrestapi.repository.childRepository;
-import engineeringthesis.androidrestapi.service.childService;
+import engineeringthesis.androidrestapi.dto.ChildDTO;
+import engineeringthesis.androidrestapi.entity.ChildEntity;
+import engineeringthesis.androidrestapi.mapper.ChildMapper;
+import engineeringthesis.androidrestapi.repository.ChildRepository;
+import engineeringthesis.androidrestapi.service.ChildService;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-public class childServiceImpl implements childService {
+@RequiredArgsConstructor
+public class ChildServiceImpl implements ChildService {
 	
-	@Autowired
-	childRepository childRepository;
+	
+	private final ChildRepository childRepository;
+	private final ChildMapper childMapper;
 
 	@Override
-	public List<child> getAllChild() {
-		return childRepository.findAll();
+	public List<ChildDTO> getAllChild() {
+		return childMapper.mapOfCollection(childRepository.findAll());
 	}
 
 	@Override
-	public child saveChild(child children) {
-		return childRepository.save(children);
+	public ChildDTO saveChild(ChildDTO child) {
+		
+		ChildEntity childEntity = childMapper.mapOfDTO(child);
+		ChildEntity savedEntity = childRepository.save(childEntity);
+		return childMapper.mapOfEntity(savedEntity);
 	}
 
 	@Override
-	public child getOneByName(String name) {
+	public ChildDTO getOneByName(String name) {
 		return null;
 	}
 
 	@Override
-	public Optional<child> getOneById(Integer childId) {
-		return childRepository.findById(childId);
+	public ChildDTO getOneById(Integer childId) {
+		return	childMapper.mapOfEntity(childRepository.findById(childId).get());
+	}
+	
+	@Override
+	public ChildDTO updateChild(Integer childId, ChildDTO child) {
+		
+		Optional<ChildEntity> childEntity = childRepository.findById(childId);
+		ChildEntity savedEntity = childEntity.get();
+		savedEntity.setChildName(child.getChildName());
+		savedEntity.setChildSurname(child.getChildSurname());
+		savedEntity.setChildCity(child.getChildCity());
+		savedEntity.setChildYearBirth(child.getChildYearBirth());
+		savedEntity.setAccountChildId(child.getAccountChildId());
+		childRepository.save(savedEntity);
+		ChildDTO dto = childMapper.mapOfEntity(savedEntity);
+		return dto;
 	}
 
 	@Override
 	public void deleteChild(Integer childId) {
 		childRepository.deleteById(childId);
 	}
+
+	
 }

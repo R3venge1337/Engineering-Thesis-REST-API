@@ -1,52 +1,52 @@
 package engineeringthesis.androidrestapi.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import engineeringthesis.androidrestapi.model.game;
-import engineeringthesis.androidrestapi.serviceImpl.gameServiceImpl;
+import engineeringthesis.androidrestapi.dto.GameDTO;
+import engineeringthesis.androidrestapi.serviceImpl.GameServiceImpl;
 
 @RestController
-public class gameController {
+@RequestMapping(value = "/api/games")
+public class GameController {
 	 @Autowired
-	    private gameServiceImpl gameServiceImpl;
+	    private GameServiceImpl gameServiceImpl;
 	 
-	//@GetMapping
-	    @RequestMapping(value="/games",method = RequestMethod.GET)
-	    List<game> getAllGames()
+	 	@GetMapping
+	    List<GameDTO> getAllGames()
 	    {
 			return gameServiceImpl.getAllGames();
 	    }
 	    
 	    
-	   // @GetMapping
-	    @RequestMapping(value="/game/{gameId}",method = RequestMethod.GET)
-	    Optional<game> getGameById(@PathVariable Integer gameId )
+	   @GetMapping(value = "/{gameId}")
+	  GameDTO getGameById(@PathVariable Integer gameId )
 	    {
 			return gameServiceImpl.getOneById(gameId);
 	    }
 	    
-	   // @PostMapping
-	    @RequestMapping(value="/game",method =  RequestMethod.POST)
-	    game saveGame(@ModelAttribute game gameObj)
+	    @PostMapping
+	    GameDTO saveGame(@RequestBody GameDTO gameObj)
 	    {
 	    	return gameServiceImpl.saveGame(gameObj);
 	    }
-	    //@PutMapping
-	    @RequestMapping(value="/game",method = RequestMethod.PUT)
-	    game updateGame(@ModelAttribute game gameObj)
+	    
+	    @PutMapping(value = "/{gameId}")
+	    void updateGame(@PathVariable Integer gameId,
+	    				@RequestBody GameDTO gameObj)
 	    {
-	    	return gameServiceImpl.saveGame(gameObj);
+	    	gameServiceImpl.updateGame(gameId, gameObj);
 	    }
-	    //@DeleteMapping
-	    @RequestMapping(value="/game/{gameId}",method= RequestMethod.DELETE)
+	    
+	    @DeleteMapping(value = "/{gameId}")
 	    void deleteGame(@PathVariable Integer gameId)
 	    {
 	    	gameServiceImpl.deleteGame(gameId);

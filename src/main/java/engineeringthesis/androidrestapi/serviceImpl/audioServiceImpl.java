@@ -1,49 +1,100 @@
     package engineeringthesis.androidrestapi.serviceImpl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import engineeringthesis.androidrestapi.model.audio;
-import engineeringthesis.androidrestapi.repository.audioRepository;
-import engineeringthesis.androidrestapi.service.audioService;
+import engineeringthesis.androidrestapi.config.ReaderPropertiesFile;
+import engineeringthesis.androidrestapi.dto.AudioDTO;
+import engineeringthesis.androidrestapi.entity.AudioEntity;
+import engineeringthesis.androidrestapi.entity.AudioFileTableEntity;
+import engineeringthesis.androidrestapi.mapper.AudioMapper;
+import engineeringthesis.androidrestapi.repository.AudioFileTableRepository;
+import engineeringthesis.androidrestapi.repository.AudioRepository;
+import engineeringthesis.androidrestapi.service.AudioService;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-public class audioServiceImpl implements audioService {
+@RequiredArgsConstructor
+public class AudioServiceImpl implements AudioService {
 
-	@Autowired
-	audioRepository audioRepository;
 	
+	private final AudioRepository audioRepository;
+	private final AudioMapper audioMapper;
+	private final ReaderPropertiesFile readerPropertiesFile;
+	private final AudioFileTableRepository audioFileTableRepository;
 	
 	@Override
-	public List<audio> getAllAudio() {
-		return audioRepository.findAll();
+	public List<AudioDTO> getAllAudio() {
+		
+		return audioMapper.mapOfCollection(audioRepository.findAll());
 	}
 
 	@Override
-	public audio saveAudio(audio audioFile) {
-		return audioRepository.save(audioFile);
+	public AudioDTO saveAudio(MultipartFile file) {
+		 try {
+				Properties prop  = readerPropertiesFile.readPropertiesFile("application.properties");
+				Path path = Paths.get(prop.getProperty("audio_save_files_path"));
+				//System.out.println(path.resolve(file.getOriginalFilename()));
+				Files.write(path.resolve(file.getOriginalFilename()),file.getBytes());
+			
+			  }  catch (Exception e) {
+			      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+			    }
+			AudioFileTableEntity imgId = audioFileTableRepository.findByName(file.getOriginalFilename());
+			 	String streamId = imgId.getStreamId();
+			 	System.out.println(streamId);
+			 	
+			 	String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+		                .path("/api")
+		                .path("/audios/")
+		                .path(file.getOriginalFilename())
+		                .toUriString();
+			 	System.out.println(fileDownloadUri);
+		
+		/*
+		AudioEntity languageEntity = audioMapper.mapOfDTO(audio);
+		AudioEntity savedEntity = audioRepository.save(languageEntity);
+		 return audioMapper.mapOfEntity(savedEntity);
+		 */
+			 	return null;
 	}
 
 	@Override
-	public audio getOneByName(String name) {
+	public AudioDTO getOneByName(String name) {
+		
 		return null;
 	}
 
 	@Override
-	public Optional<audio> getOneById(Integer audioId) {
-		return audioRepository.findById(audioId);
+	public AudioDTO getOneById(Integer audioId) {
+		
+		return audioMapper.mapOfEntity(audioRepository.findById(audioId).get());
 	}
 
 	@Override
 	public void deleteAudio(Integer audioId) {
-		audioRepository.deleteById(audioId);
 		
+		audioRepository.deleteById(audioId);
+	}
+
+	@Override
+	public AudioDTO updateAudio(Integer audioId, AudioDTO audio) {
+		
+		Optional<AudioEntity> audioEntity = audioRepository.findById(audioId);
+		AudioEntity savedEntity = audioEntity.get();
+		audioRepository.save(savedEntity);
+		AudioDTO dto = audioMapper.mapOfEntity(savedEntity);
+		return dto;
 	}
 	
 }

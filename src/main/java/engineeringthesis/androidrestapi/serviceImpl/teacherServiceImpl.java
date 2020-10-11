@@ -2,48 +2,74 @@ package engineeringthesis.androidrestapi.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
-
 import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import engineeringthesis.androidrestapi.model.teacher;
-import engineeringthesis.androidrestapi.repository.teacherRepository;
-import engineeringthesis.androidrestapi.service.teacherService;
+import engineeringthesis.androidrestapi.dto.TeacherDTO;
+import engineeringthesis.androidrestapi.entity.TeacherEntity;
+import engineeringthesis.androidrestapi.mapper.TeacherMapper;
+import engineeringthesis.androidrestapi.repository.TeacherRepository;
+import engineeringthesis.androidrestapi.service.TeacherService;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-public class teacherServiceImpl implements teacherService{
+@RequiredArgsConstructor
+public class TeacherServiceImpl implements TeacherService{
 
-	@Autowired
-	teacherRepository teacherRepo;
+	
+	private final TeacherRepository teacherRepository;
+	private final TeacherMapper teacherMapper;
 
 	@Override
-	public List<teacher> getAllTeachers() {
-		return teacherRepo.findAll();
+	public List<TeacherDTO> getAllTeachers() {
+		
+		return teacherMapper.mapOfCollection(teacherRepository.findAll());
 	}
 
 	@Override
-	public teacher saveTeacher(teacher teacherObj) {
-		return teacherRepo.save(teacherObj);
+	public TeacherDTO saveTeacher(TeacherDTO teacherObj) {
+		
+		TeacherEntity teacherEntity = teacherMapper.mapOfDTO(teacherObj);
+		TeacherEntity savedEntity =  teacherRepository.save(teacherEntity);
+		return teacherMapper.mapOfEntity(savedEntity);
 	}
 
 	@Override
-	public teacher getOneByName(String name) {
+	public TeacherDTO getOneByName(String name) {
+		
 		return null;
 	}
 
 	@Override
-	public Optional<teacher> getOneById(Integer teacherId) {
-		return teacherRepo.findById(teacherId);
+	public TeacherDTO getOneById(Integer teacherId) {
+		
+		return teacherMapper.mapOfEntity(teacherRepository.findById(teacherId).get());
+	}
+	
+	@Override
+	public TeacherDTO updateTeacher(Integer teacherId, TeacherDTO teacherObj) {
+		
+		Optional<TeacherEntity> teacherEntity = teacherRepository.findById(teacherId);
+		TeacherEntity savedEntity = teacherEntity.get();
+		savedEntity.setTeacherName(teacherObj.getTeacherName());
+		savedEntity.setTeacherSurname(teacherObj.getTeacherSurname());
+		savedEntity.setTeacherProfession(teacherObj.getTeacherProfession());
+		savedEntity.setTeacherCity(teacherObj.getTeacherCity());
+		savedEntity.setTeacherZipCode(teacherObj.getTeacherZipCode());
+		savedEntity.setTeacherAddress(teacherObj.getTeacherAddress());
+		savedEntity.setTeacherYearBirth(teacherObj.getTeacherYearBirth());
+		teacherRepository.save(savedEntity);
+		TeacherDTO dto = teacherMapper.mapOfEntity(savedEntity);
+		return dto;
 	}
 
 	@Override
 	public void deleteTeacher(Integer teacherId) {
-		teacherRepo.deleteById(teacherId);
 		
+		teacherRepository.deleteById(teacherId);
 	}
-	
+
+
 	
 }

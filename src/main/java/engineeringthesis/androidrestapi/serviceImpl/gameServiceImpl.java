@@ -4,45 +4,65 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import engineeringthesis.androidrestapi.model.game;
-import engineeringthesis.androidrestapi.repository.gameRepository;
-import engineeringthesis.androidrestapi.service.gameService;
+import engineeringthesis.androidrestapi.dto.GameDTO;
+import engineeringthesis.androidrestapi.entity.GameEntity;
+import engineeringthesis.androidrestapi.mapper.GameMapper;
+import engineeringthesis.androidrestapi.repository.GameRepository;
+import engineeringthesis.androidrestapi.service.GameService;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-public class gameServiceImpl implements gameService {
+@RequiredArgsConstructor
+public class GameServiceImpl implements GameService {
 
-	@Autowired
-	gameRepository gameRepository;
+private final GameRepository gameRepository;
+private final GameMapper gameMapper;
 	
 	@Override
-	public List<game> getAllGames() {
-		return gameRepository.findAll();
-	}
-
-	@Override
-	public game saveGame(game gameName) {
+	public List<GameDTO> getAllGames() {
 		
-		return gameRepository.save(gameName);
+		return gameMapper.mapOfCollection(gameRepository.findAll());
 	}
 
 	@Override
-	public game getOneByName(String name) {
+	public GameDTO saveGame(GameDTO game) {
+		
+		GameEntity gameEntity = gameMapper.mapOfDTO(game);
+		GameEntity savedEntity =  gameRepository.save(gameEntity);
+		return gameMapper.mapOfEntity(savedEntity);
+	}
+
+	@Override
+	public GameDTO getOneByName(String name) {
+		
 		return null;
 	}
 
 	@Override
-	public Optional<game> getOneById(Integer gameId) {
-		return gameRepository.findById(gameId);
+	public GameDTO getOneById(Integer gameId) {
+		
+		return gameMapper.mapOfEntity(gameRepository.findById(gameId).get());
+	}
+	
+	@Override
+	public GameDTO updateGame(Integer gameId, GameDTO gameName) {
+		
+		Optional<GameEntity> gameEntity = gameRepository.findById(gameId);
+		GameEntity savedEntity = gameEntity.get();
+		savedEntity.setGameName(gameName.getGameName());
+		gameRepository.save(savedEntity);
+		GameDTO dto = gameMapper.mapOfEntity(savedEntity);
+		return dto;
 	}
 
 	@Override
 	public void deleteGame(Integer gameId) {
+		
 		gameRepository.deleteById(gameId);
 	}
+
+	
 	
 }

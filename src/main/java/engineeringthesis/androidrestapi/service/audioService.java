@@ -1,21 +1,23 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import engineeringthesis.androidrestapi.model.audio;
+import org.springframework.web.multipart.MultipartFile;
+
+import engineeringthesis.androidrestapi.dto.AudioDTO;
 
 
-
-public interface audioService {
+public interface AudioService {
 	
-	List<audio> getAllAudio();
+	List<AudioDTO> getAllAudio();
 	
-	audio saveAudio(audio ad);
+	AudioDTO saveAudio(MultipartFile file);
 	
-	audio getOneByName(String name);
+	AudioDTO getOneByName(String name);
 	
-	Optional<audio> getOneById(Integer audioId);
+	AudioDTO getOneById(Integer audioId);
+	
+	AudioDTO updateAudio(Integer audioId, AudioDTO audio);
 	
 	void deleteAudio(Integer audioId);
 }

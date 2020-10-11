@@ -1,59 +1,60 @@
 package engineeringthesis.androidrestapi.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import engineeringthesis.androidrestapi.model.audio;
-import engineeringthesis.androidrestapi.serviceImpl.audioServiceImpl;
+import engineeringthesis.androidrestapi.dto.AudioDTO;
+import engineeringthesis.androidrestapi.serviceImpl.AudioServiceImpl;
 
 @RestController
-public class audioController {
+@RequestMapping(value = "/api/audio")
+public class AudioController {
 
 	@Autowired
-    private audioServiceImpl audioServiceImpl;
+    private AudioServiceImpl audioServiceImpl;
 	
-	 //@GetMapping
-    @RequestMapping(value="/audio",method = RequestMethod.GET)
-    List<audio> getAllAudioFiles()
+	@GetMapping
+    List<AudioDTO> getAllAudioFiles()
     {
 		return audioServiceImpl.getAllAudio();
     }
     
-    //@GetMapping
-    @RequestMapping(value="/audio/{audioFileName}",method = RequestMethod.GET)
-    audio getAudioFileByName(@PathVariable String audioFileName )
+    @GetMapping(value = "/{audioFileName}")
+    AudioDTO getAudioFileByName(@PathVariable String audioFileName )
     {
 		return audioServiceImpl.getOneByName(audioFileName);
     }
     
-   // @GetMapping
-    @RequestMapping(value="/audio/{audioId}",method = RequestMethod.GET)
-    Optional<audio> getAudioById(@PathVariable Integer audioId )
+    @GetMapping(value = "/{audioId}")
+    AudioDTO getAudioById(@PathVariable Integer audioId )
     {
 		return audioServiceImpl.getOneById(audioId);
     }
     
-    // @PostMapping
-    @RequestMapping(value="/audio",method =  RequestMethod.POST)
-    audio saveAudioFile(@ModelAttribute audio audioFileObj)
+    @PostMapping
+    AudioDTO saveAudioFile(@RequestParam("file") MultipartFile file)
     {
-    	return audioServiceImpl.saveAudio(audioFileObj);
+    	return audioServiceImpl.saveAudio(file);
     }
-    //@PutMapping
-    @RequestMapping(value="/audio",method = RequestMethod.PUT)
-    audio updateAudioFile(@ModelAttribute audio audioFileObj)
+    
+    @PutMapping(value = "/{audioId}" )
+    AudioDTO updateAudioFile(@RequestBody AudioDTO audioFileObj,
+    						@PathVariable Integer audioId)
     {
-    	return audioServiceImpl.saveAudio(audioFileObj);
+    	return audioServiceImpl.updateAudio(audioId,audioFileObj);
     }
-    //@DeleteMapping
-    @RequestMapping(value="/audio/{audioId}",method= RequestMethod.DELETE)
+    
+    @DeleteMapping(value = "/{audioId}")
     void deleteAudioFile(@PathVariable Integer audioId)
     {
     	audioServiceImpl.deleteAudio(audioId);

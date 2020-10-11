@@ -1,21 +1,21 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
+import engineeringthesis.androidrestapi.dto.CategoryDTO;
 
-import engineeringthesis.androidrestapi.model.category;
-
-public interface categoryService {
+public interface CategoryService {
 	
-	List<category> getAllCategories();
+	List<CategoryDTO> getAllCategories();
 	
-	List<category> getAllCategoriesByLanguage(String languageName);
+	List<CategoryDTO> getAllCategoriesByLanguage(String languageName);
 	
-	category saveCategory(category cat);
+	CategoryDTO saveCategory(CategoryDTO cat);
 	
-	category getCategoryByName(String name);
+	CategoryDTO getCategoryByName(String name);
 	
-	Optional<category> getCategoryById(Integer categoryId);
+	CategoryDTO getCategoryById(Integer categoryId);
+	
+	CategoryDTO updateCategory(Integer categoryId,CategoryDTO cat);
 	
 	void deleteCategory(Integer categoryId);
 }

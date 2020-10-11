@@ -1,53 +1,51 @@
 package engineeringthesis.androidrestapi.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import engineeringthesis.androidrestapi.model.child;
-import engineeringthesis.androidrestapi.serviceImpl.childServiceImpl;
+import engineeringthesis.androidrestapi.dto.ChildDTO;
+import engineeringthesis.androidrestapi.serviceImpl.ChildServiceImpl;
 
 
 @RestController
-public class childController {
+@RequestMapping(value = "/api/children")
+public class ChildController {
 	 @Autowired
-	    private childServiceImpl childServiceImpl;
+	    private ChildServiceImpl childServiceImpl;
 	 
-	//@GetMapping
-	    @RequestMapping(value="/children",method = RequestMethod.GET)
-	    List<child> getAllChildren()
+	 	@GetMapping
+	    List<ChildDTO> getAllChildren()
 	    {
 			return childServiceImpl.getAllChild();
 	    }
 	    
-	    
-	   // @GetMapping
-	    @RequestMapping(value="/child/{id}",method = RequestMethod.GET)
-	    Optional<child> getChildById(@PathVariable Integer childId )
+	    @GetMapping("/{childId}")
+	    ChildDTO getChildById(@PathVariable Integer childId)
 	    {
 			return childServiceImpl.getOneById(childId);
 	    }
 	    
-	   // @PostMapping
-	    @RequestMapping(value="/child",method =  RequestMethod.POST)
-	    child saveChild(@ModelAttribute child childObj)
+	    @PostMapping
+	    ChildDTO saveChild(@ModelAttribute ChildDTO childObj)
 	    {
 	    	return childServiceImpl.saveChild(childObj);
 	    }
-	    //@PutMapping
-	    @RequestMapping(value="/child",method = RequestMethod.PUT)
-	    child updateChild(@ModelAttribute child childObj)
+	    
+	    @PutMapping("/{childId}")
+	    ChildDTO updateChild(@ModelAttribute ChildDTO childObj,
+	    					@PathVariable Integer childId)
 	    {
-	    	return childServiceImpl.saveChild(childObj);
+	    	return childServiceImpl.updateChild(childId,childObj);
 	    }
-	    //@DeleteMapping
-	    @RequestMapping(value="/child/{id}",method= RequestMethod.DELETE)
+	    
+	    @DeleteMapping("/{childId}")
 	    void deleteChild(@PathVariable Integer childId)
 	    {
 	    	childServiceImpl.deleteChild(childId);

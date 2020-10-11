@@ -1,20 +1,21 @@
 package engineeringthesis.androidrestapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import engineeringthesis.androidrestapi.model.game;
+import engineeringthesis.androidrestapi.dto.GameDTO;
 
-public interface gameService {
+public interface GameService {
 	
 
-	List<game> getAllGames();
+	List<GameDTO> getAllGames();
 	
-	game saveGame(game gameName);
+	GameDTO saveGame(GameDTO gameName);
 	
-	game getOneByName(String name);
+	GameDTO getOneByName(String name);
 	
-	Optional<game> getOneById(Integer gameId);
+	GameDTO getOneById(Integer gameId);
+	
+	GameDTO updateGame(Integer gameId, GameDTO gameName);
 	
 	void deleteGame(Integer gameId);
 }

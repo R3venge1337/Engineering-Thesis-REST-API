@@ -1,52 +1,49 @@
 package engineeringthesis.androidrestapi.controller;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import engineeringthesis.androidrestapi.model.account;
-import engineeringthesis.androidrestapi.serviceImpl.accountServiceImpl;
+import engineeringthesis.androidrestapi.dto.AccountDTO;
+import engineeringthesis.androidrestapi.serviceImpl.AccountServiceImpl;
+import lombok.RequiredArgsConstructor;
 
 @RestController
-public class accountController {
+@RequestMapping(value = "/api/accounts")
+@RequiredArgsConstructor
+public class AccountController {
 	
-	@Autowired
-	accountServiceImpl accountServiceImpl;
+	private final AccountServiceImpl accountServiceImpl;
 	
-	//@GetMapping
-    @RequestMapping(value = {"/accounts"}, method = RequestMethod.GET)
-    List<account> getAllAccounts()
+	@GetMapping
+    List<AccountDTO> getAllAccounts()
     {
 		return accountServiceImpl.getAllAccounts();
     }
     
-    //@GetMapping
-    @RequestMapping(value="/account/{accountId}",method=RequestMethod.GET)
-    Optional<account> getAccountById(@PathVariable Integer accountId )
+    @GetMapping(value = "/{accountId}")
+    AccountDTO getAccountById(@PathVariable Integer accountId )
     {
 		return accountServiceImpl.getOneById(accountId);
     }
-    //@PostMapping
-    @RequestMapping(value="/account",method = RequestMethod.POST)
-    account saveAccount(@ModelAttribute account accountObj)
+    @PostMapping
+    AccountDTO saveAccount(@RequestBody AccountDTO accountObj)
     {
     	return accountServiceImpl.saveAccount(accountObj);
     }
-    @PutMapping
-    @RequestMapping(value="/account",method = RequestMethod.PUT)
-    account updateAccount(@ModelAttribute account accountObj)
+    
+    @PutMapping(value = "/{accountId}")
+    AccountDTO updateAccount(@PathVariable Integer accountId,
+    						@RequestBody AccountDTO accountObj)
     {
-    	return accountServiceImpl.saveAccount(accountObj);
+    	return accountServiceImpl.updateAccount(accountId,accountObj);
     }
-    @DeleteMapping
-    @RequestMapping(value="/account/{accountId}",method= RequestMethod.DELETE)
+    @DeleteMapping(value = "/{accountId}")
     void deleteAccountById(@PathVariable Integer accountId)
     {
     	accountServiceImpl.deleteAccount(accountId);
