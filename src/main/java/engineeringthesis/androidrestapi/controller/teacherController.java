@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import engineeringthesis.androidrestapi.dto.TeacherDTO;
 import engineeringthesis.androidrestapi.serviceImpl.TeacherServiceImpl;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping(value = "/api/teachers")
@@ -32,7 +35,20 @@ public class TeacherController {
     TeacherDTO getTeacherById(@PathVariable Integer teacherId )
     {
 		return teacherServiceImpl.getOneById(teacherId);
+		
     }
+    
+    @GetMapping(params = "languageName")
+    List<TeacherDTO> getTeacherByLanguageName( @ApiParam(
+    	    name =  "languageName",
+    	    type = "String",
+    	    value = "Name of language",
+    	    example = "Angielski",
+    	    required = false)@RequestParam(required = false, value = "languageName")  String languageName)
+	    {
+			return teacherServiceImpl.getTeachersByLanguageName(languageName);
+	    }
+   
     
     @PostMapping
     TeacherDTO saveTeacher(@RequestBody TeacherDTO teacherObj)
@@ -42,7 +58,7 @@ public class TeacherController {
     
     @PutMapping(value = "/{teacherId}")
     TeacherDTO updateTeacher(@RequestBody TeacherDTO teacherObj,
-    					  @PathVariable Integer teacherId)
+    					     @PathVariable Integer teacherId)
     {
     	return teacherServiceImpl.updateTeacher(teacherId,teacherObj);
     }
@@ -52,4 +68,16 @@ public class TeacherController {
     {
     	teacherServiceImpl.deleteTeacher(teacherId);
     }
+    
+    
+    @GetMapping(value = "/accounts")
+    TeacherDTO getTeacherWithAccount( @ApiParam(
+    	    name =  "accountName",
+    	    type = "String",
+    	    value = "account name",
+    	    example = "admin",
+    	    required = false)@RequestParam(required = true, value = "accountName")  String accountName)
+	    {
+			return teacherServiceImpl.getTeacherWithAccount(accountName);
+	    }
 }

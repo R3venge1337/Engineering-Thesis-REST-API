@@ -17,4 +17,8 @@ public interface TeacherService {
 	TeacherDTO updateTeacher(Integer teacherId,TeacherDTO teacherObj);
 	
 	void deleteTeacher(Integer teacherId);
+	
+	List<TeacherDTO> getTeachersByLanguageName(String languageName);
+	
+	TeacherDTO getTeacherWithAccount(String accountName);
 }

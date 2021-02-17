@@ -2,7 +2,6 @@ package engineeringthesis.androidrestapi.dto;
 
 import java.time.LocalDateTime;
 import engineeringthesis.androidrestapi.entity.CategoryEntity;
-import engineeringthesis.androidrestapi.entity.ChildEntity;
 import engineeringthesis.androidrestapi.entity.GameEntity;
 import engineeringthesis.androidrestapi.entity.LanguageEntity;
 import lombok.AllArgsConstructor;
@@ -23,8 +22,10 @@ public class GameplayDTO {
 	private GameEntity gameId;
 	
 	private CategoryEntity categoryId;
-
+	/*
 	private ChildEntity childId;
+	*/
+	private String questUUID;
 	
 	private LocalDateTime gameMatchDataStart;
 	

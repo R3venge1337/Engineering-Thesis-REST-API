@@ -26,11 +26,9 @@ public class TeacherDTO {
 	
 	private String teacherProfession;
 	
-	private String teacherAddress;
-
-	private String teacherZipCode;
+	private LanguageEntity languageTeacherId;
 	
 	private AccountEntity accountTeacherId;
 	
-	private LanguageEntity languageTeacherId;
+	
 }

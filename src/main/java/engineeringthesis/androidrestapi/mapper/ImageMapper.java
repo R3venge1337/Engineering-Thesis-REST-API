@@ -11,8 +11,8 @@ public class ImageMapper implements Mapper<ImageDTO,ImageEntity> {
 	public ImageDTO mapOfEntity(ImageEntity entity) {
 		
 		ImageDTO imageDTO = ImageDTO.builder()
+				.imageId(entity.getImageId())
 				.imageDownloadUri(entity.getImageDownloadUri())
-				.wordId(entity.getWordId())
 				.imageFileTable(entity.getImageFileTable())
 				.isAccepted(entity.isAccepted())
 				.isNew(entity.isNew())
@@ -25,8 +25,8 @@ public class ImageMapper implements Mapper<ImageDTO,ImageEntity> {
 	public ImageEntity mapOfDTO(ImageDTO dto) {
 		
 		ImageEntity imageEntity = ImageEntity.builder()
+				.imageId(dto.getImageId())
 				.imageDownloadUri(dto.getImageDownloadUri())
-				.wordId(dto.getWordId())
 				.imageFileTable(dto.getImageFileTable())
 				.isAccepted(dto.isAccepted())
 				.isNew(dto.isNew())

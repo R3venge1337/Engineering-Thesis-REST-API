@@ -13,11 +13,13 @@ public class ChildMapper implements Mapper<ChildDTO,ChildEntity> {
 	public ChildDTO mapOfEntity(ChildEntity entity) {
 		
 		ChildDTO childDTO = ChildDTO.builder()
+				.childId(entity.getChildId())
 				.childName(entity.getChildName())
 				.childSurname(entity.getChildSurname())
 				.childYearBirth(entity.getChildYearBirth())
 				.childCity(entity.getChildCity())
 				.accountChildId(entity.getAccountChildId())
+				.childQuestUUID(entity.getChildQuestUUID())
 				.build();
 		
 		return childDTO;
@@ -27,11 +29,13 @@ public class ChildMapper implements Mapper<ChildDTO,ChildEntity> {
 	public ChildEntity mapOfDTO(ChildDTO dto) {
 		
 		ChildEntity childEntity = ChildEntity.builder()
+				.childId(dto.getChildId())
 				.childName(dto.getChildName())
 				.childSurname(dto.getChildSurname())
 				.childYearBirth(dto.getChildYearBirth())
 				.childCity(dto.getChildCity())
 				.accountChildId(dto.getAccountChildId())
+				.childQuestUUID(dto.getChildQuestUUID())
 				.build();
 		
 		return childEntity;

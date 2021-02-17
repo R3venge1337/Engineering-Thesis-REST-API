@@ -12,8 +12,9 @@ public class AudioMapper  implements Mapper<AudioDTO,AudioEntity>{
 	public AudioDTO mapOfEntity(AudioEntity entity) {
 		
 		AudioDTO audioDTO =  AudioDTO.builder()
-				.ntfsAudioFileId(entity.getNtfsAudioFileId())
-				.wordId(entity.getWordId())
+				.audioId(entity.getAudioId())
+				.audioDownloadUri(entity.getAudioDownloadUri())
+				.audioFileTableEntity(entity.getAudioFileTable())
 				.isAccepted(entity.isAccepted())
 				.isNew(entity.isNew())
 				.build();
@@ -25,8 +26,9 @@ public class AudioMapper  implements Mapper<AudioDTO,AudioEntity>{
 	public AudioEntity mapOfDTO(AudioDTO dto) {
 		
 		AudioEntity audioEntity = AudioEntity.builder()
-				.ntfsAudioFileId(dto.getNtfsAudioFileId())
-				.wordId(dto.getWordId())
+				.audioId(dto.getAudioId())
+				.audioDownloadUri(dto.getAudioDownloadUri())
+				.audioFileTable(dto.getAudioFileTableEntity())
 				.isAccepted(dto.isAccepted())
 				.isNew(dto.isNew())
 				.build();

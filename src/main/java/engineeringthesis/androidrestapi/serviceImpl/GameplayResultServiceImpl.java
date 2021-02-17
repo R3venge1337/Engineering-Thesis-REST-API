@@ -67,6 +67,18 @@ public class GameplayResultServiceImpl implements GameplayResultService {
 		gameplayResultsRepository.deleteById(resultId);
 	}
 
+	@Override
+	public List<GameplayResultDTO> getAllUserResultsByGuestId(String guestUUID) {
+		
+		return gameplayResultMapper.mapOfCollection(gameplayResultsRepository.getAllUserResultsByGuestId(guestUUID));
+	}
+
+	@Override
+	public List<GameplayResultDTO> getAllUserResultsByGameName(String gameName) {
+		
+		return gameplayResultMapper.mapOfCollection(gameplayResultsRepository.getAllUserResultsByGameName(gameName));
+	}
+
 	
 
 	

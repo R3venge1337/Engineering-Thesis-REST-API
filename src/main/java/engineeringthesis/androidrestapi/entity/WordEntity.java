@@ -2,6 +2,7 @@ package engineeringthesis.androidrestapi.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +30,9 @@ public class WordEntity {
 	@Column(name = "word_name")
 	private String wordName;
 	
+	@Column(name = "word_download_uri")
+	private String wordDownloadUri;
+	
 	@OneToOne
 	@JoinColumn(name = "category_id_fk")
 	private CategoryEntity categoryId;
@@ -36,5 +40,15 @@ public class WordEntity {
 	@OneToOne
 	@JoinColumn(name = "language_id_fk")
 	private LanguageEntity languageId;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "image_id_fk",referencedColumnName = "image_id_pk")
+	private ImageEntity imageId;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "audio_id_fk",referencedColumnName = "audio_id_pk")
+	private AudioEntity audioId;
+	
+	
 	
 }

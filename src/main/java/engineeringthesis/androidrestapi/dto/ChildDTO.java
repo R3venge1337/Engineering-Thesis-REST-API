@@ -23,5 +23,7 @@ public class ChildDTO {
 	
 	private String childCity;
 	
+	private String childQuestUUID;
+	
 	private AccountEntity accountChildId;
 }

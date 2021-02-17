@@ -29,7 +29,9 @@ public class ChildServiceImpl implements ChildService {
 	@Override
 	public ChildDTO saveChild(ChildDTO child) {
 		
+		//System.out.println("Przed mapowaniem: "+ child);
 		ChildEntity childEntity = childMapper.mapOfDTO(child);
+		//System.out.println(child);
 		ChildEntity savedEntity = childRepository.save(childEntity);
 		return childMapper.mapOfEntity(savedEntity);
 	}
@@ -62,6 +64,12 @@ public class ChildServiceImpl implements ChildService {
 	@Override
 	public void deleteChild(Integer childId) {
 		childRepository.deleteById(childId);
+	}
+
+	@Override
+	public ChildDTO getChildWithAccount(String accountName) {
+		
+		return childMapper.mapOfEntity(childRepository.getChildWithAccount(accountName));
 	}
 
 	

@@ -1,5 +1,6 @@
 package engineeringthesis.androidrestapi.serviceImpl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,9 @@ public class LanguageServiceImpl implements LanguageService {
 	@Override
 	public LanguageDTO saveLanguage(LanguageDTO lang) {
 		
+		
 		LanguageEntity languageEntity = languageMapper.mapOfDTO(lang);
+		languageEntity.setLanguageCreatedDate(LocalDateTime.now());
 		LanguageEntity savedEntity = languageRepository.save(languageEntity);
 		 return languageMapper.mapOfEntity(savedEntity);
 	}

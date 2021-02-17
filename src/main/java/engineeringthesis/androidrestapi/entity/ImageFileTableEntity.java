@@ -9,6 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,12 +53,18 @@ public class ImageFileTableEntity {
 	private Long cachedFileSize;
 	
 	@Column(name = "creation_time",columnDefinition = "datetimeoffset")
+	@JsonSerialize(using = OffsetDateTimeSerializer.class) 
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX", iso = ISO.DATE_TIME)
 	private OffsetDateTime creationTime;	
 	
 	@Column(name = "last_write_time",columnDefinition = "datetimeoffset")
+	@JsonSerialize(using = OffsetDateTimeSerializer.class) 
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX", iso = ISO.DATE_TIME)
 	private OffsetDateTime lastWriteTime;	
 	
 	@Column(name = "last_access_time",columnDefinition = "datetimeoffset")
+	@JsonSerialize(using = OffsetDateTimeSerializer.class) 
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX", iso = ISO.DATE_TIME)
 	private OffsetDateTime lastAccessTime;	
 	
 	

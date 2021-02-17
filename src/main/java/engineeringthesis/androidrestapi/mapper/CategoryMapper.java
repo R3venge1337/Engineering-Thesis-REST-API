@@ -12,6 +12,7 @@ public class CategoryMapper implements Mapper<CategoryDTO,CategoryEntity> {
 	public CategoryDTO mapOfEntity(CategoryEntity entity) {
 		
 		CategoryDTO categoryDTO = CategoryDTO.builder()
+				.categoryId(entity.getCategoryId())
 				.categoryName(entity.getCategoryName())
 				.languageId(entity.getLanguageId())
 				.isNew(entity.isNew())
@@ -25,6 +26,7 @@ public class CategoryMapper implements Mapper<CategoryDTO,CategoryEntity> {
 	public CategoryEntity mapOfDTO(CategoryDTO dto) {
 		
 		CategoryEntity categoryEntity = CategoryEntity.builder()
+				.categoryId(dto.getCategoryId())
 				.categoryName(dto.getCategoryName())
 				.languageId(dto.getLanguageId())
 				.isNew(dto.isNew())

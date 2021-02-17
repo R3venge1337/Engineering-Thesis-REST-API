@@ -1,6 +1,7 @@
 package engineeringthesis.androidrestapi.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import engineeringthesis.androidrestapi.dto.LanguageDTO;
 import engineeringthesis.androidrestapi.serviceImpl.LanguageServiceImpl;
@@ -32,6 +34,12 @@ public  class LanguageController {
 	   LanguageDTO getLanguageById(@PathVariable Integer languageId)
 	    {
 			return languageService.getOneById(languageId);
+	    }
+	   
+	   @GetMapping(params = "languageName")
+	   Optional<LanguageDTO> getLanguageByName(@RequestParam("languageName") String languageName)
+	    {
+			return Optional.ofNullable(Optional.of(languageService.getOneByName(languageName)).orElse(new LanguageDTO()));
 	    }
 	    
 	    @PostMapping

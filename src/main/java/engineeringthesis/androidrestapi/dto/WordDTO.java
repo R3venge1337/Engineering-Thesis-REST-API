@@ -1,6 +1,8 @@
 package engineeringthesis.androidrestapi.dto;
 
+import engineeringthesis.androidrestapi.entity.AudioEntity;
 import engineeringthesis.androidrestapi.entity.CategoryEntity;
+import engineeringthesis.androidrestapi.entity.ImageEntity;
 import engineeringthesis.androidrestapi.entity.LanguageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,13 @@ public class WordDTO {
 	
 	private String wordName;
 	
+	private String wordDownloadUri;
+	
 	private CategoryEntity categoryId;
 	
 	private LanguageEntity languageId;
+	
+	private ImageEntity imageId;
+	
+	private AudioEntity audioId;
 }

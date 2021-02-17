@@ -15,5 +15,5 @@ public class StatisticResultDTO {
 	
 	private String statisticResults;
 	
-	private StatisticTypeEntity statisticId;
+	private StatisticTypeEntity statisticTypeId;
 }

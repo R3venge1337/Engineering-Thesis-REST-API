@@ -37,7 +37,7 @@ private final GameMapper gameMapper;
 	@Override
 	public GameDTO getOneByName(String name) {
 		
-		return null;
+		return gameMapper.mapOfEntity(gameRepository.findByGameName(name));
 	}
 
 	@Override

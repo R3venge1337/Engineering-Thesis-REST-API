@@ -15,7 +15,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import engineeringthesis.androidrestapi.config.ReaderPropertiesFile;
 import engineeringthesis.androidrestapi.dto.ImageDTO;
@@ -25,7 +24,6 @@ import engineeringthesis.androidrestapi.exception.MyFileNotFoundException;
 import engineeringthesis.androidrestapi.mapper.ImageMapper;
 import engineeringthesis.androidrestapi.repository.ImageFileTableRepository;
 import engineeringthesis.androidrestapi.repository.ImageRepository;
-import engineeringthesis.androidrestapi.repository.WordRepository;
 import engineeringthesis.androidrestapi.service.ImageService;
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +36,6 @@ public class ImageServiceImpl implements ImageService {
 	private final ImageMapper imageMapper;
 	private final ReaderPropertiesFile readerPropertiesFile;
 	private final ImageFileTableRepository imageFileTableRepository;
-	private final WordRepository wordRepository;
 
 	@Override
 	public List<ImageDTO> getAllImages() {
@@ -47,8 +44,9 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public ImageDTO saveImage(MultipartFile file) {
-		 try {
-			Properties prop  = readerPropertiesFile.readPropertiesFile("application.properties");
+		Properties prop;
+		try {
+			 prop  = readerPropertiesFile.readPropertiesFile("application.properties");
 			Path path = Paths.get(prop.getProperty("image_save_files_path"));
 			//System.out.println(path.resolve(file.getOriginalFilename()));
 			Files.write(path.resolve(file.getOriginalFilename()),file.getBytes());
@@ -60,20 +58,14 @@ public class ImageServiceImpl implements ImageService {
 		 	String streamId = imgId.getStreamId();
 		 	System.out.println(streamId);
 		 	
-		 	String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-	                .path("/api")
-	                .path("/images")
-	                .path("/downloadFile/")
-	                .path(file.getOriginalFilename())
-	                .toUriString();
+		 	String fileDownloadUri = prop.getProperty("image_download_uri")+file.getOriginalFilename();
 		 	System.out.println(fileDownloadUri);
 		 	
 		 	//WordEntity word = wordRepository.findById(wordid);
 		 
 			ImageDTO imageObj = new ImageDTO(); 
-			imageObj.setWordId(null);
 			imageObj.setImageFileTable(imgId);
-			imageObj.setImageDownloadUri(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
+			imageObj.setImageDownloadUri(fileDownloadUri);
 			imageObj.setAccepted(false);
 			imageObj.setNew(true);
 			ImageEntity imageEntity = imageMapper.mapOfDTO(imageObj);

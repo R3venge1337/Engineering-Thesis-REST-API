@@ -52,12 +52,11 @@ public class TeacherServiceImpl implements TeacherService{
 		
 		Optional<TeacherEntity> teacherEntity = teacherRepository.findById(teacherId);
 		TeacherEntity savedEntity = teacherEntity.get();
+		savedEntity.setTeacherId(teacherObj.getTeacherId());
 		savedEntity.setTeacherName(teacherObj.getTeacherName());
 		savedEntity.setTeacherSurname(teacherObj.getTeacherSurname());
 		savedEntity.setTeacherProfession(teacherObj.getTeacherProfession());
 		savedEntity.setTeacherCity(teacherObj.getTeacherCity());
-		savedEntity.setTeacherZipCode(teacherObj.getTeacherZipCode());
-		savedEntity.setTeacherAddress(teacherObj.getTeacherAddress());
 		savedEntity.setTeacherYearBirth(teacherObj.getTeacherYearBirth());
 		teacherRepository.save(savedEntity);
 		TeacherDTO dto = teacherMapper.mapOfEntity(savedEntity);
@@ -68,6 +67,17 @@ public class TeacherServiceImpl implements TeacherService{
 	public void deleteTeacher(Integer teacherId) {
 		
 		teacherRepository.deleteById(teacherId);
+	}
+
+	@Override
+	public List<TeacherDTO> getTeachersByLanguageName(String languageName) {
+	 return teacherMapper.mapOfCollection(teacherRepository.getTeachersByLanguageName(languageName));
+	}
+
+	@Override
+	public TeacherDTO getTeacherWithAccount(String accountName) {
+		
+		return teacherMapper.mapOfEntity(teacherRepository.getTeacherWithAccount(accountName));
 	}
 
 

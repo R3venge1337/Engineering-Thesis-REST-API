@@ -12,6 +12,7 @@ public class StatisticTypeMapper implements Mapper<StatisticTypeDTO,StatisticTyp
 	public StatisticTypeDTO mapOfEntity(StatisticTypeEntity entity) {
 		
 		StatisticTypeDTO statisticTypeDTO = StatisticTypeDTO.builder()
+				.statisticId(entity.getStatisticId())
 				.statisticName(entity.getStatisticName())
 				.build();
 		
@@ -22,7 +23,8 @@ public class StatisticTypeMapper implements Mapper<StatisticTypeDTO,StatisticTyp
 	public StatisticTypeEntity mapOfDTO(StatisticTypeDTO dto) {
 		 
 		StatisticTypeEntity statisticTypeEntity =  StatisticTypeEntity.builder()
-				 .statisticName(dto.getStatisticName())
+				.statisticId(dto.getStatisticId())
+				.statisticName(dto.getStatisticName())
 				 .build();
 		
 		return statisticTypeEntity;

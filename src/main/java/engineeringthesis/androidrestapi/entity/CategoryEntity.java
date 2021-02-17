@@ -26,7 +26,7 @@ public class CategoryEntity {
     @Column(name = "category_id_pk")
 	private Integer categoryId;
 	
-	@Column(name = "category_name ")
+	@Column(name = "category_name")
 	private String categoryName;
 	
 	@OneToOne
@@ -38,7 +38,5 @@ public class CategoryEntity {
 	
 	@Column(name = "is_accepted", columnDefinition="BIT")
 	private boolean isAccepted;
-	
-	
 	
 }

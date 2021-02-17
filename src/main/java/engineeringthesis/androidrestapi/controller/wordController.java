@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import engineeringthesis.androidrestapi.dto.WordDTO;
@@ -31,7 +32,13 @@ public class WordController {
 	    @GetMapping(value = "/{wordId}")
 	    WordDTO getWordById(@PathVariable Integer wordId )
 	    {
-			return wordServiceImpl.getOneById(wordId);
+			return wordServiceImpl.getWordById(wordId);
+	    }
+	    
+	    @GetMapping(params="wordName")
+	    WordDTO getWordByName(@RequestParam(value = "wordName", required=false) String wordName )
+	    {
+			return wordServiceImpl.getWordByName(wordName);
 	    }
 	    
 	    @PostMapping
@@ -41,8 +48,8 @@ public class WordController {
 	    }
 	    
 	    @PutMapping(value = "/{wordId}")
-	    WordDTO updateWord(@RequestBody WordDTO wordObj,
-	    				@PathVariable Integer wordId)
+	    WordDTO updateWord(@PathVariable Integer wordId,
+	    					@RequestBody WordDTO wordObj)
 	    {
 	    	return wordServiceImpl.updateWord(wordId,wordObj);
 	    }
@@ -52,5 +59,14 @@ public class WordController {
 	    {
 	    	wordServiceImpl.deleteWord(wordId);
 	    }
-		
+	    
+	    @GetMapping(value = "/categories")
+	    List<WordDTO> getAllWordsFromCategory(@RequestParam("categoryName") String categoryName,
+	    									@RequestParam("pageNumber") Integer pageNumber,
+	    									@RequestParam("size") Integer size)
+	    									
+	    {
+			return wordServiceImpl.getWordsByCategoryName(categoryName,pageNumber,size).toList();
+	    }
+	    
 }

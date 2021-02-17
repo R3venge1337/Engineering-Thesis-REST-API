@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -42,10 +41,9 @@ public class LanguageEntity {
 		//private String languageImageIcon;
 		
 		@Column(name = "language_date_created")
-		@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss",iso = DateTimeFormat.ISO.DATE_TIME)
-		@JsonSerialize(using = LocalDateTimeSerializer.class) 
-		@JsonDeserialize(using = LocalDateTimeDeserializer.class) 
-		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+		@JsonDeserialize(using = LocalDateTimeDeserializer.class)  
+		@JsonSerialize(using = LocalDateTimeSerializer.class)  
+		@DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
 		private LocalDateTime languageCreatedDate;	
 		
 		@Column(name = "is_new", columnDefinition="BIT")

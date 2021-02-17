@@ -1,7 +1,7 @@
 package engineeringthesis.androidrestapi.dto;
 
 import java.time.LocalDateTime;
-
+import engineeringthesis.androidrestapi.entity.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +22,6 @@ public class AccountDTO {
 	private LocalDateTime accountCreatedDate;
 	
 	private String accountEmail;
+	
+	private RoleEntity role;
 }

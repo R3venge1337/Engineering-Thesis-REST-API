@@ -13,12 +13,10 @@ import javax.persistence.Table;
 
 
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,24 +46,26 @@ public class GameplayEntity {
 	@JoinColumn(name = "category_id_fk")
 	private CategoryEntity categoryId;
 	
+	/*
 	@OneToOne
 	@JoinColumn(name = "child_id_fk")
 	private ChildEntity childId;
-	
+	*/
 	
 	@Column(name = "gameplay_starting_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-	@JsonDeserialize(using = LocalDateDeserializer.class)  
-	@JsonSerialize(using = LocalDateSerializer.class)  
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)  
+	@JsonSerialize(using = LocalDateTimeSerializer.class)  
+	@DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
 		private LocalDateTime gameMatchDataStart;
 	
 	@Column(name = "gameplay_ending_date")
-	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-	@JsonDeserialize(using = LocalDateDeserializer.class)  
-	@JsonSerialize(using = LocalDateSerializer.class)  
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)  
+	@JsonSerialize(using = LocalDateTimeSerializer.class)  
+	@DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
 		private LocalDateTime gameMatchDataEnd;
+	
+	@Column(name = "quest_uuid_fk")
+	private String questUUID;
 	
 
 }

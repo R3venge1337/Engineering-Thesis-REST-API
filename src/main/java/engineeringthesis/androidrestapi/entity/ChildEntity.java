@@ -1,5 +1,6 @@
 package engineeringthesis.androidrestapi.entity;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,8 +40,11 @@ public class ChildEntity {
 	@Column(name = "child_city")
 	private String childCity;
 	
-	@OneToOne
-	@JoinColumn(name = "account_id_fk ")
-	private AccountEntity accountChildId;
+	@Column(name = "child_quest_uuid")
+	private String childQuestUUID;
+	
+    @OneToOne
+    @JoinColumn(name = "account_id_fk",nullable = false)
+	AccountEntity accountChildId;
 	
 }

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import engineeringthesis.androidrestapi.dto.WordDTO;
 import engineeringthesis.androidrestapi.entity.WordEntity;
@@ -17,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WordServiceImpl implements WordService{
 
-		
 		private final WordRepository wordRepository;
 		private final WordMapper wordMapper;
 
@@ -36,14 +38,14 @@ public class WordServiceImpl implements WordService{
 		}
 
 		@Override
-		public WordDTO getOneByName(String name) {
-			return null;
+		public WordDTO getWordByName(String wordName) {
+			return  wordMapper.mapOfEntity(wordRepository.getWordByName(wordName));
 		}
 
 		@Override
-		public WordDTO getOneById(Integer wordId) {
+		public WordDTO getWordById(Integer wordId) {
 			
-			return  wordMapper.mapOfEntity(wordRepository.findById(wordId).get());
+			return wordMapper.mapOfEntity(wordRepository.findById(wordId).get());
 		}
 
 		@Override
@@ -62,4 +64,11 @@ public class WordServiceImpl implements WordService{
 			WordDTO dto = wordMapper.mapOfEntity(savedEntity);
 			return dto;
 		}
+
+		@Override
+		public Page<WordDTO> getWordsByCategoryName(String categoryName,Integer page,Integer size) {
+			int pageNumber = page != null && page > 0 ? page : 0;
+			int sizeNumber = size != null && size > 0 ? size : 4;
+			return wordMapper.map(wordRepository.findAllByCategoryId_CategoryName(categoryName,PageRequest.of(pageNumber, sizeNumber)));
+		}	
 }

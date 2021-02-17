@@ -1,7 +1,6 @@
 package engineeringthesis.androidrestapi.dto;
 
 import engineeringthesis.androidrestapi.entity.ImageFileTableEntity;
-import engineeringthesis.androidrestapi.entity.WordEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +17,6 @@ public class ImageDTO {
 	private String imageDownloadUri;
 	
 	private ImageFileTableEntity imageFileTable;
-	
-	private WordEntity wordId;
 	
 	private boolean isNew;
 	

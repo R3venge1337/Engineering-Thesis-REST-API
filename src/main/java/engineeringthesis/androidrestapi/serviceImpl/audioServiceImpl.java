@@ -1,5 +1,7 @@
     package engineeringthesis.androidrestapi.serviceImpl;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,14 +10,17 @@ import java.util.Optional;
 import java.util.Properties;
 
 import javax.transaction.Transactional;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import engineeringthesis.androidrestapi.config.ReaderPropertiesFile;
 import engineeringthesis.androidrestapi.dto.AudioDTO;
 import engineeringthesis.androidrestapi.entity.AudioEntity;
 import engineeringthesis.androidrestapi.entity.AudioFileTableEntity;
+import engineeringthesis.androidrestapi.exception.MyFileNotFoundException;
 import engineeringthesis.androidrestapi.mapper.AudioMapper;
 import engineeringthesis.androidrestapi.repository.AudioFileTableRepository;
 import engineeringthesis.androidrestapi.repository.AudioRepository;
@@ -41,8 +46,9 @@ public class AudioServiceImpl implements AudioService {
 
 	@Override
 	public AudioDTO saveAudio(MultipartFile file) {
-		 try {
-				Properties prop  = readerPropertiesFile.readPropertiesFile("application.properties");
+		Properties prop;
+		try {
+				prop  = readerPropertiesFile.readPropertiesFile("application.properties");
 				Path path = Paths.get(prop.getProperty("audio_save_files_path"));
 				//System.out.println(path.resolve(file.getOriginalFilename()));
 				Files.write(path.resolve(file.getOriginalFilename()),file.getBytes());
@@ -50,29 +56,28 @@ public class AudioServiceImpl implements AudioService {
 			  }  catch (Exception e) {
 			      throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
 			    }
-			AudioFileTableEntity imgId = audioFileTableRepository.findByName(file.getOriginalFilename());
-			 	String streamId = imgId.getStreamId();
+			AudioFileTableEntity audioId = audioFileTableRepository.findByName(file.getOriginalFilename());
+			 	String streamId = audioId.getStreamId();
 			 	System.out.println(streamId);
 			 	
-			 	String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-		                .path("/api")
-		                .path("/audios/")
-		                .path(file.getOriginalFilename())
-		                .toUriString();
+			 	String fileDownloadUri = prop.getProperty("audio_download_uri")+file.getOriginalFilename();
+		              
 			 	System.out.println(fileDownloadUri);
 		
-		/*
-		AudioEntity languageEntity = audioMapper.mapOfDTO(audio);
-		AudioEntity savedEntity = audioRepository.save(languageEntity);
-		 return audioMapper.mapOfEntity(savedEntity);
-		 */
-			 	return null;
+				AudioDTO audio = new AudioDTO();
+				audio.setAudioFileTableEntity(audioId);
+				audio.setAudioDownloadUri(fileDownloadUri);
+				audio.setAccepted(false);
+				audio.setNew(true);
+				AudioEntity languageEntity = audioMapper.mapOfDTO(audio);
+				AudioEntity savedEntity = audioRepository.save(languageEntity);
+				 return audioMapper.mapOfEntity(savedEntity);
 	}
 
 	@Override
 	public AudioDTO getOneByName(String name) {
 		
-		return null;
+		return audioMapper.mapOfEntity(audioRepository.findByName(name));
 	}
 
 	@Override
@@ -97,4 +102,26 @@ public class AudioServiceImpl implements AudioService {
 		return dto;
 	}
 	
+	@Override
+	public Resource loadAudioAsResource(String  audioName) {
+		
+		try {
+			Properties prop = null;
+			try {
+				prop = readerPropertiesFile.readPropertiesFile("application.properties");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Path path = Paths.get(prop.getProperty("audio_save_files_path"));
+            Resource resource = new UrlResource(path.toUri() + audioName);
+            System.out.println("Sciezka: " + resource.toString());
+            if(resource.exists()) {
+                return resource;
+            } else {
+                throw new MyFileNotFoundException("File not found " + audioName);
+            }
+        } catch (MalformedURLException ex) {
+            throw new MyFileNotFoundException("File not found " + audioName, ex);
+        }
+	}
 }

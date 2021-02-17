@@ -37,12 +37,17 @@ public class ImageEntity {
 	@Column(name = "is_accepted", columnDefinition="BIT")
 	private boolean isAccepted;
 	
+	/*
 	@OneToOne
 	@JoinColumn(name = "word_id_fk")
 	private WordEntity wordId;
+	*/
 	
 	@OneToOne
 	@JoinColumn(name="ntfs_image_id_fk")
 	//@Column(name = "ntfs_image_id_fk" , columnDefinition="uniqueidentifier")
 	private ImageFileTableEntity imageFileTable;
+	
+	
+	
 }

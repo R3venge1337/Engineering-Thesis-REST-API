@@ -11,7 +11,9 @@ public class GameplayResultMapper implements Mapper<GameplayResultDTO,GameplayRe
 	public GameplayResultDTO mapOfEntity(GameplayResultEntity entity) {
 		 
 		GameplayResultDTO gameMatchResult =  GameplayResultDTO.builder()
-				 .gameplayResultsId(entity.getGameplayResultsId())
+				.gameplayId(entity.getGameplayId())
+				.gameplayResultsId(entity.getGameplayResultsId())
+				.statisticResultsId(entity.getStatisticResultsId())
 				 .build();
 		return gameMatchResult;
 	}
@@ -20,7 +22,9 @@ public class GameplayResultMapper implements Mapper<GameplayResultDTO,GameplayRe
 	public GameplayResultEntity mapOfDTO(GameplayResultDTO dto) {
 		
 		GameplayResultEntity gameMatchResult =  GameplayResultEntity.builder()
+				 .gameplayId(dto.getGameplayId())
 				 .gameplayResultsId(dto.getGameplayResultsId())
+				 .statisticResultsId(dto.getStatisticResultsId())
 				 .build();
 		return gameMatchResult;
 	}

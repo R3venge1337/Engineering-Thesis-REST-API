@@ -10,14 +10,16 @@ public class TeacherMapper implements Mapper<TeacherDTO,TeacherEntity> {
 
 	@Override
 	public TeacherDTO mapOfEntity(TeacherEntity entity) {
+		
 		TeacherDTO teacherDTO = TeacherDTO.builder()
+				.teacherId(entity.getTeacherId())
 				.teacherName(entity.getTeacherName())
 				.teacherSurname(entity.getTeacherSurname())
 				.teacherProfession(entity.getTeacherProfession())
 				.teacherCity(entity.getTeacherCity())
-				.teacherAddress(entity.getTeacherAddress())
 				.teacherYearBirth(entity.getTeacherYearBirth())
-				.teacherZipCode(entity.getTeacherZipCode())
+				.accountTeacherId(entity.getAccountTeacherId())
+				.languageTeacherId(entity.getLanguageTeacherId())
 				.build();
 		return teacherDTO;
 	}
@@ -26,13 +28,14 @@ public class TeacherMapper implements Mapper<TeacherDTO,TeacherEntity> {
 	public TeacherEntity mapOfDTO(TeacherDTO dto) {
 		
 		TeacherEntity teacherEntity = TeacherEntity.builder()
+				.teacherId(dto.getTeacherId())
 				.teacherName(dto.getTeacherName())
 				.teacherSurname(dto.getTeacherSurname())
 				.teacherProfession(dto.getTeacherProfession())
 				.teacherCity(dto.getTeacherCity())
-				.teacherAddress(dto.getTeacherAddress())
 				.teacherYearBirth(dto.getTeacherYearBirth())
-				.teacherZipCode(dto.getTeacherZipCode())
+				.accountTeacherId(dto.getAccountTeacherId())
+				.languageTeacherId(dto.getLanguageTeacherId())
 				.build();
 		return teacherEntity;
 	}

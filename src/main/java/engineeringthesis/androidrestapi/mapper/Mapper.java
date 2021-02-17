@@ -17,6 +17,7 @@ public interface Mapper<DTO,ENTITY> {
 		return entities.map(this::mapOfEntity);
 	}
 	
+	
 	public default List<DTO> mapOfCollection(Collection<ENTITY> entity)
 	{
 		return entity

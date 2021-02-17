@@ -18,4 +18,6 @@ public interface ChildService {
 	ChildDTO updateChild(Integer childId,ChildDTO children);
 	
 	void deleteChild(Integer childId);
+	
+	ChildDTO getChildWithAccount(String accountName);
 }

@@ -17,6 +17,7 @@ public class AccountMapper implements Mapper<AccountDTO,AccountEntity>{
 				.accountPassword(entity.getAccountPassword())
 				.accountEmail(entity.getAccountEmail())
 				.accountCreatedDate(entity.getAccountCreatedDate())
+				.role(entity.getRole())
 				.build();
 		return accountDTO;
 	}
@@ -30,6 +31,7 @@ public class AccountMapper implements Mapper<AccountDTO,AccountEntity>{
 				.accountPassword(dto.getAccountPassword())
 				.accountEmail(dto.getAccountEmail())
 				.accountCreatedDate(dto.getAccountCreatedDate())
+				.role(dto.getRole())
 				.build();
 		return accountEntity;
 	}

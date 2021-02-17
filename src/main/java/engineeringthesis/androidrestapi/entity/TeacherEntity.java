@@ -32,7 +32,6 @@ public class TeacherEntity {
 	@Column(name = "teacher_surname")
 	private String teacherSurname;
 	
-	
 	@Column(name = "teacher_year_of_birth")
 	private Short teacherYearBirth;
 	
@@ -42,17 +41,13 @@ public class TeacherEntity {
 	@Column(name = "teacher_profession")
 	private String teacherProfession;
 	
-	@Column(name = "teacher_address")
-	private String teacherAddress;
-	
-	@Column(name = "teacher_zip_code",columnDefinition="char(6)")
-	private String teacherZipCode;
+	@OneToOne
+	@JoinColumn(name = "language_id_fk")
+	private LanguageEntity languageTeacherId;	
 	
 	@OneToOne
 	@JoinColumn(name = "account_id_fk")
 	private AccountEntity accountTeacherId;
 	
-	@OneToOne
-	@JoinColumn(name = "language_id_fk")
-	private LanguageEntity languageTeacherId;	
+	
 }
