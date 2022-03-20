@@ -18,6 +18,7 @@ Engineering-Thesis-REST-API will be sharing a data to my  Engineering Thesis and
 <li>Hibernate</li>
 <li>Lombok</li>
 <li>Junit</li>
+<li>Mockito</li>
 </ul>
 
 ## Setup
