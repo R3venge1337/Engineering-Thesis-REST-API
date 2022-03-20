@@ -25,4 +25,5 @@ Clone the repo
 ```git clone https://github.com/R3venge1337/Engineering-Thesis-REST-API.git```
 
 ## Application view
-https://user-images.githubusercontent.com/32364525/159160324-f0db4e2a-3871-4dcf-abd7-4f03a1a9399e.png
+![swagger](https://user-images.githubusercontent.com/32364525/159160324-f0db4e2a-3871-4dcf-abd7-4f03a1a9399e.png)
+
