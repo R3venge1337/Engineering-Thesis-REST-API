@@ -23,8 +23,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import engineeringthesis.androidrestapi.dto.AccountDTO;
-import engineeringthesis.androidrestapi.entity.RoleEntity;
+import engineeringthesis.androidrestapi.account.AccountDTO;
+import engineeringthesis.androidrestapi.role.RoleEntity;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,9 +52,8 @@ class AccountControllerTest {
 		assertThat(result, Matchers.notNullValue());
 	}
 	
-	@Test
 	@ParameterizedTest
-	@ValueSource( ints = {1,2,4})
+	@ValueSource(ints = {1,2,4})
 	void shouldGetAccountById(Integer id) throws Exception {
 		
 		MvcResult mvcResult  = mockMvc.perform(MockMvcRequestBuilders.get("/api/accounts/" + id ))
@@ -68,9 +67,8 @@ class AccountControllerTest {
 		
 	}
 	
-	@Test
 	@ParameterizedTest
-	@ValueSource( strings = {"","admin","teacherTest"})
+	@ValueSource(strings = {"admin","teacherTest"})
 	void shouldGetAccountByName(String accountName) throws Exception {
 		
 		MvcResult mvcResult  = mockMvc.perform(MockMvcRequestBuilders.get("/api/accounts?accountName=" + accountName ))
@@ -89,7 +87,7 @@ class AccountControllerTest {
 				.andReturn();
 		AccountDTO accountReturned = objectMapper.readValue(mvcResultGetAccount.getResponse().getContentAsString(), AccountDTO.class);
 		
-		accountReturned.setAccountName("JestesKozak12");
+		accountReturned.builder().accountName("JestesKozak12").build();
 		MvcResult mvcResult  = mockMvc.perform(MockMvcRequestBuilders.put("/api/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(accountReturned.toString())
@@ -109,11 +107,20 @@ class AccountControllerTest {
 		
 		RoleEntity roleReturned = objectMapper.readValue(mvcResultRoles.getResponse().getContentAsString(), RoleEntity.class);
 		
+		/*
 		AccountDTO accountAdd = new AccountDTO();
-		accountAdd.setAccountName("admin2");
+		accountAdd.builder().accountName("admin2")
+		//accountAdd.setAccountName("admin2");
 		accountAdd.setAccountPassword("admin2");
 		accountAdd.setAccountEmail("admin2@wp.pl");
 		accountAdd.setRole(roleReturned);
+		*/
+		AccountDTO accountAdd = AccountDTO.builder()
+				.accountName("admin2")
+				.accountPassword("admin2")
+				.accountEmail("admin2@wp.pl")
+				.role(roleReturned)
+				.build();
 		
 		MvcResult mvcResult  = mockMvc.perform(MockMvcRequestBuilders.post("/api/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -125,9 +132,8 @@ class AccountControllerTest {
 		assertThat(mvcResult.toString(), Matchers.notNullValue());
 	}
 	
-	@Test
 	@ParameterizedTest
-	@ValueSource( ints = {2})
+	@ValueSource(ints = {100})
 	void shouldDeleteAccount(Integer id) throws Exception {
 		
 		MvcResult mvcResult  = mockMvc.perform(MockMvcRequestBuilders.delete("/api/accounts/"+ id))
@@ -136,8 +142,4 @@ class AccountControllerTest {
 		
 		assertThat(mvcResult.toString(), Matchers.nullValue());
 	}
-	
-
-	
-
 }

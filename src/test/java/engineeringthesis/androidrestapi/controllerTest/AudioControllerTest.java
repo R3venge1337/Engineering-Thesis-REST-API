@@ -21,7 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import engineeringthesis.androidrestapi.dto.AudioDTO;
+
+import engineeringthesis.androidrestapi.audio.AudioDTO;
 
 
 @SpringBootTest
@@ -49,7 +50,7 @@ public class AudioControllerTest {
 		assertThat(result, Matchers.notNullValue());
 	}
 	
-	@Test
+
 	@ParameterizedTest
 	@ValueSource( ints = {1,2,4})
 	void shouldGetAudioById(Integer id) throws Exception {
@@ -115,7 +116,6 @@ public class AudioControllerTest {
 	}
 	*/
 	
-	@Test
 	@ParameterizedTest
 	@ValueSource(ints = {20})
 	void shouldDeleteAudio(Integer id) throws Exception {

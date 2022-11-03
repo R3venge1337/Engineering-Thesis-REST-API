@@ -13,15 +13,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import engineeringthesis.androidrestapi.dto.GameDTO;
-import engineeringthesis.androidrestapi.entity.GameEntity;
-import engineeringthesis.androidrestapi.mapper.GameMapper;
-import engineeringthesis.androidrestapi.repository.GameRepository;
-import engineeringthesis.androidrestapi.serviceImpl.GameServiceImpl;
+import engineeringthesis.androidrestapi.game.GameDTO;
+import engineeringthesis.androidrestapi.game.GameEntity;
+import engineeringthesis.androidrestapi.game.GameMapper;
+import engineeringthesis.androidrestapi.game.GameRepository;
+import engineeringthesis.androidrestapi.game.GameServiceImpl;
 
 
-
+@SpringBootTest
+@AutoConfigureMockMvc
 public class GameTest {
 	
 	
@@ -41,7 +44,7 @@ public class GameTest {
 	public void setup()
 	{
 		MockitoAnnotations.initMocks(this);
-		gameServiceImpl = new GameServiceImpl(gameRepository,mapper);
+		//gameServiceImpl = new GameServiceImpl(gameRepository,mapper);
 		
 		listwords = new LinkedList<GameEntity>();
 		listwords.add(new GameEntity(1,"Find out pciture"));
