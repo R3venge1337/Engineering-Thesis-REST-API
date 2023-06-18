@@ -2,8 +2,8 @@ package engineeringthesis.androidrestapi.game.controller;
 
 import java.util.List;
 
+import engineeringthesis.androidrestapi.game.GameplayResultFacade;
 import engineeringthesis.androidrestapi.game.dto.GameplayResultDTO;
-import engineeringthesis.androidrestapi.game.domain.GameplayResultServiceImpl;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,47 +20,47 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class GameplayResultController {
 
-	private final GameplayResultServiceImpl gameplayResultServiceImpl;
+	private final GameplayResultFacade gameplayResultFacade;
 
 	@GetMapping
 	List<GameplayResultDTO> getAllGameplayResults() {
-		return gameplayResultServiceImpl.getAllGameplayResults();
+		return gameplayResultFacade.getAllGameplayResults();
 	}
 
 	@GetMapping(value = "/{gameplayResultsId}")
 	GameplayResultDTO getGameplayResultById(@PathVariable Integer gameplayResultsId) {
-		return gameplayResultServiceImpl.getOneById(gameplayResultsId);
+		return gameplayResultFacade.getOneById(gameplayResultsId);
 	}
 
 	@GetMapping(value = "/gameplay/{gameplayId}")
 	List<GameplayResultDTO> getAllGameplayResultsByGameplayId(@PathVariable Integer gameplayId) {
-		return gameplayResultServiceImpl.getAllGameplayResultsByGameplayId(gameplayId);
+		return gameplayResultFacade.getAllGameplayResultsByGameplayId(gameplayId);
 	}
 
 	@PostMapping
 	GameplayResultDTO saveGameplay(@RequestBody GameplayResultDTO gameplayResultsObj) {
-		return gameplayResultServiceImpl.saveGameplayResults(gameplayResultsObj);
+		return gameplayResultFacade.saveGameplayResults(gameplayResultsObj);
 	}
 
 	@PutMapping(value = "/{gameplayId}")
 	GameplayResultDTO updateGameplayResults(@RequestBody GameplayResultDTO gameplayResultsObj,
 			@PathVariable Integer gameplayId) {
-		return gameplayResultServiceImpl.updateGameplayResults(gameplayId, gameplayResultsObj);
+		return gameplayResultFacade.updateGameplayResults(gameplayId, gameplayResultsObj);
 	}
 
 	@DeleteMapping
 	void deleteGameplayResultsById(@PathVariable Integer gameplayResultsId) {
-		gameplayResultServiceImpl.deleteGameplayResults(gameplayResultsId);
+		gameplayResultFacade.deleteGameplayResults(gameplayResultsId);
 	}
 
 	@GetMapping(value = "/child/{guestUUID}")
 	List<GameplayResultDTO> getAllUserResultsByGuestId(@PathVariable String guestUUID) {
-		return gameplayResultServiceImpl.getAllUserResultsByGuestId(guestUUID);
+		return gameplayResultFacade.getAllUserResultsByGuestId(guestUUID);
 	}
 
 	@GetMapping(value = "/game/{gameName}")
 	List<GameplayResultDTO> getAllGameplayResultsByGameName(@PathVariable String gameName) {
-		return gameplayResultServiceImpl.getAllUserResultsByGameName(gameName);
+		return gameplayResultFacade.getAllUserResultsByGameName(gameName);
 	}
 
 }

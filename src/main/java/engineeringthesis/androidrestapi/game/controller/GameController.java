@@ -2,8 +2,8 @@ package engineeringthesis.androidrestapi.game.controller;
 
 import java.util.List;
 
+import engineeringthesis.androidrestapi.game.GameFacade;
 import engineeringthesis.androidrestapi.game.dto.GameDTO;
-import engineeringthesis.androidrestapi.game.domain.GameServiceImpl;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,35 +21,35 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class GameController {
 
-	private final GameServiceImpl gameServiceImpl;
+	private final GameFacade gameFacade;
 
 	@GetMapping
 	List<GameDTO> getAllGames() {
-		return gameServiceImpl.getAllGames();
+		return gameFacade.getAllGames();
 	}
 
 	@GetMapping(value = "/{gameId}")
 	GameDTO getGameById(@PathVariable Integer gameId) {
-		return gameServiceImpl.getOneById(gameId);
+		return gameFacade.getOneById(gameId);
 	}
 
 	@GetMapping(params = "gameName")
 	GameDTO getGameByName(@RequestParam("gameName") String gameName) {
-		return gameServiceImpl.getOneByName(gameName);
+		return gameFacade.getOneByName(gameName);
 	}
 
 	@PostMapping
 	GameDTO saveGame(@RequestBody GameDTO gameObj) {
-		return gameServiceImpl.saveGame(gameObj);
+		return gameFacade.saveGame(gameObj);
 	}
 
 	@PutMapping(value = "/{gameId}")
 	void updateGame(@PathVariable Integer gameId, @RequestBody GameDTO gameObj) {
-		gameServiceImpl.updateGame(gameId, gameObj);
+		gameFacade.updateGame(gameId, gameObj);
 	}
 
 	@DeleteMapping(value = "/{gameId}")
 	void deleteGame(@PathVariable Integer gameId) {
-		gameServiceImpl.deleteGame(gameId);
+		gameFacade.deleteGame(gameId);
 	}
 }

@@ -1,8 +1,6 @@
 package engineeringthesis.androidrestapi.security.controller;
 
 import engineeringthesis.androidrestapi.security.dto.AuthorizationResponse;
-import engineeringthesis.androidrestapi.security.domain.JwtTokenUtil;
-import engineeringthesis.androidrestapi.security.domain.UserDetailsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class LoginController {
 
-	private final UserDetailsFacade userDetailsService;
+	private final UserDetailsFacade userDetailsFacade;
 
 	private final AuthenticationManager authenticationManager;
 
@@ -33,7 +31,7 @@ class LoginController {
 
 		authenticate(username, password);
 
-		final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		final UserDetails userDetails = userDetailsFacade.loadUserByUsername(username);
 
 		final String token = jwtTokenUtil.generateToken(userDetails);
 

@@ -1,15 +1,8 @@
 package engineeringthesis.androidrestapi.category.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
-import engineeringthesis.androidrestapi.teacher.domain.TeacherEntity;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-class CategoryTeacherEntity {
+class CategoryTeacher {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +22,11 @@ class CategoryTeacherEntity {
 	
 	@OneToOne
 	@JoinColumn(name = "category_id_fk")
-	private CategoryEntity categoryId;
+	private Category categoryId;
 	
 	@OneToOne
 	@JoinColumn(name = "teacher_id_fk")
-	private TeacherEntity teacherId;
+	private Teacher teacherId;
 	
 	@Column(name = "is_new", columnDefinition="BIT")
 	private boolean isNew;

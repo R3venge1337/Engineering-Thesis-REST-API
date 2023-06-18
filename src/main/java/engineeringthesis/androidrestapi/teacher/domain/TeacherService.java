@@ -3,10 +3,9 @@ package engineeringthesis.androidrestapi.teacher.domain;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import engineeringthesis.androidrestapi.teacher.TeacherFacade;
 import engineeringthesis.androidrestapi.teacher.dto.TeacherDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;

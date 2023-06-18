@@ -2,8 +2,8 @@ package engineeringthesis.androidrestapi.game.controller;
 
 import java.util.List;
 
+import engineeringthesis.androidrestapi.game.GameplayFacade;
 import engineeringthesis.androidrestapi.game.dto.GameplayDTO;
-import engineeringthesis.androidrestapi.game.domain.GameplayServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,30 +19,30 @@ import org.springframework.web.bind.annotation.RestController;
 class GameplayController {
 
 	@Autowired
-	private GameplayServiceImpl gameplayServiceImpl;
+	private GameplayFacade gameplayFacade;
 
 	@GetMapping
 	List<GameplayDTO> getAllGameplays() {
-		return gameplayServiceImpl.getAllGameplay();
+		return gameplayFacade.getAllGameplay();
 	}
 
 	@GetMapping(value = "{gameplayId}")
 	GameplayDTO getGameplayById(@PathVariable Integer gameplayId) {
-		return gameplayServiceImpl.getOneById(gameplayId);
+		return gameplayFacade.getOneById(gameplayId);
 	}
 
 	@PostMapping
 	GameplayDTO saveGameplay(@RequestBody GameplayDTO gameMatchObj) {
-		return gameplayServiceImpl.saveGameplay(gameMatchObj);
+		return gameplayFacade.saveGameplay(gameMatchObj);
 	}
 
 	@PutMapping(value = "/{gameplayId}")
 	GameplayDTO updateGameplay(@RequestBody GameplayDTO gameplayObj, @PathVariable Integer gameplayId) {
-		return gameplayServiceImpl.updateGameplay(gameplayId, gameplayObj);
+		return gameplayFacade.updateGameplay(gameplayId, gameplayObj);
 	}
 
 	@DeleteMapping(value = "/{gameMatchId}")
 	void deleteGameplayById(@PathVariable Integer gameMatchId) {
-		gameplayServiceImpl.deleteGameplay(gameMatchId);
+		gameplayFacade.deleteGameplay(gameMatchId);
 	}
 }

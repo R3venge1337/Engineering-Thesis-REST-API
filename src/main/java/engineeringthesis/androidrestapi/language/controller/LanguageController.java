@@ -3,8 +3,8 @@ package engineeringthesis.androidrestapi.language.controller;
 import java.util.List;
 import java.util.Optional;
 
+import engineeringthesis.androidrestapi.language.LanguageFacade;
 import engineeringthesis.androidrestapi.language.dto.LanguageDTO;
-import engineeringthesis.androidrestapi.language.domain.LanguageServiceImpl;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,35 +22,35 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class LanguageController {
 
-	private final LanguageServiceImpl languageService;
+	private final LanguageFacade languageFacade;
 
 	@GetMapping
 	List<LanguageDTO> getAllLanguages() {
-		return languageService.getAllLanguage();
+		return languageFacade.getAllLanguage();
 	}
 
 	@GetMapping(value = "/{languageId}")
 	LanguageDTO getLanguageById(@PathVariable Integer languageId) {
-		return languageService.getOneById(languageId);
+		return languageFacade.getOneById(languageId);
 	}
 
 	@GetMapping(params = "languageName")
 	Optional<LanguageDTO> getLanguageByName(@RequestParam("languageName") String languageName) {
-		return Optional.ofNullable(Optional.of(languageService.getOneByName(languageName)).orElse(new LanguageDTO()));
+		return Optional.ofNullable(Optional.of(languageFacade.getOneByName(languageName)).orElse(new LanguageDTO()));
 	}
 
 	@PostMapping
 	LanguageDTO saveLanguage(@RequestBody LanguageDTO lang) {
-		return languageService.saveLanguage(lang);
+		return languageFacade.saveLanguage(lang);
 	}
 
 	@PutMapping(value = "/{languageId}")
 	void updateLanguage(@RequestBody LanguageDTO lang, @PathVariable Integer languageId) {
-		languageService.updateLanguage(languageId, lang);
+		languageFacade.updateLanguage(languageId, lang);
 	}
 
 	@DeleteMapping(value = "/{languageId}")
 	void deleteLanguage(@PathVariable Integer languageId) {
-		languageService.deleteLanguage(languageId);
+		languageFacade.deleteLanguage(languageId);
 	}
 }

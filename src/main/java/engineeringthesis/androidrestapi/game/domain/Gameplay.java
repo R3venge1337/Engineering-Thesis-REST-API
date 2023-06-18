@@ -3,6 +3,7 @@ package engineeringthesis.androidrestapi.game.domain;
 import java.time.LocalDateTime;
 
 
+import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

@@ -1,6 +1,5 @@
 package engineeringthesis.androidrestapi.statistic.dto;
 
-import engineeringthesis.androidrestapi.statistic.domain.StatisticType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

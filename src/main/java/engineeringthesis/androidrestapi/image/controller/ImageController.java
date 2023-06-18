@@ -3,10 +3,10 @@ package engineeringthesis.androidrestapi.image.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 
+import engineeringthesis.androidrestapi.image.ImageFacade;
 import engineeringthesis.androidrestapi.image.dto.ImageDTO;
-import engineeringthesis.androidrestapi.image.domain.ImageServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -31,39 +31,39 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class ImageController {
 
-	private final ImageServiceImpl imageServiceImpl;
+	private final ImageFacade imageFacade;
 
 	private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
 
 	@GetMapping
 	List<ImageDTO> getAllImages() {
-		return imageServiceImpl.getAllImages();
+		return imageFacade.getAllImages();
 	}
 
 	@GetMapping(value = "/{imageId}")
 	ImageDTO getImageById(@PathVariable Integer imageId) {
-		return imageServiceImpl.getOneById(imageId);
+		return imageFacade.getOneById(imageId);
 	}
 
 	@PostMapping
 	ImageDTO saveImage(@RequestParam("file") MultipartFile file) {
-		return imageServiceImpl.saveImage(file);
+		return imageFacade.saveImage(file);
 	}
 
 	@PutMapping(value = "/{imageId}")
 	ImageDTO updateImage(@RequestBody ImageDTO imageObj, @PathVariable Integer imageId) {
-		return imageServiceImpl.updateImage(imageId, imageObj);
+		return imageFacade.updateImage(imageId, imageObj);
 	}
 
 	@DeleteMapping(value = "/{imageId}")
 	void deleteImage(@PathVariable Integer imageId) {
-		imageServiceImpl.deleteImage(imageId);
+		imageFacade.deleteImage(imageId);
 	}
 
 	@GetMapping("/downloadFile/{fileName:.+}")
 	ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
 		// Load file as Resource
-		Resource resource = imageServiceImpl.loadImageAsResource(fileName);
+		Resource resource = imageFacade.loadImageAsResource(fileName);
 
 		// Try to determine file's content type
 		String contentType = null;

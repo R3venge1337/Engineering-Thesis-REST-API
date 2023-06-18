@@ -3,10 +3,10 @@ package engineeringthesis.androidrestapi.statistic.domain;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
 
 import engineeringthesis.androidrestapi.statistic.StatisticTypeFacade;
 import engineeringthesis.androidrestapi.statistic.dto.StatisticTypeDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;

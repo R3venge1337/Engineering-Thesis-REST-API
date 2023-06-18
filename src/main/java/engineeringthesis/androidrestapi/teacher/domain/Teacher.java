@@ -1,8 +1,6 @@
 package engineeringthesis.androidrestapi.teacher.domain;
 
 
-import engineeringthesis.androidrestapi.account.domain.Account;
-import engineeringthesis.androidrestapi.language.domain.LanguageEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

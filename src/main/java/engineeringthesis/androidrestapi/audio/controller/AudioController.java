@@ -3,11 +3,9 @@ package engineeringthesis.androidrestapi.audio.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-
+import engineeringthesis.androidrestapi.audio.AudioFacade;
 import engineeringthesis.androidrestapi.audio.dto.AudioDTO;
-import engineeringthesis.androidrestapi.audio.AudioServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,51 +30,51 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class AudioController {
 
-    private final AudioServiceImpl audioServiceImpl;
+    private final AudioFacade audioFacade;
 	private static final Logger logger = LoggerFactory.getLogger(AudioController.class);
 
 	@GetMapping
     List<AudioDTO> getAllAudioFiles()
     {
-		return audioServiceImpl.getAllAudio();
+		return audioFacade.getAllAudio();
     }
     
     @GetMapping(params="audioFileName")
     AudioDTO getAudioFileByName(@RequestParam("audioFileName") String audioFileName )
     {
-		return audioServiceImpl.getOneByName(audioFileName);
+		return audioFacade.getOneByName(audioFileName);
     }
     
     @GetMapping(value = "/{audioId}")
     AudioDTO getAudioById(@PathVariable Integer audioId )
     {
-		return audioServiceImpl.getOneById(audioId);
+		return audioFacade.getOneById(audioId);
     }
     
     @PostMapping
     AudioDTO saveAudioFile(@RequestParam("file") MultipartFile file)
     {
-    	return audioServiceImpl.saveAudio(file);
+    	return audioFacade.saveAudio(file);
     }
     
     @PutMapping(value = "/{audioId}" )
     AudioDTO updateAudioFile(@RequestBody AudioDTO audioFileObj,
     						@PathVariable Integer audioId)
     {
-    	return audioServiceImpl.updateAudio(audioId,audioFileObj);
+    	return audioFacade.updateAudio(audioId,audioFileObj);
     }
     
     @DeleteMapping(value = "/{audioId}")
     void deleteAudioFile(@PathVariable Integer audioId)
     {
-    	audioServiceImpl.deleteAudio(audioId);
+    	audioFacade.deleteAudio(audioId);
     }
     
     @GetMapping("/downloadFile/{fileName:.+}")
     ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         
     	// Load file as Resource
-        Resource resource = audioServiceImpl.loadAudioAsResource(fileName);
+        Resource resource = audioFacade.loadAudioAsResource(fileName);
 
         // Try to determine file's content type
         String contentType = null;

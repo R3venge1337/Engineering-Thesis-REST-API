@@ -1,6 +1,6 @@
 package engineeringthesis.androidrestapi.image.dto;
 
-import engineeringthesis.androidrestapi.image.domain.ImageFileTableEntity;
+import engineeringthesis.androidrestapi.image.domain.ImageFileTable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class ImageDTO {
 	
 	private String imageDownloadUri;
 	
-	private ImageFileTableEntity imageFileTable;
+	private ImageFileTable imageFileTable;
 	
 	private boolean isNew;
 	

@@ -32,5 +32,5 @@ public class AccountDTO {
 	private String accountEmail;
 	
 	@Setter(value = AccessLevel.PACKAGE)
-	private RoleEntity role;
+	private Role role;
 }

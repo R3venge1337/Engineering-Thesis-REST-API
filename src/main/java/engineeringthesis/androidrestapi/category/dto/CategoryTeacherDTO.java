@@ -14,9 +14,9 @@ public class CategoryTeacherDTO {
 	
 	private Integer categoryTeacherId;
 	
-	private CategoryEntity categoryId;
+	private Category categoryId;
 	
-	private TeacherEntity teacherId;
+	private Teacher teacherId;
 	
 	private boolean isNew;
 

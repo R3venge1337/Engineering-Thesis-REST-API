@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import engineeringthesis.androidrestapi.audio.AudioFacade;
 import engineeringthesis.androidrestapi.audio.dto.AudioDTO;
+import engineeringthesis.androidrestapi.common.exception.FileNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import engineeringthesis.androidrestapi.common.entity.ReaderPropertiesFile;
-import engineeringthesis.androidrestapi.exception.MyFileNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
@@ -114,10 +114,10 @@ class AudioService implements AudioFacade {
             if(resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("File not found " + audioName);
+                throw new FileNotFoundException("File not found " + audioName);
             }
         } catch (MalformedURLException ex) {
-            throw new MyFileNotFoundException("File not found " + audioName, ex);
+            throw new FileNotFoundException("File not found " + audioName, ex);
         }
 	}
 }

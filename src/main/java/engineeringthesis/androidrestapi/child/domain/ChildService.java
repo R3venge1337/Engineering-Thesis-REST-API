@@ -2,10 +2,10 @@ package engineeringthesis.androidrestapi.child.domain;
 
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 
 import engineeringthesis.androidrestapi.child.ChildFacade;
 import engineeringthesis.androidrestapi.child.dto.ChildDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;

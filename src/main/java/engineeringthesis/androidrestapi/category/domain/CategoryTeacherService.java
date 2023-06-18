@@ -2,10 +2,10 @@ package engineeringthesis.androidrestapi.category.domain;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 
 import engineeringthesis.androidrestapi.category.CategoryTeacherFacade;
 import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;
@@ -27,8 +27,8 @@ class CategoryTeacherService implements CategoryTeacherFacade {
 	@Override
 	public CategoryTeacherDTO saveCategoryToTeacher(CategoryTeacherDTO categoryTeacherObj) {
 		
-		CategoryTeacherEntity categoryTeacherEntity = categoryTeacherMapper.mapOfDTO(categoryTeacherObj);
-		CategoryTeacherEntity categoryTeacherEntitySaved = categoryTeacherRepository.save(categoryTeacherEntity);
+		CategoryTeacher categoryTeacherEntity = categoryTeacherMapper.mapOfDTO(categoryTeacherObj);
+		CategoryTeacher categoryTeacherEntitySaved = categoryTeacherRepository.save(categoryTeacherEntity);
 		return categoryTeacherMapper.mapOfEntity(categoryTeacherEntitySaved);
 	}
 	

@@ -4,7 +4,6 @@ import java.util.List;
 
 import engineeringthesis.androidrestapi.category.CategoryTeacherFacade;
 import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDTO;
-import engineeringthesis.androidrestapi.category.domain.CategoryTeacherServiceImpl;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,15 +18,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class CategoryTeacherController {
 
-	private final CategoryTeacherFacade categoryTeacherSerivce;
+	private final CategoryTeacherFacade categoryTeacherFacade;
 
 	@GetMapping(value = "/{teacherId}")
 	List<CategoryTeacherDTO> getAllCategoriesByTeacherId(@PathVariable Integer teacherId) {
-		return categoryTeacherSerivce.getCategoriesTeacher(teacherId);
+		return categoryTeacherFacade.getCategoriesTeacher(teacherId);
 	}
 
 	@PostMapping
 	CategoryTeacherDTO saveCategoryToTeacher(@RequestBody CategoryTeacherDTO categoryTeacherObj) {
-		return categoryTeacherSerivce.saveCategoryToTeacher(categoryTeacherObj);
+		return categoryTeacherFacade.saveCategoryToTeacher(categoryTeacherObj);
 	}
 }

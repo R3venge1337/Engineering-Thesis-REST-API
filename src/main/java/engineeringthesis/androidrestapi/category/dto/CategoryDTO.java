@@ -16,7 +16,7 @@ public class CategoryDTO {
 	
 	private String categoryName;
 	
-	private LanguageEntity languageId;
+	private Language languageId;
 	
 	private boolean isNew;
 	

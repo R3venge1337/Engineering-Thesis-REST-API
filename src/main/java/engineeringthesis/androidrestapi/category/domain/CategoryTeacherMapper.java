@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 import engineeringthesis.androidrestapi.common.entity.Mapper;
 
 @Component
-class CategoryTeacherMapper implements Mapper<CategoryTeacherDTO, CategoryTeacherEntity> {
+class CategoryTeacherMapper implements Mapper<CategoryTeacherDTO, CategoryTeacher> {
 
 	@Override
-	public CategoryTeacherDTO mapOfEntity(CategoryTeacherEntity entity) {
+	public CategoryTeacherDTO mapOfEntity(CategoryTeacher entity) {
 		
 		CategoryTeacherDTO categoryTeacherDTO = CategoryTeacherDTO.builder()
 				.categoryTeacherId(entity.getCategoryTeacherId())
@@ -22,9 +22,9 @@ class CategoryTeacherMapper implements Mapper<CategoryTeacherDTO, CategoryTeache
 	}
 
 	@Override
-	public CategoryTeacherEntity mapOfDTO(CategoryTeacherDTO dto) {
+	public CategoryTeacher mapOfDTO(CategoryTeacherDTO dto) {
 		
-		CategoryTeacherEntity categoryTeacherEntity = CategoryTeacherEntity.builder()
+		CategoryTeacher categoryTeacherEntity = CategoryTeacher.builder()
 				.categoryTeacherId(dto.getCategoryTeacherId())
 				.categoryId(dto.getCategoryId())
 				.teacherId(dto.getTeacherId())

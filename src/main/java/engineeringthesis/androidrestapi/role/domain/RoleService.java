@@ -2,10 +2,9 @@ package engineeringthesis.androidrestapi.role.domain;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import engineeringthesis.androidrestapi.role.RoleFacade;
 import engineeringthesis.androidrestapi.role.dto.RoleDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;

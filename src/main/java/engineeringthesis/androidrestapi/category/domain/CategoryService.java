@@ -3,10 +3,9 @@ package engineeringthesis.androidrestapi.category.domain;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import engineeringthesis.androidrestapi.category.CategoryFacade;
 import engineeringthesis.androidrestapi.category.dto.CategoryDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;
@@ -36,8 +35,8 @@ class CategoryService implements CategoryFacade {
 	@Override
 	public CategoryDTO saveCategory(CategoryDTO cat) {
 		
-		CategoryEntity categoryEntity = categoryMapper.mapOfDTO(cat);
-		CategoryEntity savedEntity = categoryRepository.save(categoryEntity);
+		Category categoryEntity = categoryMapper.mapOfDTO(cat);
+		Category savedEntity = categoryRepository.save(categoryEntity);
 		 return categoryMapper.mapOfEntity(savedEntity);
 	}
 
@@ -56,8 +55,8 @@ class CategoryService implements CategoryFacade {
 	@Override
 	public CategoryDTO updateCategory(Integer categoryId, CategoryDTO cat) {
 		
-		Optional<CategoryEntity> categoryEntity = categoryRepository.findById(categoryId);
-		CategoryEntity savedEntity = categoryEntity.get();
+		Optional<Category> categoryEntity = categoryRepository.findById(categoryId);
+		Category savedEntity = categoryEntity.get();
 		savedEntity.setCategoryName(cat.getCategoryName());
 		savedEntity.setLanguageId(cat.getLanguageId());
 		categoryRepository.save(savedEntity);
