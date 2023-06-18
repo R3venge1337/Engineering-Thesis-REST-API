@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import engineeringthesis.androidrestapi.audio.AudioDTO;
+import engineeringthesis.androidrestapi.audio.dto.AudioDTO;
 
 
 @SpringBootTest

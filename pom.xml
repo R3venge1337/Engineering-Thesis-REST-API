@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.5</version>
+		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>engineeringthesis</groupId>
@@ -16,6 +16,15 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<sqlserver>11.2.3.jre17</sqlserver>
+		<swagger>3.0.0</swagger>
+		<jsonwebtoken>0.11.5</jsonwebtoken>
+		<oauth>3.11.0</oauth>
+		<lombok>1.18.22</lombok>
+		<hamcrest>1.3</hamcrest>
+		<apachecommonscollections>4.4</apachecommonscollections>
+		<apachecommonslang>3.12.0</apachecommonslang>
+		<springvalidation>3.1.0</springvalidation>
 	</properties>
 
 	<dependencies>
@@ -27,21 +36,35 @@
 	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<!-- HATEOAS-->
-		<!--  
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-hateoas</artifactId>
-		</dependency>
-		-->
-			<!-- -->
-			
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+			<version>${springvalidation}</version>
+		</dependency>
+
+		<!-- Apache commons-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${apachecommonslang}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${apachecommonscollections}</version>
+		</dependency>
+		<!-- -->
+
 	<!-- Devtools-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -50,15 +73,15 @@
 			<optional>true</optional>
 		</dependency>
 		<!-- -->
+
 		<!-- SQL Server -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
-			<version>11.2.0.jre17</version>
-
-			<scope>runtime</scope>
+			<version>${sqlserver}</version>
 		</dependency>
 		<!-- -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -70,6 +93,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
 		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -80,6 +104,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
@@ -98,47 +123,57 @@
    		 <artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		 <!-- -->
-		    <!-- Swagger 2 -->
+		<!-- Swagger 2 -->
 		   <dependency>
 			    <groupId>io.springfox</groupId>
 			    <artifactId>springfox-swagger2</artifactId>
-			    <version>3.0.0</version>
+			    <version>${swagger}</version>
 			</dependency>	
 			
 			<dependency>
 			    <groupId>io.springfox</groupId>
 			    <artifactId>springfox-swagger-ui</artifactId>
-			    <version>3.0.0</version>
+				<version>${swagger}</version>
 			</dependency>
-			
-			<dependency>
-  <groupId>io.springfox</groupId>
-  <artifactId>springfox-boot-starter</artifactId>
-  <version>3.0.0</version>
-</dependency>
-			<!-- -->
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>${swagger}</version>
+		</dependency>
+		<!-- -->
 			
 		<!-- JSON Web Token -->
-			<dependency>
-			    <groupId>io.jsonwebtoken</groupId>
-			    <artifactId>jjwt</artifactId>
-			    <version>0.9.1</version>
-			</dependency>
-			
-			<dependency>
-			    <groupId>com.auth0</groupId>
-			    <artifactId>java-jwt</artifactId>
-			    <version>3.11.0</version>
-			</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jsonwebtoken}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jsonwebtoken}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jsonwebtoken}</version>
+			<scope>runtime</scope>
+		</dependency>
 		<!-- -->
-				<!--> Lombok -->
+
+		<!--> Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
-			  <version>1.18.22</version>
+			  <version>${lombok}</version>
 		</dependency>
 		<!-- -->
+
 		<!--> Mockito -->
 		<dependency>
 		    <groupId>org.mockito</groupId>
@@ -160,7 +195,7 @@
 		   <dependency>
 		    <groupId>org.hamcrest</groupId>
 		    <artifactId>hamcrest-all</artifactId>
-		    <version>1.3</version>
+		    <version>${hamcrest}</version>
 		    <scope>test</scope>
 		</dependency>
 		

@@ -23,8 +23,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import engineeringthesis.androidrestapi.account.AccountDTO;
-import engineeringthesis.androidrestapi.role.RoleEntity;
+import engineeringthesis.androidrestapi.account.dto.AccountDTO;
+import engineeringthesis.androidrestapi.role.domain.RoleEntity;
 
 @SpringBootTest
 @AutoConfigureMockMvc
