@@ -21,10 +21,9 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {
+class SwaggerConfig {
 
 		@Bean
 		public Docket get()
@@ -37,8 +36,6 @@ public class SwaggerConfig {
 					.apiInfo(createApiInfo())
 					.securitySchemes(Collections.singletonList(createSchema()))
 					.securityContexts(Collections.singletonList(createContext()));
-			
-		
 		}
 		
 		private ApiInfo createApiInfo()
@@ -61,17 +58,14 @@ public class SwaggerConfig {
 			return new ApiKey("apiKey", "Authorization", "header");
 		}
 		
-		
-		
 		private SecurityContext createContext()
 		{
 			return SecurityContext.builder()
 					.securityReferences(defaultAuth())
-					.forPaths(PathSelectors.any())
 					.build();
 		}
 		
-	 private List<SecurityReference> defaultAuth() {
+		private List<SecurityReference> defaultAuth() {
 		        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
 		        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
 		        authorizationScopes[0] = authorizationScope;

@@ -21,7 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import engineeringthesis.androidrestapi.dto.CategoryTeacherDTO;
+
+import engineeringthesis.androidrestapi.category.CategoryTeacherDTO;
 
 @SpringBootTest
 @AutoConfigureMockMvc

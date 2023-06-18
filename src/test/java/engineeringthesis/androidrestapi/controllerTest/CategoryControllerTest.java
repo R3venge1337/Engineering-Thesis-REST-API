@@ -22,8 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import engineeringthesis.androidrestapi.dto.AudioDTO;
-import engineeringthesis.androidrestapi.dto.CategoryDTO;
+import engineeringthesis.androidrestapi.category.CategoryDTO;
 
 @SpringBootTest
 @AutoConfigureMockMvc

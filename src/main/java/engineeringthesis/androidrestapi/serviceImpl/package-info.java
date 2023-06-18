@@ -1,1 +1,0 @@
-package engineeringthesis.androidrestapi.serviceImpl;
