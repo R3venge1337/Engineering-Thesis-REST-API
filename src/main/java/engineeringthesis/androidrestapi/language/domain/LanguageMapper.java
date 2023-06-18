@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 import engineeringthesis.androidrestapi.common.entity.Mapper;
 
 @Component
-class LanguageMapper implements Mapper<LanguageDTO, LanguageEntity> {
+class LanguageMapper implements Mapper<LanguageDTO, Language> {
 
 	@Override
-	public LanguageDTO mapOfEntity(LanguageEntity entity) {
+	public LanguageDTO mapOfEntity(Language entity) {
 		
 		LanguageDTO languageDTO = LanguageDTO.builder()
 				.languageId(entity.getLanguageId())
@@ -24,9 +24,9 @@ class LanguageMapper implements Mapper<LanguageDTO, LanguageEntity> {
 	}
 
 	@Override
-	public LanguageEntity mapOfDTO(LanguageDTO dto) {
+	public Language mapOfDTO(LanguageDTO dto) {
 		
-		LanguageEntity languageEntity = LanguageEntity.builder()
+		Language language = Language.builder()
 				.languageId(dto.getLanguageId())
 				.languageName(dto.getLanguageName())
 				//.languageImageIcon(dto.getLanguageImageIcon())
@@ -35,7 +35,7 @@ class LanguageMapper implements Mapper<LanguageDTO, LanguageEntity> {
 				.isAccepted(dto.isAccepted())
 				.build();
 		
-		return languageEntity;
+		return language;
 	}
 
 }

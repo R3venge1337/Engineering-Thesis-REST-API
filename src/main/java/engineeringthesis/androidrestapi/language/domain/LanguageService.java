@@ -30,9 +30,9 @@ class LanguageService implements LanguageFacade {
 	public LanguageDTO saveLanguage(LanguageDTO lang) {
 		
 		
-		LanguageEntity languageEntity = languageMapper.mapOfDTO(lang);
-		languageEntity.setLanguageCreatedDate(LocalDateTime.now());
-		LanguageEntity savedEntity = languageRepository.save(languageEntity);
+		Language language = languageMapper.mapOfDTO(lang);
+		language.setLanguageCreatedDate(LocalDateTime.now());
+		Language savedEntity = languageRepository.save(language);
 		 return languageMapper.mapOfEntity(savedEntity);
 	}
 
@@ -56,8 +56,8 @@ class LanguageService implements LanguageFacade {
 
 	@Override
 	public LanguageDTO updateLanguage(Integer languageId,LanguageDTO lang) {
-		Optional<LanguageEntity> languageEntity = languageRepository.findById(languageId);
-		LanguageEntity savedEntity = languageEntity.get();
+		Optional<Language> languageEntity = languageRepository.findById(languageId);
+		Language savedEntity = languageEntity.get();
 		savedEntity.setLanguageName(lang.getLanguageName());
 		//savedEntity.setLanguageImageIcon(lang.getLanguageImageIcon());
 		savedEntity.setLanguageCreatedDate(lang.getLanguageCreatedDate());

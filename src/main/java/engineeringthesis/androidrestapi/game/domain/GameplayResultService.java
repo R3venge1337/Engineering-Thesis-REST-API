@@ -3,10 +3,10 @@ package engineeringthesis.androidrestapi.game.domain;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
 
 import engineeringthesis.androidrestapi.game.GameplayResultFacade;
 import engineeringthesis.androidrestapi.game.dto.GameplayResultDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;

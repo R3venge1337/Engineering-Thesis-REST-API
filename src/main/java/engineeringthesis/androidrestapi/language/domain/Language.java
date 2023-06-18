@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-class LanguageEntity {
+class Language {
 
 		@Id
     	@GeneratedValue(strategy = GenerationType.IDENTITY)
