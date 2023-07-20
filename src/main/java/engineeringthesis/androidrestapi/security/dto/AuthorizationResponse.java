@@ -7,7 +7,7 @@ public class AuthorizationResponse implements Serializable {
 	private static final long serialVersionUID = -8091879091924046844L;
 	private final String jwttoken;
 
-	public AuthorizationResponse(String jwttoken) {
+	public AuthorizationResponse(final String jwttoken) {
 		this.jwttoken = jwttoken;
 	}
 
