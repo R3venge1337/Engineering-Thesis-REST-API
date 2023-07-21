@@ -1,89 +1,51 @@
 package engineeringthesis.androidrestapi.security.domain;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import engineeringthesis.androidrestapi.account.dto.AccountDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import engineeringthesis.androidrestapi.account.dto.AccountDTO;
+import java.util.Collection;
+import java.util.List;
 
+@RequiredArgsConstructor
 class AuthorizationUser implements UserDetails {
-	
-	private static final long serialVersionUID = -1986331235857128091L;
-	private int id;
-    private String username;
-    private String password;
-    private String email;
-    private LocalDateTime createdTime;
-    private List<GrantedAuthority> authorities = new ArrayList<>();
-    
-    
-    
-	public AuthorizationUser(AccountDTO account) {
-		super();
-		this.id = account.getAccountId();
-		this.username = account.getAccountName();
-		this.password = account.getAccountPassword();
-		this.email = account.getAccountEmail() ;
-		this.createdTime = account.getAccountCreatedDate();
-        this.authorities.add(new SimpleGrantedAuthority(account.getRole().toString()));
-	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
+    private final AccountDto accountDto;
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(accountDto.role()));
+    }
 
-	@Override
-	public String getUsername() {
-		return username;
-	}
-	
-	public int getId() { return id; }
+    @Override
+    public String getPassword() {
+        return accountDto.password();
+    }
 
-    public String getEmail() { return email; }
-    
-    
+    @Override
+    public String getUsername() {
+        return accountDto.name();
+    }
 
-	public LocalDateTime getCreatedTime() {
-		return createdTime;
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	public void setCreatedTime(LocalDateTime createdTime) {
-		this.createdTime = createdTime;
-	}
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
+    @Override
+    public boolean isEnabled() {
+        return accountDto.isActive();
+    }
 }
