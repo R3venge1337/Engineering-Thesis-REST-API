@@ -1,75 +1,76 @@
 package engineeringthesis.androidrestapi.child.domain;
 
-import java.util.List;
-import java.util.Optional;
-
 import engineeringthesis.androidrestapi.child.ChildFacade;
-import engineeringthesis.androidrestapi.child.dto.ChildDTO;
+import engineeringthesis.androidrestapi.child.dto.ChildDto;
+import engineeringthesis.androidrestapi.child.dto.CreateChildForm;
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class ChildService implements ChildFacade {
-	
-	
-	private final ChildRepository childRepository;
-	private final ChildMapper childMapper;
 
-	@Override
-	public List<ChildDTO> getAllChild() {
-		return childMapper.mapOfCollection(childRepository.findAll());
-	}
 
-	@Override
-	public ChildDTO saveChild(ChildDTO child) {
-		
-		//System.out.println("Przed mapowaniem: "+ child);
-		Child childEntity = childMapper.mapOfDTO(child);
-		//System.out.println(child);
-		Child savedEntity = childRepository.save(childEntity);
-		return childMapper.mapOfEntity(savedEntity);
-	}
+    private final ChildRepository childRepository;
 
-	@Override
-	public ChildDTO getOneByName(String name) {
-		return null;
-	}
+    @Override
+    public List<ChildDto> getAllChild() {
+        return childRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public ChildDTO getOneById(Integer childId) {
-		return	childMapper.mapOfEntity(childRepository.findById(childId).get());
-	}
-	
-	@Override
-	public ChildDTO updateChild(Integer childId, ChildDTO child) {
-		
-		Optional<Child> childEntity = childRepository.findById(childId);
-		Child savedEntity = childEntity.get();
-		savedEntity.setChildName(child.getChildName());
-		savedEntity.setChildSurname(child.getChildSurname());
-		savedEntity.setChildCity(child.getChildCity());
-		savedEntity.setChildYearBirth(child.getChildYearBirth());
-		savedEntity.setAccountChildId(child.getAccountChildId());
-		childRepository.save(savedEntity);
-		ChildDTO dto = childMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+    @Override
+    @Transactional
+    public ChildDto saveChild(final CreateChildForm childForm) {
 
-	@Override
-	public void deleteChild(Integer childId) {
-		childRepository.deleteById(childId);
-	}
+        final Child childEntity = new Child();
+        childEntity.setName(childForm.childName());
+        childEntity.setSurname(childForm.childSurname());
+        childEntity.setYearOfBirth(childForm.childYearBirth());
+        childEntity.setCity(childForm.childCity());
 
-	@Override
-	public ChildDTO getChildWithAccount(String accountName) {
-		
-		return childMapper.mapOfEntity(childRepository.getChildWithAccount(accountName));
-	}
+        final Child savedEntity = childRepository.save(childEntity);
+        return mapToDto(savedEntity);
+    }
 
-	
+    @Override
+    public ChildDto getOneByName(final String name) {
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public ChildDto updateChild(final UUID uuid, final CreateChildForm childForm) {
+
+        final Child childEntity = childRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+        childEntity.setName(childForm.childName());
+        childEntity.setSurname(childForm.childSurname());
+        childEntity.setCity(childForm.childCity());
+        childEntity.setYearOfBirth(childForm.childYearBirth());
+
+        childRepository.save(childEntity);
+
+        return mapToDto(childEntity);
+    }
+
+    @Override
+    @Transactional
+    public void deleteChild(final UUID uuid) {
+        childRepository.deleteByUuid(uuid);
+    }
+
+    @Override
+    public ChildDto getChildWithAccount(final UUID uuid, final String accountName) {
+        return mapToDto(childRepository.getChildWithAccount(accountName));
+    }
+
+    ChildDto mapToDto(final Child child) {
+        return new ChildDto(child.getUuid(), child.getName(), child.getSurname(), child.getYearOfBirth(), child.getCity(), null);
+    }
 }

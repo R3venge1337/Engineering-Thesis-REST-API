@@ -1,41 +1,41 @@
 package engineeringthesis.androidrestapi.child.domain;
 
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "child")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Child {
+@FieldNameConstants
+class Child extends AbstractUUIDEntity {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "child_id_pk")
-	private Integer childId;
+	@Column(name = "name")
+	private String name;
 	
-	@Column(name = "child_name")
-	private String childName;
+	@Column(name = "surname")
+	private String surname;
 	
-	@Column(name = "child_surname")
-	private String childSurname;
+	@Column(name = "year_of_birth")
+	private Short  yearOfBirth;
 	
-	@Column(name = "child_year_of_birth")
-	private Short childYearBirth;
+	@Column(name = "city")
+	private String city;
 	
-	@Column(name = "child_city")
-	private String childCity;
-	
-	@Column(name = "child_quest_uuid")
-	private String childQuestUUID;
+	@Column(name = "quest_uuid")
+	private String questUUID;
 	
     @OneToOne
     @JoinColumn(name = "account_id_fk",nullable = false)
-    Account accountChildId;
-	
+    ChildAccount accountChild;
 }
