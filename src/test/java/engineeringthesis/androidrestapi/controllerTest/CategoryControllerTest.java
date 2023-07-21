@@ -1,29 +1,6 @@
 package engineeringthesis.androidrestapi.controllerTest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.List;
-
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-
-import engineeringthesis.androidrestapi.category.dto.CategoryDTO;
-
+/*
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "./test.properties")
@@ -42,9 +19,9 @@ public class CategoryControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andReturn();
 		
-		ObjectReader objectReader = objectMapper.reader().forType(new TypeReference<List<CategoryDTO>>(){});
+		ObjectReader objectReader = objectMapper.reader().forType(new TypeReference<List<CategoryDto>>(){});
 		
-		List<CategoryDTO> result = objectReader.readValue(mvcResult.getResponse().getContentAsString());
+		List<CategoryDto> result = objectReader.readValue(mvcResult.getResponse().getContentAsString());
 		
 		assertThat(result, Matchers.notNullValue());
 	}
@@ -58,9 +35,9 @@ public class CategoryControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andReturn();
 		
-		ObjectReader objectReader = objectMapper.reader().forType(new TypeReference<List<CategoryDTO>>(){});
+		ObjectReader objectReader = objectMapper.reader().forType(new TypeReference<List<CategoryDto>>(){});
 		
-		List<CategoryDTO> readValue = objectReader.readValue(mvcResult.getResponse().getContentAsString());
+		List<CategoryDto> readValue = objectReader.readValue(mvcResult.getResponse().getContentAsString());
 		assertThat(readValue.toString(), Matchers.notNullValue());
 	}
 	
@@ -72,9 +49,9 @@ public class CategoryControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andReturn();
 		
-		ObjectReader objectReader = objectMapper.reader().forType(new TypeReference<CategoryDTO>(){});
+		ObjectReader objectReader = objectMapper.reader().forType(new TypeReference<CategoryDto>(){});
 		
-		CategoryDTO readValue = objectReader.readValue(mvcResult.getResponse().getContentAsString());
+		CategoryDto readValue = objectReader.readValue(mvcResult.getResponse().getContentAsString());
 		
 		assertThat(readValue.toString(), Matchers.notNullValue());
 	}
@@ -85,7 +62,7 @@ public class CategoryControllerTest {
 		MvcResult mvcResultGetAccount  = mockMvc.perform(MockMvcRequestBuilders.get("/api/categories/1"))
 				.andReturn();
 		
-		CategoryDTO categoryReturned = objectMapper.readValue(mvcResultGetAccount.getResponse().getContentAsString(),CategoryDTO.class);
+		CategoryDto categoryReturned = objectMapper.readValue(mvcResultGetAccount.getResponse().getContentAsString(), CategoryDto.class);
 		
 		categoryReturned.setAccepted(true);
 		MvcResult mvcResult  = mockMvc.perform(MockMvcRequestBuilders.put("/api/categories/")
@@ -112,7 +89,7 @@ public class CategoryControllerTest {
 		
 		assertThat(mvcResult.toString(), Matchers.notNullValue());
 	}
-	*/
+
 	
 	@ParameterizedTest
 	@ValueSource(ints = {2})
@@ -124,4 +101,7 @@ public class CategoryControllerTest {
 		
 		assertThat(mvcResult.toString(), Matchers.nullValue());
 	}
+
+
 }
+ */

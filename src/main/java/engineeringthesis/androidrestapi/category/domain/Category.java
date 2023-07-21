@@ -1,34 +1,34 @@
 package engineeringthesis.androidrestapi.category.domain;
 
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "category")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Category {
+@FieldNameConstants
+class Category extends AbstractUUIDEntity {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id_pk")
-	private Integer categoryId;
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "is_new")
+	private Boolean isNew;
 	
-	@Column(name = "category_name")
-	private String categoryName;
-	
+	@Column(name = "is_accepted")
+	private Boolean isAccepted;
+
 	@OneToOne
 	@JoinColumn(name = "language_id_fk")
-	private LanguageEntity languageId;
-	
-	@Column(name = "is_new", columnDefinition="BIT")
-	private boolean isNew;
-	
-	@Column(name = "is_accepted", columnDefinition="BIT")
-	private boolean isAccepted;
-	
+	private CategoryLanguage language;
 }

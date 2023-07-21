@@ -1,11 +1,14 @@
 package engineeringthesis.androidrestapi.category.controller;
 
 import engineeringthesis.androidrestapi.category.CategoryFacade;
-import engineeringthesis.androidrestapi.category.dto.CategoryDTO;
+import engineeringthesis.androidrestapi.category.dto.CategoryDto;
+import engineeringthesis.androidrestapi.category.dto.CreateCategoryForm;
+import engineeringthesis.androidrestapi.category.dto.UpdateCategoryForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -16,38 +19,37 @@ class CategoryController {
     private final CategoryFacade categoryService;
 
     @GetMapping
-    List<CategoryDTO> getAllCategories() {
+    List<CategoryDto> getAllCategories() {
         return categoryService.getAllCategories();
     }
 
     @GetMapping(value = "/languages/{languageName}")
-    List<CategoryDTO> getAllCategoriesByLanguage(@PathVariable String languageName) {
+    List<CategoryDto> getAllCategoriesByLanguage(@PathVariable final String languageName) {
         return categoryService.getAllCategoriesByLanguage(languageName);
     }
 
-    @GetMapping(params = "categoryName")
-    CategoryDTO getCategoryByName(@RequestParam("categoryName") String categoryName) {
-        return categoryService.getCategoryByName(categoryName);
+    @GetMapping(params = "name")
+    CategoryDto getCategoryByName(@RequestParam final String name) {
+        return categoryService.getCategoryByName(name);
     }
 
-    @GetMapping(value = "/{categoryId}")
-    CategoryDTO getCategoryById(@PathVariable Integer categoryId) {
-        return categoryService.getCategoryById(categoryId);
+    @GetMapping(value = "/{uuid}")
+    CategoryDto findCategory(@PathVariable final UUID uuid) {
+        return categoryService.findCategory(uuid);
     }
 
     @PostMapping
-    CategoryDTO saveCategory(@RequestBody CategoryDTO cat) {
-        return categoryService.saveCategory(cat);
+    CategoryDto saveCategory(@RequestBody final CreateCategoryForm categoryForm) {
+        return categoryService.saveCategory(categoryForm);
     }
 
-    @PutMapping(value = "/{categoryId}")
-    CategoryDTO updateCategory(@RequestBody CategoryDTO cat,
-                               @PathVariable Integer categoryId) {
-        return categoryService.updateCategory(categoryId, cat);
+    @PutMapping(value = "/{uuid}")
+    void updateCategory(@PathVariable final UUID uuid, @RequestBody final UpdateCategoryForm categoryForm) {
+        categoryService.updateCategory(uuid, categoryForm);
     }
 
-    @DeleteMapping(value = "/{categoryId}")
-    void deleteCategory(@PathVariable Integer categoryId) {
-        categoryService.deleteCategory(categoryId);
+    @DeleteMapping(value = "/{uuid}")
+    void deleteCategory(@PathVariable final UUID uuid) {
+        categoryService.deleteCategory(uuid);
     }
 }

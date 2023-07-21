@@ -1,75 +1,73 @@
 package engineeringthesis.androidrestapi.category.domain;
 
-import java.util.List;
-import java.util.Optional;
-
 import engineeringthesis.androidrestapi.category.CategoryFacade;
-import engineeringthesis.androidrestapi.category.dto.CategoryDTO;
+import engineeringthesis.androidrestapi.category.dto.CategoryDto;
+import engineeringthesis.androidrestapi.category.dto.CreateCategoryForm;
+import engineeringthesis.androidrestapi.category.dto.UpdateCategoryForm;
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class CategoryService implements CategoryFacade {
-	
-	
-	private final CategoryRepository categoryRepository;
-	private final CategoryMapper categoryMapper;
-	
-	@Override
-	public List<CategoryDTO> getAllCategories() {
-		
-		return categoryMapper.mapOfCollection(categoryRepository.findAll());
-	}
 
-	@Override
-	public List<CategoryDTO> getAllCategoriesByLanguage(String languageName) {
-		
-		return categoryMapper.mapOfCollection(categoryRepository.getCategoriesByLanguage(languageName));
-	}
 
-	@Override
-	public CategoryDTO saveCategory(CategoryDTO cat) {
-		
-		Category categoryEntity = categoryMapper.mapOfDTO(cat);
-		Category savedEntity = categoryRepository.save(categoryEntity);
-		 return categoryMapper.mapOfEntity(savedEntity);
-	}
+    private final CategoryRepository categoryRepository;
 
-	@Override
-	public CategoryDTO getCategoryByName(String name) {
-		
-		return categoryMapper.mapOfEntity(categoryRepository.findByCategoryNazwa(name));
-	}
+    @Override
+    public List<CategoryDto> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public CategoryDTO getCategoryById(Integer categoryId) {
-		
-		return categoryMapper.mapOfEntity(categoryRepository.findById(categoryId).get());
-	}
-	
-	@Override
-	public CategoryDTO updateCategory(Integer categoryId, CategoryDTO cat) {
-		
-		Optional<Category> categoryEntity = categoryRepository.findById(categoryId);
-		Category savedEntity = categoryEntity.get();
-		savedEntity.setCategoryName(cat.getCategoryName());
-		savedEntity.setLanguageId(cat.getLanguageId());
-		categoryRepository.save(savedEntity);
-		CategoryDTO dto = categoryMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+    @Override
+    public List<CategoryDto> getAllCategoriesByLanguage(final String languageName) {
+        return categoryRepository.getCategoriesByLanguage(languageName).stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public void deleteCategory(Integer categoryId) {
-		
-		categoryRepository.deleteById(categoryId);
-		
-	}
+    @Override
+    @Transactional
+    public CategoryDto saveCategory(final CreateCategoryForm categoryForm) {
+        Category categoryEntity = new Category();
+        categoryEntity.setName(categoryForm.name());
 
+        return mapToDto(categoryRepository.save(categoryEntity));
+    }
+
+    @Override
+    public CategoryDto getCategoryByName(final String name) {
+        return mapToDto(categoryRepository.findByCategoryName(name));
+    }
+
+    public CategoryDto findCategory(final UUID uuid) {
+        return (categoryRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException("")));
+    }
+
+    @Override
+    @Transactional
+    public void updateCategory(final UUID uuid, final UpdateCategoryForm categoryForm) {
+        Category category = categoryRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+        category.setName(categoryForm.name());
+    }
+
+    @Override
+    @Transactional
+    public void deleteCategory(final UUID uuid) {
+        categoryRepository.deleteByUuid(uuid);
+    }
+
+    CategoryDto mapToDto(final Category category) {
+        return new CategoryDto(category.getUuid(), category.getName(),null);
+    }
 
 }

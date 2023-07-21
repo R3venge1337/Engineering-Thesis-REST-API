@@ -1,12 +1,14 @@
 package engineeringthesis.androidrestapi.category;
 
-import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDTO;
+import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDto;
+import engineeringthesis.androidrestapi.category.dto.CreateCategoryTeacherForm;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CategoryTeacherFacade {
 	
-	List<CategoryTeacherDTO> getCategoriesTeacher(Integer teacherId);
+	List<CategoryTeacherDto> getCategoriesTeacher(final UUID uuid);
 	
-	CategoryTeacherDTO saveCategoryToTeacher(CategoryTeacherDTO categoryTeacherObj);
+	CategoryTeacherDto saveCategoryToTeacher(final CreateCategoryTeacherForm categoryTeacherForm);
 }
