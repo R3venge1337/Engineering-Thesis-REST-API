@@ -1,10 +1,10 @@
 package engineeringthesis.androidrestapi.account.controller;
 
-import java.util.List;
-
 import engineeringthesis.androidrestapi.account.AccountFacade;
+import engineeringthesis.androidrestapi.account.dto.AccountDto;
+import engineeringthesis.androidrestapi.account.dto.AccountForm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,60 +15,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import engineeringthesis.androidrestapi.account.dto.AccountDTO;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/accounts")
 @RequiredArgsConstructor
 class AccountController {
-	
-	private final AccountFacade accountFacade;
-	private static final int MAX_SIZE = 20;
-	
-	@GetMapping
-    List<AccountDTO> getAllAccounts(@RequestParam(required=false) Integer page,Sort.Direction sort)
-    {
-		return accountFacade.getAllAccounts(page,MAX_SIZE,sort);
+
+    private final AccountFacade accountFacade;
+    private static final int MAX_SIZE = 20;
+
+    @GetMapping
+    List<AccountDto> getAllAccounts(@RequestParam(required = false) final Integer page, final Sort.Direction sort) {
+        return accountFacade.getAllAccounts(page, MAX_SIZE, sort);
     }
-    
-	
-    @GetMapping(value = "/{accountId}")
-   AccountDTO getAccountById(@PathVariable Integer accountId )
-    {
-		  return accountFacade.getOneById(accountId);
+
+    @GetMapping(params = "accountExpiredAge")
+    List<AccountDto> getExpiredAccounts(@RequestParam(required = false) final Integer accountExpiredAge) {
+        return accountFacade.getExpiredAccounts(accountExpiredAge);
     }
-    
-    
-    @GetMapping(params="accountExpiredAge")
-    List<AccountDTO> getExpiredAccounts(@RequestParam(required=false) Integer accountExpiredAge)
-     {
- 		  return accountFacade.getExpiredAccounts(accountExpiredAge);
-     }
-    
-    @GetMapping(params="accountName")
-    AccountDTO getAccountByName(@RequestParam("accountName") String accountName )
-    {
-		return accountFacade.getOneByName(accountName);
+
+    @GetMapping(params = "accountName")
+    AccountDto getAccountByName(@RequestParam("accountName") final String accountName) {
+        return accountFacade.findAccount(accountName);
     }
-    
+
     @PostMapping
-    AccountDTO saveAccount(@RequestBody AccountDTO accountObj)
-    {
-    	return accountFacade.saveAccount(accountObj);
+    AccountDto saveAccount(@RequestBody final AccountForm accountObj) {
+        return accountFacade.saveAccount(accountObj);
     }
-    
-    @PutMapping(value = "/{accountId}")
-    AccountDTO updateAccount(@PathVariable Integer accountId,
-    						@RequestBody AccountDTO accountObj)
-    {
-    	return accountFacade.updateAccount(accountId,accountObj);
+
+    @PutMapping(value = "/{uuid}")
+    void updateAccount(@PathVariable final UUID uuid,
+                       @RequestBody final AccountForm accountForm) {
+        accountFacade.updateAccount(uuid, accountForm);
     }
-    
-    @DeleteMapping(value = "/{accountId}")
-    void deleteAccountById(@PathVariable Integer accountId)
-    {
-    	accountFacade.deleteAccount(accountId);
+
+    @DeleteMapping(value = "/{uuid}")
+    void deleteAccount(@PathVariable final UUID uuid) {
+        accountFacade.deleteAccount(uuid);
     }
-    
+
 }

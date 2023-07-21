@@ -2,24 +2,24 @@ package engineeringthesis.androidrestapi.account;
 
 
 import java.util.List;
+import java.util.UUID;
 
+import engineeringthesis.androidrestapi.account.dto.AccountForm;
 import org.springframework.data.domain.Sort;
 
-import engineeringthesis.androidrestapi.account.dto.AccountDTO;
+import engineeringthesis.androidrestapi.account.dto.AccountDto;
 
 public interface AccountFacade {
 		
-	List<AccountDTO> getAllAccounts(Integer page, Integer size,Sort.Direction sort);
+	List<AccountDto> getAllAccounts(final Integer page, final Integer size, final Sort.Direction sort);
 	
-	AccountDTO saveAccount(AccountDTO account);
+	AccountDto saveAccount(final AccountForm account);
 	
-	AccountDTO getOneByName(String name);
+	AccountDto findAccount(final String name);
+
+	void updateAccount(final UUID uuid, final AccountForm accountForm);
 	
-	AccountDTO getOneById(Integer accountId);
+	List<AccountDto> getExpiredAccounts(final Integer  accountExpiredAge);
 	
-	AccountDTO updateAccount(Integer accountId,AccountDTO account);
-	
-	List<AccountDTO> getExpiredAccounts(Integer  accountExpiredAge);
-	
-	void deleteAccount(Integer accountId);
+	void deleteAccount(final UUID uuid);
 }
