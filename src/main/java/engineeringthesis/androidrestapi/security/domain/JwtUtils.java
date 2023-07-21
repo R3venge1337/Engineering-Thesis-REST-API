@@ -36,15 +36,15 @@ class JwtUtils {
   String generateToken(final AccountDto account) {
     final Map<String, Object> extraClaims = Map.of(
       USER_TYPE, account.role(),
-      USER_LOGIN, account.accountName(),
-      USER_UUID, account.accountUuid());
+      USER_LOGIN, account.name(),
+      USER_UUID, account.uuid());
     return generateToken(extraClaims, account);
   }
 
   String generateToken(final Map<String, Object> extraClaims, final AccountDto account) {
     return Jwts.builder()
       .setClaims(extraClaims)
-      .setSubject(account.accountName())
+      .setSubject(account.name())
       .setIssuedAt(new Date(System.currentTimeMillis()))
       .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
       .signWith(getSignInKey(), SignatureAlgorithm.HS512)
