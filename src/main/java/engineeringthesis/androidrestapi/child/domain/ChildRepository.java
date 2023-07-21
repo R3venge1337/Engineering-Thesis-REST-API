@@ -2,7 +2,6 @@ package engineeringthesis.androidrestapi.child.domain;
 
 import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 interface ChildRepository extends UUIDAwareJpaRepository<Child, Integer> {
 
