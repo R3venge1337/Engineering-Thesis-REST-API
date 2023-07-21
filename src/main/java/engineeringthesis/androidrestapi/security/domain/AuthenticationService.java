@@ -21,6 +21,6 @@ class AuthenticationService implements AuthenticationFacade {
     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.login(), request.password()));
     final AccountDto account = accountFacade.findAccount(request.login());
     final String jwtToken = jwtUtils.generateToken(account);
-    return new AuthenticationResponse(jwtToken, account.accountName(), account.accountUuid(),account.role());
+    return new AuthenticationResponse(jwtToken, account.name(), account.uuid(),account.role());
   }
 }
