@@ -1,25 +1,25 @@
 package engineeringthesis.androidrestapi.audio;
 
 import java.util.List;
+import java.util.UUID;
 
-import engineeringthesis.androidrestapi.audio.dto.AudioDTO;
+import engineeringthesis.androidrestapi.audio.dto.AudioDto;
+import engineeringthesis.androidrestapi.audio.dto.UpdateAudioForm;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 
 public interface AudioFacade {
 	
-	List<AudioDTO> getAllAudio();
+	List<AudioDto> getAllAudio();
 	
-	AudioDTO saveAudio(MultipartFile file);
+	AudioDto saveAudio(final MultipartFile file);
+
+	AudioDto findAudio(final UUID uuid);
+
+	void updateAudio(final UUID uuid, final UpdateAudioForm audioForm);
 	
-	AudioDTO getOneByName(String name);
+	void deleteAudio(final UUID uuid);
 	
-	AudioDTO getOneById(Integer audioId);
-	
-	AudioDTO updateAudio(Integer audioId, AudioDTO audio);
-	
-	void deleteAudio(Integer audioId);
-	
-	Resource loadAudioAsResource(String audioName);
+	Resource loadAudioAsResource(final String audioName);
 }

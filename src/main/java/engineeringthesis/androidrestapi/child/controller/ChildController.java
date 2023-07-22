@@ -1,9 +1,11 @@
 package engineeringthesis.androidrestapi.child.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import engineeringthesis.androidrestapi.child.ChildFacade;
-import engineeringthesis.androidrestapi.child.dto.ChildDTO;
+import engineeringthesis.androidrestapi.child.dto.ChildDto;
+import engineeringthesis.androidrestapi.child.dto.CreateChildForm;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,32 +26,27 @@ class ChildController {
 	private final ChildFacade childFacade;
 
 	@GetMapping
-	List<ChildDTO> getAllChildren() {
+	List<ChildDto> getAllChildren() {
 		return childFacade.getAllChild();
 	}
 
-	@GetMapping("/{childId}")
-	ChildDTO getChildById(@PathVariable Integer childId) {
-		return childFacade.getOneById(childId);
-	}
-
 	@PostMapping
-	ChildDTO saveChild(@RequestBody ChildDTO childObj) {
-		return childFacade.saveChild(childObj);
+    ChildDto saveChild(@RequestBody final CreateChildForm childForm) {
+		return childFacade.saveChild(childForm);
 	}
 
-	@PutMapping("/{childId}")
-	ChildDTO updateChild(@RequestBody ChildDTO childObj, @PathVariable Integer childId) {
-		return childFacade.updateChild(childId, childObj);
+	@PutMapping("/{uuid}")
+    ChildDto updateChild(@PathVariable final UUID uuid, @RequestBody final CreateChildForm childForm) {
+		return childFacade.updateChild(uuid, childForm);
 	}
 
-	@DeleteMapping("/{childId}")
-	void deleteChild(@PathVariable Integer childId) {
-		childFacade.deleteChild(childId);
+	@DeleteMapping("/{uuid}")
+	void deleteChild(@PathVariable final UUID uuid) {
+		childFacade.deleteChild(uuid);
 	}
 
-	@GetMapping("/accounts")
-	ChildDTO getChildWithAccount(@RequestParam(required = true, value = "accountName") String accountName) {
-		return childFacade.getChildWithAccount(accountName);
+	@GetMapping("/{uuid}/accounts")
+    ChildDto getChildWithAccount(@PathVariable final UUID uuid, @RequestParam final String accountName) {
+		return childFacade.getChildWithAccount(uuid, accountName);
 	}
 }

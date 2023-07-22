@@ -1,64 +1,62 @@
 package engineeringthesis.androidrestapi.statistic.domain;
 
-import java.util.List;
-import java.util.Optional;
-
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.statistic.StatisticTypeFacade;
-import engineeringthesis.androidrestapi.statistic.dto.StatisticTypeDTO;
+import engineeringthesis.androidrestapi.statistic.dto.CreateStatisticTypeForm;
+import engineeringthesis.androidrestapi.statistic.dto.StatisticTypeDto;
+import engineeringthesis.androidrestapi.statistic.dto.UpdateStatisticTypeForm;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class StatisticTypeService implements StatisticTypeFacade {
 
-	
-	private final StatisticTypeRepository statisticTypeRepository;
-	private final StatisticTypeMapper statisticTypeMapper;
 
-	@Override
-	public List<StatisticTypeDTO> getAllStatistic() {
-		return statisticTypeMapper.mapOfCollection(statisticTypeRepository.findAll());
-	}
+    private final StatisticTypeRepository statisticTypeRepository;
 
-	@Override
-	public StatisticTypeDTO saveStatisticType(StatisticTypeDTO statisticTypeObj) {
-		
-		StatisticType statisticTypeEntity = statisticTypeMapper.mapOfDTO(statisticTypeObj);
-		StatisticType savedEntity = statisticTypeRepository.save(statisticTypeEntity);
-		return statisticTypeMapper.mapOfEntity(savedEntity);
-	}
+    @Override
+    public List<StatisticTypeDto> getAllStatistic() {
+        return statisticTypeRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public StatisticTypeDTO getOneByName(String name) {
-		return null;
-	}
+    @Override
+    @Transactional
+    public StatisticTypeDto saveStatisticType(final CreateStatisticTypeForm statisticTypeForm) {
 
-	@Override
-	public StatisticTypeDTO getOneById(Integer statisticId) {
-		return statisticTypeMapper.mapOfEntity(statisticTypeRepository.findById(statisticId).get());
-	}
-	
-	@Override
-	public StatisticTypeDTO updateStatisticType(Integer statisticId, StatisticTypeDTO statisticTypeObj) {
-		
-		Optional<StatisticType> gameEntity = statisticTypeRepository.findById(statisticId);
-		StatisticType savedEntity = gameEntity.get();
-		savedEntity.setStatisticName(statisticTypeObj.getStatisticName());
-		statisticTypeRepository.save(savedEntity);
-		StatisticTypeDTO dto = statisticTypeMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+        StatisticType statisticTypeEntity = new StatisticType();
 
-	@Override
-	public void deleteStatistic(Integer statisticId) {
-		statisticTypeRepository.deleteById(statisticId);
-	}
+        return mapToDto(statisticTypeRepository.save(statisticTypeEntity));
+    }
 
-	
+    @Override
+    public StatisticTypeDto findStatisticType(final UUID uuid) {
+        return statisticTypeRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(""));
+    }
+
+    @Override
+    @Transactional
+    public void updateStatisticType(final UUID uuid, final UpdateStatisticTypeForm statisticTypeForm) {
+
+        StatisticType statisticType = statisticTypeRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+        statisticType.setName(statisticTypeForm.name());
+    }
+
+    @Override
+    public void deleteStatistic(final UUID uuid) {
+        statisticTypeRepository.deleteByUuid(uuid);
+    }
+
+    private StatisticTypeDto mapToDto(final StatisticType statisticType) {
+        return new StatisticTypeDto(statisticType.getName());
+    }
+
 }

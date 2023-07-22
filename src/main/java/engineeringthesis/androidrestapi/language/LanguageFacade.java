@@ -1,20 +1,21 @@
 package engineeringthesis.androidrestapi.language;
 
-import engineeringthesis.androidrestapi.language.dto.LanguageDTO;
+import engineeringthesis.androidrestapi.language.dto.CreateLanguageForm;
+import engineeringthesis.androidrestapi.language.dto.LanguageDto;
+import engineeringthesis.androidrestapi.language.dto.UpdateLanguageForm;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface LanguageFacade {
 	 
-	List<LanguageDTO> getAllLanguage();
+	List<LanguageDto> getAllLanguage();
 	
-	LanguageDTO saveLanguage(LanguageDTO lang);
+	LanguageDto saveLanguage(final CreateLanguageForm languageForm);
+
+	LanguageDto findLanguage(final UUID uuid);
 	
-	LanguageDTO getOneByName(String name);
+	void updateLanguage(final UUID uuid, final UpdateLanguageForm languageForm);
 	
-	LanguageDTO getOneById(Integer languageId);
-	
-	LanguageDTO updateLanguage(Integer languageId,LanguageDTO lang);
-	
-	void deleteLanguage(Integer languageId);
+	void deleteLanguage(final UUID uuid);
 }

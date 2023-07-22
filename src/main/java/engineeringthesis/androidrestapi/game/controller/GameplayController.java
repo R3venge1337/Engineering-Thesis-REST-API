@@ -1,9 +1,12 @@
 package engineeringthesis.androidrestapi.game.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import engineeringthesis.androidrestapi.game.GameplayFacade;
-import engineeringthesis.androidrestapi.game.dto.GameplayDTO;
+import engineeringthesis.androidrestapi.game.dto.CreateGameplayForm;
+import engineeringthesis.androidrestapi.game.dto.GameplayDto;
+import engineeringthesis.androidrestapi.game.dto.UpdateGameplayForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,27 +25,27 @@ class GameplayController {
 	private GameplayFacade gameplayFacade;
 
 	@GetMapping
-	List<GameplayDTO> getAllGameplays() {
+	List<GameplayDto> getAllGameplays() {
 		return gameplayFacade.getAllGameplay();
 	}
 
-	@GetMapping(value = "{gameplayId}")
-	GameplayDTO getGameplayById(@PathVariable Integer gameplayId) {
-		return gameplayFacade.getOneById(gameplayId);
+	@GetMapping(value = "/{uuid}")
+    GameplayDto findGameplay(@PathVariable final UUID uuid) {
+		return gameplayFacade.findGameplay(uuid);
 	}
 
 	@PostMapping
-	GameplayDTO saveGameplay(@RequestBody GameplayDTO gameMatchObj) {
-		return gameplayFacade.saveGameplay(gameMatchObj);
+    GameplayDto saveGameplay(@RequestBody final CreateGameplayForm gameplayForm) {
+		return gameplayFacade.saveGameplay(gameplayForm);
 	}
 
-	@PutMapping(value = "/{gameplayId}")
-	GameplayDTO updateGameplay(@RequestBody GameplayDTO gameplayObj, @PathVariable Integer gameplayId) {
-		return gameplayFacade.updateGameplay(gameplayId, gameplayObj);
+	@PutMapping(value = "/{uuid}")
+    void updateGameplay(@PathVariable final UUID uuid, @RequestBody final UpdateGameplayForm gameplayForm) {
+		gameplayFacade.updateGameplay(uuid, gameplayForm);
 	}
 
-	@DeleteMapping(value = "/{gameMatchId}")
-	void deleteGameplayById(@PathVariable Integer gameMatchId) {
-		gameplayFacade.deleteGameplay(gameMatchId);
+	@DeleteMapping(value = "/{uuid}")
+	void deleteGameplay(@PathVariable final UUID uuid) {
+		gameplayFacade.deleteGameplay(uuid);
 	}
 }

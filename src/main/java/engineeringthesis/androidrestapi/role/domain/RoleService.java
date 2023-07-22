@@ -1,55 +1,67 @@
 package engineeringthesis.androidrestapi.role.domain;
 
-import java.util.List;
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.role.RoleFacade;
-import engineeringthesis.androidrestapi.role.dto.RoleDTO;
+import engineeringthesis.androidrestapi.role.dto.CreateRoleForm;
+import engineeringthesis.androidrestapi.role.dto.RoleDto;
+import engineeringthesis.androidrestapi.role.dto.UpdateRoleForm;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class RoleService implements RoleFacade {
 
-	private final RoleRepository roleRepository;
-	private final RoleMapper roleMapper;
-	private String role_prefix = "ROLE_";
-	@Override
-	public List<RoleDTO> getAllRoles() {
-		
-		return roleMapper.mapOfCollection(roleRepository.findAll());
-	}
+    private final RoleRepository roleRepository;
+    private static final String ROLE_PREFIX = "ROLE_";
 
-	@Override
-	public RoleDTO getOneRoleByName(String roleName) {
-	
-		return roleMapper.mapOfEntity(roleRepository.findByRoleName(role_prefix + roleName)) ;
-	}
-	
-	@Override
-	public RoleDTO getOneRoleById(Integer roleId) {
-		
-		return roleMapper.mapOfEntity(roleRepository.findById(roleId).get());
-	}
+    @Override
+    public List<RoleDto> getAllRoles() {
 
-	@Override
-	public RoleDTO saveRole(RoleDTO role) {
-		
-		Role roleEntity = roleMapper.mapOfDTO(role);
-		Role savedEntity = roleRepository.save(roleEntity);
-		return  roleMapper.mapOfEntity(savedEntity);
-	}
+        return roleRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public void deleteRole(Integer roleId) {
-		
-		roleRepository.deleteById(roleId);
-	}
+    @Override
+    public RoleDto getOneRoleByName(final String roleName) {
+        return mapToDto(roleRepository.findByRoleName(ROLE_PREFIX + roleName));
+    }
+
+    @Override
+    public RoleDto findRole(final UUID uuid) {
+        return roleRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(""));
+    }
+
+    @Override
+    @Transactional
+    public RoleDto saveRole(final CreateRoleForm roleForm) {
+        Role role = new Role();
 
 
+        return mapToDto(roleRepository.save(role));
+    }
+
+    @Override
+    @Transactional
+    public void updateRole(final UUID uuid, final UpdateRoleForm roleForm) {
+        Role role = roleRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+    }
+
+    @Override
+    @Transactional
+    public void deleteRole(final UUID uuid) {
+        roleRepository.deleteByUuid(uuid);
+    }
+
+    RoleDto mapToDto(final Role role) {
+        return new RoleDto(role.getName(), role.getCreatedDate());
+    }
 
 }

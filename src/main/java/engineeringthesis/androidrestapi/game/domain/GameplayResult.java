@@ -1,38 +1,28 @@
 package engineeringthesis.androidrestapi.game.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
-import engineeringthesis.androidrestapi.statistic.domain.StatisticResult;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "gameplay_result")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class GameplayResult {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "gameplay_result_id_pk")
-	private Integer gameplayResultsId;
-	
-	@OneToOne
-	@JoinColumn(name = "gameplay_id_fk")
-	private Gameplay gameplayId;
-	
-	@OneToOne
-	@JoinColumn(name = "statistic_result_id_fk")
-	private StatisticResult statisticResultsId;
-	
+@FieldNameConstants
+class GameplayResult extends AbstractUUIDEntity {
+
+    @OneToOne
+    @JoinColumn(name = "gameplay_id_fk")
+    private Gameplay gameplay;
+
+    @OneToOne
+    @JoinColumn(name = "statistic_result_id_fk")
+    private GameplayResultStatisticResult statisticResults;
 }

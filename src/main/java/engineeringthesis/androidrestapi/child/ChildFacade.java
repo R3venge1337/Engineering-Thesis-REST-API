@@ -1,23 +1,23 @@
 package engineeringthesis.androidrestapi.child;
 
-import engineeringthesis.androidrestapi.child.dto.ChildDTO;
+import engineeringthesis.androidrestapi.child.dto.ChildDto;
+import engineeringthesis.androidrestapi.child.dto.CreateChildForm;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public interface ChildFacade {
 	
-	List<ChildDTO> getAllChild();
+	List<ChildDto> getAllChild();
 	
-	ChildDTO saveChild(ChildDTO children);
+	ChildDto saveChild(final CreateChildForm childForm);
 	
-	ChildDTO getOneByName(String name);
+	ChildDto getOneByName(final String name);
+
+	ChildDto updateChild(final UUID uuid, final CreateChildForm childForm);
 	
-	ChildDTO getOneById(Integer childId);
+	void deleteChild(final UUID uuid);
 	
-	ChildDTO updateChild(Integer childId,ChildDTO children);
-	
-	void deleteChild(Integer childId);
-	
-	ChildDTO getChildWithAccount(String accountName);
+	ChildDto getChildWithAccount(final UUID uuid, final String accountName);
 }

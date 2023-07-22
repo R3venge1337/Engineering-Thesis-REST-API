@@ -1,48 +1,46 @@
 package engineeringthesis.androidrestapi.language.domain;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "language")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Language {
+@FieldNameConstants
+class Language extends AbstractUUIDEntity {
 
-		@Id
-    	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    	@Column(name = "language_id_pk")
-		private Integer languageId;
-	
-		@Column(name = "language_name")
-		private String languageName;
-		
-	
-		//@Column(name = "language_icon")
-		//private String languageImageIcon;
-		
-		@Column(name = "language_date_created")
-		@JsonDeserialize(using = LocalDateTimeDeserializer.class)  
-		@JsonSerialize(using = LocalDateTimeSerializer.class)  
-		@DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-		private LocalDateTime languageCreatedDate;	
-		
-		@Column(name = "is_new", columnDefinition="BIT")
-		private boolean isNew;
-		
-		@Column(name = "is_accepted", columnDefinition="BIT")
-		private boolean isAccepted;
+    @Column(name = "name")
+    private String name;
+
+
+    //@Column(name = "image_icon")
+    //private String imageIcon;
+
+    @Column(name = "language_date_created")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    private LocalDateTime createdDate;
+
+    @Column(name = "is_new")
+    private Boolean isNew;
+
+    @Column(name = "is_accepted")
+    private Boolean isAccepted;
 }

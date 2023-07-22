@@ -1,84 +1,84 @@
 package engineeringthesis.androidrestapi.teacher.domain;
 
-import java.util.List;
-import java.util.Optional;
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.teacher.TeacherFacade;
-import engineeringthesis.androidrestapi.teacher.dto.TeacherDTO;
+import engineeringthesis.androidrestapi.teacher.dto.CreateTeacherForm;
+import engineeringthesis.androidrestapi.teacher.dto.TeacherAccountDto;
+import engineeringthesis.androidrestapi.teacher.dto.TeacherDto;
+import engineeringthesis.androidrestapi.teacher.dto.TeacherLanguageDto;
+import engineeringthesis.androidrestapi.teacher.dto.UpdateTeacherForm;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class TeacherService implements TeacherFacade {
 
-	
-	private final TeacherRepository teacherRepository;
-	private final TeacherMapper teacherMapper;
+    private final TeacherRepository teacherRepository;
 
-	@Override
-	public List<TeacherDTO> getAllTeachers() {
-		
-		return teacherMapper.mapOfCollection(teacherRepository.findAll());
-	}
+    @Override
+    public List<TeacherDto> getAllTeachers() {
 
-	@Override
-	public TeacherDTO saveTeacher(TeacherDTO teacherObj) {
-		
-		Teacher teacherEntity = teacherMapper.mapOfDTO(teacherObj);
-		Teacher savedEntity =  teacherRepository.save(teacherEntity);
-		return teacherMapper.mapOfEntity(savedEntity);
-	}
+        return teacherRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public TeacherDTO getOneByName(String name) {
-		
-		return null;
-	}
+    @Override
+    public TeacherDto findTeacher(final UUID uuid) {
+        return teacherRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(""));
+    }
 
-	@Override
-	public TeacherDTO getOneById(Integer teacherId) {
-		
-		return teacherMapper.mapOfEntity(teacherRepository.findById(teacherId).get());
-	}
-	
-	@Override
-	public TeacherDTO updateTeacher(Integer teacherId, TeacherDTO teacherObj) {
-		
-		Optional<Teacher> teacherEntity = teacherRepository.findById(teacherId);
-		Teacher savedEntity = teacherEntity.get();
-		savedEntity.setTeacherId(teacherObj.getTeacherId());
-		savedEntity.setTeacherName(teacherObj.getTeacherName());
-		savedEntity.setTeacherSurname(teacherObj.getTeacherSurname());
-		savedEntity.setTeacherProfession(teacherObj.getTeacherProfession());
-		savedEntity.setTeacherCity(teacherObj.getTeacherCity());
-		savedEntity.setTeacherYearBirth(teacherObj.getTeacherYearBirth());
-		teacherRepository.save(savedEntity);
-		TeacherDTO dto = teacherMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+    @Override
+    public TeacherDto saveTeacher(final CreateTeacherForm teacherForm) {
 
-	@Override
-	public void deleteTeacher(Integer teacherId) {
-		
-		teacherRepository.deleteById(teacherId);
-	}
+        final Teacher teacher = new Teacher();
+        teacher.setName(teacherForm.name());
+        teacher.setSurname(teacherForm.surname());
+        teacher.setCity(teacherForm.city());
+        teacher.setYearOfBirth(teacherForm.yearOfBirth());
+        teacher.setProfession(teacherForm.profession());
 
-	@Override
-	public List<TeacherDTO> getTeachersByLanguageName(String languageName) {
-	 return teacherMapper.mapOfCollection(teacherRepository.getTeachersByLanguageName(languageName));
-	}
+        final Teacher savedEntity = teacherRepository.save(teacher);
+        return mapToDto(savedEntity);
+    }
 
-	@Override
-	public TeacherDTO getTeacherWithAccount(String accountName) {
-		
-		return teacherMapper.mapOfEntity(teacherRepository.getTeacherWithAccount(accountName));
-	}
+    @Override
+    @Transactional
+    public void updateTeacher(final UUID uuid, final UpdateTeacherForm teacherForm) {
+        final Teacher teacher = teacherRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
 
+        teacher.setName(teacherForm.name());
+        teacher.setSurname(teacherForm.surname());
+        teacher.setProfession(teacherForm.profession());
+        teacher.setCity(teacherForm.city());
+        teacher.setYearOfBirth(teacherForm.yearOfBirth());
+    }
 
-	
+    @Override
+    @Transactional
+    public void deleteTeacher(final UUID uuid) {
+        teacherRepository.deleteByUuid(uuid);
+    }
+
+    @Override
+    public List<TeacherDto> getTeachersByLanguageName(final String languageName) {
+        return teacherRepository.getTeachersByLanguageName(languageName).stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    @Override
+    public TeacherDto getTeacherWithAccount(final String accountName) {
+        return mapToDto(teacherRepository.getTeacherWithAccount(accountName));
+    }
+
+    TeacherDto mapToDto(final Teacher teacher) {
+        return new TeacherDto(teacher.getUuid(), teacher.getName(), teacher.getSurname(), teacher.getYearOfBirth(), teacher.getCity(), teacher.getProfession(), new TeacherLanguageDto(teacher.getName()), new TeacherAccountDto(teacher.getAccountTeacher().getName(), teacher.getAccountTeacher().getPassword(), teacher.getAccountTeacher().getEmail()));
+    }
 }

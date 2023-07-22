@@ -1,28 +1,29 @@
 package engineeringthesis.androidrestapi.statistic.domain;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
 
-
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "statisticResult")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class StatisticResult {
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "statistic_result_id_pk")
-	private Integer statisticResultsId;
-	
-	@Column(name = "statistic_result_score")
-	private String statisticResults;
-	
-	@OneToOne
-	@JoinColumn(name = "statistic_id_fk")
-	private StatisticType statisticId;
+@FieldNameConstants
+class StatisticResult extends AbstractUUIDEntity {
+
+    @Column(name = "statistic_result")
+    private String result;
+
+    @OneToOne
+    @JoinColumn(name = "statistic_id_fk")
+    private StatisticType statistic;
 }

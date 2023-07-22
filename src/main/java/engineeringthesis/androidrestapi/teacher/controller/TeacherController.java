@@ -1,9 +1,10 @@
 package engineeringthesis.androidrestapi.teacher.controller;
 
-import java.util.List;
-
 import engineeringthesis.androidrestapi.teacher.TeacherFacade;
-import engineeringthesis.androidrestapi.teacher.dto.TeacherDTO;
+import engineeringthesis.androidrestapi.teacher.dto.CreateTeacherForm;
+import engineeringthesis.androidrestapi.teacher.dto.TeacherDto;
+import engineeringthesis.androidrestapi.teacher.dto.UpdateTeacherForm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,51 +15,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/teachers")
 @RequiredArgsConstructor
 class TeacherController {
 
-	private final TeacherFacade teacherServiceImpl;
+    private final TeacherFacade teacherServiceImpl;
 
-	@GetMapping
-	List<TeacherDTO> getAllTeachers() {
-		return teacherServiceImpl.getAllTeachers();
-	}
+    @GetMapping
+    List<TeacherDto> getAllTeachers() {
+        return teacherServiceImpl.getAllTeachers();
+    }
 
-	@GetMapping(value = "/{teacherId}")
-	TeacherDTO getTeacherById(@PathVariable Integer teacherId) {
-		return teacherServiceImpl.getOneById(teacherId);
+    @GetMapping(value = "/{uuid}")
+    TeacherDto getTeacher(@PathVariable final UUID uuid) {
+        return teacherServiceImpl.findTeacher(uuid);
 
-	}
+    }
 
-	@GetMapping(params = "languageName")
-	List<TeacherDTO> getTeacherByLanguageName(
-			@ApiParam(name = "languageName", type = "String", value = "Name of language", example = "Angielski", required = false) @RequestParam(required = false, value = "languageName") String languageName) {
-		return teacherServiceImpl.getTeachersByLanguageName(languageName);
-	}
+    @GetMapping(params = "name")
+    List<TeacherDto> getTeacherByLanguageName(@RequestParam(required = false) final String name) {
+        return teacherServiceImpl.getTeachersByLanguageName(name);
+    }
 
-	@PostMapping
-	TeacherDTO saveTeacher(@RequestBody TeacherDTO teacherObj) {
-		return teacherServiceImpl.saveTeacher(teacherObj);
-	}
+    @PostMapping
+    TeacherDto saveTeacher(@RequestBody final CreateTeacherForm teacherForm) {
+        return teacherServiceImpl.saveTeacher(teacherForm);
+    }
 
-	@PutMapping(value = "/{teacherId}")
-	TeacherDTO updateTeacher(@RequestBody TeacherDTO teacherObj, @PathVariable Integer teacherId) {
-		return teacherServiceImpl.updateTeacher(teacherId, teacherObj);
-	}
+    @PutMapping(value = "/{uuid}")
+    void updateTeacher(@PathVariable final UUID uuid, @RequestBody final UpdateTeacherForm teacherForm) {
+        teacherServiceImpl.updateTeacher(uuid, teacherForm);
+    }
 
-	@DeleteMapping(value = "/{teacherId}")
-	void deleteTeacherById(@PathVariable Integer teacherId) {
-		teacherServiceImpl.deleteTeacher(teacherId);
-	}
+    @DeleteMapping(value = "/{uuid}")
+    void deleteTeacherById(@PathVariable final UUID uuid) {
+        teacherServiceImpl.deleteTeacher(uuid);
+    }
 
-	@GetMapping(value = "/accounts")
-	TeacherDTO getTeacherWithAccount(
-			@ApiParam(name = "accountName", type = "String", value = "account name", example = "admin", required = false) @RequestParam(required = true, value = "accountName") String accountName) {
-		return teacherServiceImpl.getTeacherWithAccount(accountName);
-	}
+    @GetMapping(value = "/accounts")
+    TeacherDto getTeacherWithAccount(@RequestParam final String accountName) {
+        return teacherServiceImpl.getTeacherWithAccount(accountName);
+    }
 }

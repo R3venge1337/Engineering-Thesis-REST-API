@@ -1,41 +1,41 @@
 package engineeringthesis.androidrestapi.child.domain;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "child")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Child {
+@FieldNameConstants
+class Child extends AbstractUUIDEntity {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "child_id_pk")
-	private Integer childId;
-	
-	@Column(name = "child_name")
-	private String childName;
-	
-	@Column(name = "child_surname")
-	private String childSurname;
-	
-	@Column(name = "child_year_of_birth")
-	private Short childYearBirth;
-	
-	@Column(name = "child_city")
-	private String childCity;
-	
-	@Column(name = "child_quest_uuid")
-	private String childQuestUUID;
-	
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "year_of_birth")
+    private Short yearOfBirth;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "quest_uuid")
+    private String questUUID;
+
     @OneToOne
-    @JoinColumn(name = "account_id_fk",nullable = false)
-    Account accountChildId;
-	
+    @JoinColumn(name = "account_id_fk", nullable = false)
+    ChildAccount accountChild;
 }

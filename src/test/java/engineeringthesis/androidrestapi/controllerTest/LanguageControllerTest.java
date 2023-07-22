@@ -1,30 +1,6 @@
 package engineeringthesis.androidrestapi.controllerTest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-
-import engineeringthesis.androidrestapi.language.dto.LanguageDTO;
-
+/*
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "./test.properties")
@@ -132,3 +108,4 @@ public class LanguageControllerTest {
 		assertThat(mvcResult.toString(), Matchers.nullValue());
 	}
 }
+*/

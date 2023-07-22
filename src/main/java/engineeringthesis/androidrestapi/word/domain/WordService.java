@@ -1,72 +1,82 @@
 package engineeringthesis.androidrestapi.word.domain;
 
-import java.util.List;
-import java.util.Optional;
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.word.WordFacade;
-import engineeringthesis.androidrestapi.word.dto.WordDTO;
+import engineeringthesis.androidrestapi.word.dto.CreateWordForm;
+import engineeringthesis.androidrestapi.word.dto.UpdateWordForm;
+import engineeringthesis.androidrestapi.word.dto.WordDto;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class WordService implements WordFacade {
 
-		private final WordRepository wordRepository;
-		private final WordMapper wordMapper;
+    private final WordRepository wordRepository;
 
-		@Override
-		public List<WordDTO> getAllWords() {
-			
-			return  wordMapper.mapOfCollection(wordRepository.findAll());
-		}
+    @Override
+    public List<WordDto> getAllWords() {
+        return wordRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-		@Override
-		public WordDTO saveWord(WordDTO wordObj) {
-			
-			Word wordEntity = wordMapper.mapOfDTO(wordObj);
-			Word savedEntity = wordRepository.save(wordEntity);
-			return wordMapper.mapOfEntity(savedEntity);
-		}
+    @Override
+    @Transactional
+    public WordDto saveWord(final CreateWordForm wordForm) {
 
-		@Override
-		public WordDTO getWordByName(String wordName) {
-			return  wordMapper.mapOfEntity(wordRepository.getWordByName(wordName));
-		}
+        final Word word = new Word();
+        word.setName(wordForm.name());
+        word.setDownloadUri(wordForm.downloadUri());
 
-		@Override
-		public WordDTO getWordById(Integer wordId) {
-			
-			return wordMapper.mapOfEntity(wordRepository.findById(wordId).get());
-		}
+        final Word savedEntity = wordRepository.save(word);
+        return mapToDto(savedEntity);
+    }
 
-		@Override
-		public void deleteWord(Integer wordId) {
-			 
-			wordRepository.deleteById(wordId);
-		}
+    @Override
+    public WordDto getWordByName(final String wordName) {
+        return mapToDto(wordRepository.getWordByName(wordName));
+    }
 
-		@Override
-		public WordDTO updateWord(Integer wordId, WordDTO word) {
-			
-			Optional<Word> accountEntity = wordRepository.findById(wordId);
-			Word savedEntity = accountEntity.get();
-			savedEntity.setWordName(word.getWordName());
-			wordRepository.save(savedEntity);
-			WordDTO dto = wordMapper.mapOfEntity(savedEntity);
-			return dto;
-		}
+    @Override
+    @Transactional
+    public void deleteWord(final UUID uuid) {
+        wordRepository.deleteByUuid(uuid);
+    }
 
-		@Override
-		public Page<WordDTO> getWordsByCategoryName(String categoryName,Integer page,Integer size) {
-			int pageNumber = page != null && page > 0 ? page : 0;
-			int sizeNumber = size != null && size > 0 ? size : 4;
-			return wordMapper.map(wordRepository.findAllByCategoryId_CategoryName(categoryName,PageRequest.of(pageNumber, sizeNumber)));
-		}	
+    @Override
+    @Transactional
+    public WordDto updateWord(final UUID uuid, final UpdateWordForm wordForm) {
+
+        final Word word = wordRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+        word.setName(wordForm.name());
+        word.setDownloadUri(wordForm.downloadUri());
+        wordRepository.save(word);
+
+        return mapToDto(word);
+    }
+
+    @Override
+    public Page<WordDto> getWordsByCategoryName(String categoryName, Integer page, Integer size) {
+        int pageNumber = page != null && page > 0 ? page : 0;
+        int sizeNumber = size != null && size > 0 ? size : 4;
+        return mapToPageDto(wordRepository.findAllByCategory_Name(categoryName, PageRequest.of(pageNumber, sizeNumber)));
+    }
+
+    private Page<WordDto> mapToPageDto(Page<Word> pages) {
+        return new PageImpl<>(pages.stream().map(this::mapToDto).toList());
+    }
+
+    WordDto mapToDto(final Word word) {
+        return new WordDto(word.getUuid(), word.getName(), word.getDownloadUri());
+    }
+
+
 }

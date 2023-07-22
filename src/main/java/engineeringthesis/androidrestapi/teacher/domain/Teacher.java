@@ -1,46 +1,45 @@
 package engineeringthesis.androidrestapi.teacher.domain;
 
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "teacher")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Teacher {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "teacher_id_pk")
-	private Integer teacherId;
-	
-	@Column(name = "teacher_name")
-	private String teacherName;
-	
-	@Column(name = "teacher_surname")
-	private String teacherSurname;
-	
-	@Column(name = "teacher_year_of_birth")
-	private Short teacherYearBirth;
-	
-	@Column(name = "teacher_city")
-	private String teacherCity;
-	
-	@Column(name = "teacher_profession")
-	private String teacherProfession;
-	
-	@OneToOne
-	@JoinColumn(name = "language_id_fk")
-	private Language languageTeacherId;
-	
-	@OneToOne
-	@JoinColumn(name = "account_id_fk")
-	private Account accountTeacherId;
-	
-	
+@FieldNameConstants
+class Teacher extends AbstractUUIDEntity {
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "year_of_birth")
+    private Short yearOfBirth;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "profession")
+    private String profession;
+
+    @OneToOne
+    @JoinColumn(name = "language_id_fk")
+    private TeacherLanguage languageTeacher;
+
+    @OneToOne
+    @JoinColumn(name = "account_id_fk")
+    private TeacherAccount accountTeacher;
 }

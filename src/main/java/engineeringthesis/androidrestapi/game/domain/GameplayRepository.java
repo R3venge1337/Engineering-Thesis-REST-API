@@ -1,9 +1,7 @@
 package engineeringthesis.androidrestapi.game.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository;
 
-@Repository
-interface GameplayRepository extends JpaRepository<Gameplay,Integer> {
+interface GameplayRepository extends UUIDAwareJpaRepository<Gameplay, Integer> {
 
 }

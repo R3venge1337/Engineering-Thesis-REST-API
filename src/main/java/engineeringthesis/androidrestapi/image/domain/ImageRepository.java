@@ -1,14 +1,12 @@
 package engineeringthesis.androidrestapi.image.domain;
 
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
-interface ImageRepository extends JpaRepository<Image,Integer> {
-	
-	@Query("SELECT image FROM ImageEntity as image INNER JOIN image.imageFileTable  WHERE image.imageFileTable.imageFileTableName = :filename")
-	Image findByName(@Param("filename") String filename);
+interface ImageRepository extends UUIDAwareJpaRepository<Image, Integer> {
+
+    @Query("SELECT image FROM Image as image INNER JOIN image.imageFileTable  WHERE image.imageFileTable.imageFileTableName = :filename")
+    Image findByName(@Param("filename") final String filename);
 }

@@ -1,46 +1,45 @@
 package engineeringthesis.androidrestapi.word.domain;
 
-import engineeringthesis.androidrestapi.audio.AudioEntity;
-import engineeringthesis.androidrestapi.category.domain.CategoryEntity;
-import engineeringthesis.androidrestapi.image.domain.ImageEntity;
-import engineeringthesis.androidrestapi.language.domain.LanguageEntity;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "word")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Word {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "word_id_pk ")
-	private Integer wordId;
-	
-	@Column(name = "word_name")
-	private String wordName;
-	
-	@Column(name = "word_download_uri")
-	private String wordDownloadUri;
-	
-	@OneToOne
-	@JoinColumn(name = "category_id_fk")
-	private Category categoryId;
-	
-	@OneToOne
-	@JoinColumn(name = "language_id_fk")
-	private Language languageId;
-	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "image_id_fk",referencedColumnName = "image_id_pk")
-	private Image imageId;
-	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "audio_id_fk",referencedColumnName = "audio_id_pk")
-	private Audio audioId;
+@FieldNameConstants
+class Word extends AbstractUUIDEntity {
+
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "download_uri")
+    private String downloadUri;
+
+    @OneToOne
+    @JoinColumn(name = "category_id_fk")
+    private WordCategory category;
+
+    @OneToOne
+    @JoinColumn(name = "language_id_fk")
+    private WordLanguage language;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id_fk", referencedColumnName = "id")
+    private WordImage image;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "audio_id_fk", referencedColumnName = "id")
+    private WordAudio audio;
 }

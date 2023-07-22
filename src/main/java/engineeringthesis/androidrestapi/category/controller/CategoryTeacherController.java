@@ -1,9 +1,11 @@
 package engineeringthesis.androidrestapi.category.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import engineeringthesis.androidrestapi.category.CategoryTeacherFacade;
-import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDTO;
+import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDto;
+import engineeringthesis.androidrestapi.category.dto.CreateCategoryTeacherForm;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,13 +22,13 @@ class CategoryTeacherController {
 
 	private final CategoryTeacherFacade categoryTeacherFacade;
 
-	@GetMapping(value = "/{teacherId}")
-	List<CategoryTeacherDTO> getAllCategoriesByTeacherId(@PathVariable Integer teacherId) {
-		return categoryTeacherFacade.getCategoriesTeacher(teacherId);
+	@GetMapping(value = "/{uuid}")
+	List<CategoryTeacherDto> getAllCategoriesByTeacherId(@PathVariable final UUID uuid) {
+		return categoryTeacherFacade.getCategoriesTeacher(uuid);
 	}
 
 	@PostMapping
-	CategoryTeacherDTO saveCategoryToTeacher(@RequestBody CategoryTeacherDTO categoryTeacherObj) {
-		return categoryTeacherFacade.saveCategoryToTeacher(categoryTeacherObj);
+    CategoryTeacherDto saveCategoryToTeacher(@RequestBody final CreateCategoryTeacherForm categoryTeacherForm) {
+		return categoryTeacherFacade.saveCategoryToTeacher(categoryTeacherForm);
 	}
 }

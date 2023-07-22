@@ -1,36 +1,34 @@
 package engineeringthesis.androidrestapi.category.domain;
 
-import java.util.List;
-
-
 import engineeringthesis.androidrestapi.category.CategoryTeacherFacade;
-import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDTO;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
+import engineeringthesis.androidrestapi.category.dto.CategoryTeacherDto;
+import engineeringthesis.androidrestapi.category.dto.CreateCategoryTeacherForm;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-class CategoryTeacherService implements CategoryTeacherFacade {
-	
-	private final CategoryTeacherRepository categoryTeacherRepository;
-	private final CategoryTeacherMapper categoryTeacherMapper;
-	
-	@Override
-	public List<CategoryTeacherDTO> getCategoriesTeacher(Integer teacherId) {
-		return categoryTeacherMapper.mapOfCollection(categoryTeacherRepository.getCategoriesTeacher(teacherId));
-	}
+import java.util.List;
+import java.util.UUID;
 
-	@Override
-	public CategoryTeacherDTO saveCategoryToTeacher(CategoryTeacherDTO categoryTeacherObj) {
-		
-		CategoryTeacher categoryTeacherEntity = categoryTeacherMapper.mapOfDTO(categoryTeacherObj);
-		CategoryTeacher categoryTeacherEntitySaved = categoryTeacherRepository.save(categoryTeacherEntity);
-		return categoryTeacherMapper.mapOfEntity(categoryTeacherEntitySaved);
-	}
-	
-	
+@RequiredArgsConstructor
+class CategoryTeacherService implements CategoryTeacherFacade {
+
+    private final CategoryTeacherRepository categoryTeacherRepository;
+
+    @Override
+    public List<CategoryTeacherDto> getCategoriesTeacher(final UUID uuid) {
+        return categoryTeacherRepository.getCategoriesTeacher(uuid)
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    @Override
+    public CategoryTeacherDto saveCategoryToTeacher(final CreateCategoryTeacherForm teacherCategoryForm) {
+        CategoryTeacher categoryTeacher = new CategoryTeacher();
+
+        return mapToDto(categoryTeacherRepository.save(categoryTeacher));
+    }
+
+    CategoryTeacherDto mapToDto(final CategoryTeacher categoryTeacher) {
+        return new CategoryTeacherDto(categoryTeacher.getUuid(), null, null);
+    }
 } 

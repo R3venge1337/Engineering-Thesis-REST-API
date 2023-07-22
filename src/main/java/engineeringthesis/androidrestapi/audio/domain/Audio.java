@@ -1,40 +1,41 @@
 package engineeringthesis.androidrestapi.audio.domain;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "audio")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Audio {
-	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "audio_id_pk")
-	private Integer audioId;
-	
+@FieldNameConstants
+class Audio extends AbstractUUIDEntity {
+
 	//@Column(name = "ntfs_audio_id_fk" , columnDefinition="uniqueidentifier")
 	//private String ntfsAudioFileId;
 	
-	@Column(name = "audio_download_uri")
-	private String audioDownloadUri;
+	@Column(name = "download_uri")
+	private String downloadUri;
 	
 	/*
 	@OneToOne
 	@JoinColumn(name = "word_id_fk")
-	private WordEntity wordId;
+	private Word word;
 	*/
 	
 	@Column(name = "is_new", columnDefinition="BIT")
-	private boolean isNew;
+	private Boolean isNew;
 	
 	@Column(name = "is_accepted", columnDefinition="BIT")
-	private boolean isAccepted;
+	private Boolean isAccepted;
 	
 	@OneToOne
 	@JoinColumn(name="ntfs_audio_id_fk")

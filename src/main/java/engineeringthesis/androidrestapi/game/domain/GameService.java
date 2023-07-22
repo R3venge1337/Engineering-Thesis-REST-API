@@ -1,68 +1,62 @@
 package engineeringthesis.androidrestapi.game.domain;
 
-import java.util.List;
-import java.util.Optional;
-
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.game.GameFacade;
-import engineeringthesis.androidrestapi.game.dto.GameDTO;
+import engineeringthesis.androidrestapi.game.dto.CreateGameForm;
+import engineeringthesis.androidrestapi.game.dto.GameDto;
+import engineeringthesis.androidrestapi.game.dto.UpdateGameForm;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class GameService implements GameFacade {
 
-private final GameRepository gameRepository;
-private final GameMapper gameMapper;
-	
-	@Override
-	public List<GameDTO> getAllGames() {
-		
-		return gameMapper.mapOfCollection(gameRepository.findAll());
-	}
+    private final GameRepository gameRepository;
 
-	@Override
-	public GameDTO saveGame(GameDTO game) {
-		
-		Game gameEntity = gameMapper.mapOfDTO(game);
-		Game savedEntity =  gameRepository.save(gameEntity);
-		return gameMapper.mapOfEntity(savedEntity);
-	}
+    @Override
+    public List<GameDto> getAllGames() {
+        return gameRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public GameDTO getOneByName(String name) {
-		
-		return gameMapper.mapOfEntity(gameRepository.findByGameName(name));
-	}
+    @Override
+    public GameDto findGame(final UUID uuid) {
+        return gameRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(""));
+    }
 
-	@Override
-	public GameDTO getOneById(Integer gameId) {
-		
-		return gameMapper.mapOfEntity(gameRepository.findById(gameId).get());
-	}
-	
-	@Override
-	public GameDTO updateGame(Integer gameId, GameDTO gameName) {
-		
-		Optional<Game> gameEntity = gameRepository.findById(gameId);
-		Game savedEntity = gameEntity.get();
-		savedEntity.setGameName(gameName.getGameName());
-		gameRepository.save(savedEntity);
-		GameDTO dto = gameMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+    @Override
+    @Transactional
+    public GameDto saveGame(final CreateGameForm gameForm) {
 
-	@Override
-	public void deleteGame(Integer gameId) {
-		
-		gameRepository.deleteById(gameId);
-	}
+        Game game = new Game();
+        game.setName(gameForm.name());
 
-	
-	
+        return mapToDto(gameRepository.save(game));
+    }
+
+
+    @Override
+    @Transactional
+    public void updateGame(final UUID uuid, final UpdateGameForm gameForm) {
+        final Game game = gameRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+        game.setName(gameForm.name());
+    }
+
+    @Override
+    @Transactional
+    public void deleteGame(final UUID uuid) {
+        gameRepository.deleteByUuid(uuid);
+    }
+
+    GameDto mapToDto(final Game game) {
+        return new GameDto(game.getUuid(), game.getName());
+    }
 }

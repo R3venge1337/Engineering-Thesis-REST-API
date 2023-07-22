@@ -1,33 +1,23 @@
 package engineeringthesis.androidrestapi.game.domain;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "game")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Game {
+@FieldNameConstants
+class Game extends AbstractUUIDEntity {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "game_id_pk")
-	private Integer gameId;
-	
-	@Column(name = "game_name")
-	private String gameName;
-
-	public String getGameName() {
-		return gameName;
-	}
-
-	public void setGameName(String gameName) {
-		this.gameName = gameName;
-	}
-	
+    @Column(name = "name")
+    private String name;
 }

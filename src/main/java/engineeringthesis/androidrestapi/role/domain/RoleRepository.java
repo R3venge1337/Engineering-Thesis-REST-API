@@ -1,11 +1,8 @@
 package engineeringthesis.androidrestapi.role.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository;
 
-@Repository
-interface RoleRepository extends JpaRepository<Role,Integer> {
+interface RoleRepository extends UUIDAwareJpaRepository<Role, Integer> {
 
-	 Role findByRoleName(@Param("roleName")String roleName);
+    Role findByRoleName(final String roleName);
 }

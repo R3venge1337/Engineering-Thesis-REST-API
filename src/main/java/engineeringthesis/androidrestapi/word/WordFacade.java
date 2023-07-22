@@ -1,23 +1,24 @@
 package engineeringthesis.androidrestapi.word;
 
-import java.util.List;
-
-import engineeringthesis.androidrestapi.word.dto.WordDTO;
+import engineeringthesis.androidrestapi.word.dto.CreateWordForm;
+import engineeringthesis.androidrestapi.word.dto.UpdateWordForm;
+import engineeringthesis.androidrestapi.word.dto.WordDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface WordFacade {
-	
-	List<WordDTO> getAllWords();
-	
-	WordDTO saveWord(WordDTO word);
-	
-	WordDTO getWordById(Integer wordId);
-	
-	WordDTO getWordByName(String wordName);
-	
-	WordDTO updateWord(Integer wordId,WordDTO word);
-	
-	void deleteWord(Integer wordId);
-	
-	Page<WordDTO> getWordsByCategoryName(String categoryName,Integer pageNumber,Integer size);
+
+    List<WordDto> getAllWords();
+
+    WordDto saveWord(final CreateWordForm wordForm);
+
+    WordDto getWordByName(final String wordName);
+
+    WordDto updateWord(final UUID uuid, final UpdateWordForm wordForm);
+
+    void deleteWord(final UUID uuid);
+
+    Page<WordDto> getWordsByCategoryName(final String categoryName, final Integer pageNumber, final Integer size);
 }
