@@ -1,46 +1,45 @@
 package engineeringthesis.androidrestapi.teacher.domain;
 
 
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "teacher")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Teacher {
+@FieldNameConstants
+class Teacher extends AbstractUUIDEntity {
+
+	@Column(name = "name")
+	private String name;
 	
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "teacher_id_pk")
-	private Integer teacherId;
+	@Column(name = "surname")
+	private String surname;
 	
-	@Column(name = "teacher_name")
-	private String teacherName;
+	@Column(name = "year_of_birth")
+	private Short yearOfBirth;
 	
-	@Column(name = "teacher_surname")
-	private String teacherSurname;
+	@Column(name = "city")
+	private String city;
 	
-	@Column(name = "teacher_year_of_birth")
-	private Short teacherYearBirth;
-	
-	@Column(name = "teacher_city")
-	private String teacherCity;
-	
-	@Column(name = "teacher_profession")
-	private String teacherProfession;
+	@Column(name = "profession")
+	private String profession;
 	
 	@OneToOne
 	@JoinColumn(name = "language_id_fk")
-	private Language languageTeacherId;
+	private TeacherLanguage languageTeacher;
 	
 	@OneToOne
 	@JoinColumn(name = "account_id_fk")
-	private Account accountTeacherId;
-	
-	
+	private TeacherAccount accountTeacher;
 }
