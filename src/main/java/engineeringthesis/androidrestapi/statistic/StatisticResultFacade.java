@@ -1,20 +1,21 @@
 package engineeringthesis.androidrestapi.statistic;
 
-import engineeringthesis.androidrestapi.statistic.dto.StatisticResultDTO;
+import engineeringthesis.androidrestapi.statistic.dto.CreateStatisticResultForm;
+import engineeringthesis.androidrestapi.statistic.dto.StatisticResultDto;
+import engineeringthesis.androidrestapi.statistic.dto.UpdateStatisticResultForm;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface StatisticResultFacade {
 
-	List<StatisticResultDTO> getAllStatisticResults();
+	List<StatisticResultDto> getAllStatisticResults();
 	
-	StatisticResultDTO saveStatisticResult(StatisticResultDTO StatisticResultObj);
+	StatisticResultDto saveStatisticResult(final CreateStatisticResultForm resultForm);
+
+	StatisticResultDto findStatisticResult(final UUID uuid);
 	
-	StatisticResultDTO getOneByName(String name);
+	void updateStatisticResult(final UUID uuid, final UpdateStatisticResultForm resultForm);
 	
-	StatisticResultDTO getOneById(Integer statisticResultsId);
-	
-	StatisticResultDTO updateStatisticResult(Integer statisticResultsId,StatisticResultDTO StatisticResultObj);
-	
-	void deleteStatisticResults(Integer statisticResultsId);
+	void deleteStatisticResults(final UUID uuid);
 }

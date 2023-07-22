@@ -1,9 +1,7 @@
 package engineeringthesis.androidrestapi.statistic.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-interface StatisticTypeRepository  extends JpaRepository<StatisticType,Integer>{
-
+interface StatisticTypeRepository extends UUIDAwareJpaRepository<StatisticType, Integer> {
 }

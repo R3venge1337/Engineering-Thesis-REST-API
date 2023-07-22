@@ -1,65 +1,62 @@
 package engineeringthesis.androidrestapi.statistic.domain;
 
-import java.util.List;
-import java.util.Optional;
-
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.statistic.StatisticResultFacade;
-import engineeringthesis.androidrestapi.statistic.dto.StatisticResultDTO;
+import engineeringthesis.androidrestapi.statistic.dto.CreateStatisticResultForm;
+import engineeringthesis.androidrestapi.statistic.dto.StatisticResultDto;
+import engineeringthesis.androidrestapi.statistic.dto.UpdateStatisticResultForm;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class StatisticResultService implements StatisticResultFacade {
-	
 
-	private final StatisticResultRepository statisticResultRepository;
-	private final StatisticResultMapper statisticResultMapper;
 
-	@Override
-	public List<StatisticResultDTO> getAllStatisticResults() {
-		return statisticResultMapper.mapOfCollection(statisticResultRepository.findAll());
-	}
+    private final StatisticResultRepository statisticResultRepository;
 
-	@Override
-	public StatisticResultDTO saveStatisticResult(StatisticResultDTO statisticResultObj) {
-		
-		StatisticResult statisticResultEntity = statisticResultMapper.mapOfDTO(statisticResultObj);
-		StatisticResult savedEntity = statisticResultRepository.save(statisticResultEntity);
-		return statisticResultMapper.mapOfEntity(savedEntity);
-	}
+    @Override
+    public List<StatisticResultDto> getAllStatisticResults() {
+        return statisticResultRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public StatisticResultDTO getOneByName(String name) {
-		return null;
-	}
+    @Override
+    @Transactional
+    public StatisticResultDto saveStatisticResult(final CreateStatisticResultForm resultForm) {
 
-	@Override
-	public StatisticResultDTO getOneById(Integer statisticResultsId) {
-		return statisticResultMapper.mapOfEntity(statisticResultRepository.findById(statisticResultsId).get());
-	}
-	
-	@Override
-	public StatisticResultDTO updateStatisticResult(Integer statisticResultsId, StatisticResultDTO StatisticResultObj) {
-		
-		Optional<StatisticResult> statisticResultEntity = statisticResultRepository.findById(statisticResultsId);
-		StatisticResult savedEntity = statisticResultEntity.get();
-		savedEntity.setStatisticResults(StatisticResultObj.getStatisticResults());
-		statisticResultRepository.save(savedEntity);
-		StatisticResultDTO dto = statisticResultMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+        StatisticResult statisticResultEntity = new StatisticResult();
 
-	@Override
-	public void deleteStatisticResults(Integer statisticResultsId) {
-		statisticResultRepository.deleteById(statisticResultsId);
-		
-	}
+        return mapToDto(statisticResultRepository.save(statisticResultEntity));
+    }
 
-	
+    @Override
+    public StatisticResultDto findStatisticResult(final UUID uuid) {
+        return statisticResultRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(""));
+    }
+
+    @Override
+    @Transactional
+    public void updateStatisticResult(final UUID uuid, final UpdateStatisticResultForm resultForm) {
+
+        StatisticResult statisticResult = statisticResultRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+        statisticResult.setResult(resultForm.statisticResults());
+    }
+
+    @Override
+    @Transactional
+    public void deleteStatisticResults(final UUID uuid) {
+        statisticResultRepository.deleteByUuid(uuid);
+    }
+
+    StatisticResultDto mapToDto(final StatisticResult statisticResult) {
+        return new StatisticResultDto(statisticResult.getResult(), null);
+    }
 }

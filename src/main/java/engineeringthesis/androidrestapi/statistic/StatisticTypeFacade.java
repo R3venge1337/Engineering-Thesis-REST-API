@@ -1,20 +1,21 @@
 package engineeringthesis.androidrestapi.statistic;
 
-import engineeringthesis.androidrestapi.statistic.dto.StatisticTypeDTO;
+import engineeringthesis.androidrestapi.statistic.dto.CreateStatisticTypeForm;
+import engineeringthesis.androidrestapi.statistic.dto.StatisticTypeDto;
+import engineeringthesis.androidrestapi.statistic.dto.UpdateStatisticTypeForm;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface StatisticTypeFacade {
 		
-	List<StatisticTypeDTO> getAllStatistic();
+	List<StatisticTypeDto> getAllStatistic();
 	
-	StatisticTypeDTO saveStatisticType(StatisticTypeDTO statisticTypeObj);
+	StatisticTypeDto saveStatisticType(final CreateStatisticTypeForm statisticTypeForm);
+
+	StatisticTypeDto findStatisticType(final UUID uuid);
 	
-	StatisticTypeDTO getOneByName(String name);
+	void updateStatisticType(final UUID uuid, final UpdateStatisticTypeForm statisticTypeForm);
 	
-	StatisticTypeDTO getOneById(Integer statisticId);
-	
-	StatisticTypeDTO updateStatisticType(Integer statisticId,StatisticTypeDTO statisticTypeObj);
-	
-	void deleteStatistic(Integer statisticId);
+	void deleteStatistic(final UUID uuid);
 }

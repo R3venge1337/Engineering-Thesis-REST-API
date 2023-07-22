@@ -1,9 +1,10 @@
 package engineeringthesis.androidrestapi.statistic.controller;
 
-import java.util.List;
-
 import engineeringthesis.androidrestapi.statistic.StatisticTypeFacade;
-import engineeringthesis.androidrestapi.statistic.dto.StatisticTypeDTO;
+import engineeringthesis.androidrestapi.statistic.dto.CreateStatisticTypeForm;
+import engineeringthesis.androidrestapi.statistic.dto.StatisticTypeDto;
+import engineeringthesis.androidrestapi.statistic.dto.UpdateStatisticTypeForm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,39 +14,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/statistics")
 @RequiredArgsConstructor
 class StatisticTypeController {
 
-	private final StatisticTypeFacade statisticServiceImpl;
+    private final StatisticTypeFacade statisticServiceImpl;
 
-	@GetMapping
-	List<StatisticTypeDTO> getAllStatisticsTypes() {
-		return statisticServiceImpl.getAllStatistic();
-	}
+    @GetMapping
+    List<StatisticTypeDto> getAllStatisticsTypes() {
+        return statisticServiceImpl.getAllStatistic();
+    }
 
-	@GetMapping(value = "/{statisticId}")
-	StatisticTypeDTO getStatisticTypeById(@PathVariable Integer statisticId) {
-		return statisticServiceImpl.getOneById(statisticId);
-	}
+    @GetMapping(value = "/{uuid}")
+    StatisticTypeDto getStatisticType(@PathVariable final UUID uuid) {
+        return statisticServiceImpl.findStatisticType(uuid);
+    }
 
-	@PostMapping
-	StatisticTypeDTO saveStatistic(@RequestBody StatisticTypeDTO statisticTypeObj) {
-		return statisticServiceImpl.saveStatisticType(statisticTypeObj);
-	}
+    @PostMapping
+    StatisticTypeDto saveStatistic(@RequestBody final CreateStatisticTypeForm createStatisticTypeForm) {
+        return statisticServiceImpl.saveStatisticType(createStatisticTypeForm);
+    }
 
-	@PutMapping(value = "/{statisticId}")
-	StatisticTypeDTO updateStatistic(@RequestBody StatisticTypeDTO statisticTypeObj,
-			@PathVariable Integer statisticId) {
-		return statisticServiceImpl.updateStatisticType(statisticId, statisticTypeObj);
-	}
+    @PutMapping(value = "/{uuid}")
+    void updateStatistic(@PathVariable final UUID uuid, @RequestBody final UpdateStatisticTypeForm statisticTypeForm) {
+        statisticServiceImpl.updateStatisticType(uuid, statisticTypeForm);
+    }
 
-	@DeleteMapping(value = "/{statisticId}")
-	void deleteStatisticById(@PathVariable Integer statisticId) {
-		statisticServiceImpl.deleteStatistic(statisticId);
-	}
+    @DeleteMapping(value = "/{uuid}")
+    void deleteStatistic(@PathVariable final UUID uuid) {
+        statisticServiceImpl.deleteStatistic(uuid);
+    }
 
 }
