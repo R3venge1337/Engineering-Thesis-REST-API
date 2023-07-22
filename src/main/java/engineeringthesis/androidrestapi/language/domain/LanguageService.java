@@ -1,69 +1,66 @@
 package engineeringthesis.androidrestapi.language.domain;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.language.LanguageFacade;
-import engineeringthesis.androidrestapi.language.dto.LanguageDTO;
+import engineeringthesis.androidrestapi.language.dto.CreateLanguageForm;
+import engineeringthesis.androidrestapi.language.dto.LanguageDto;
+import engineeringthesis.androidrestapi.language.dto.UpdateLanguageForm;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class LanguageService implements LanguageFacade {
 
-	private final LanguageRepository languageRepository;
-	private final LanguageMapper languageMapper;
-	
-	@Override
-	public List<LanguageDTO> getAllLanguage() {
-		
-		return languageMapper.mapOfCollection(languageRepository.findAll());
-	}
+    private final LanguageRepository languageRepository;
 
-	@Override
-	public LanguageDTO saveLanguage(LanguageDTO lang) {
-		
-		
-		Language language = languageMapper.mapOfDTO(lang);
-		language.setLanguageCreatedDate(LocalDateTime.now());
-		Language savedEntity = languageRepository.save(language);
-		 return languageMapper.mapOfEntity(savedEntity);
-	}
+    @Override
+    public List<LanguageDto> getAllLanguage() {
 
-	@Override
-	public LanguageDTO getOneByName(String name) {
-		
-		return languageMapper.mapOfEntity(languageRepository.findByLanguageName(name));
-	}
+        return languageRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public LanguageDTO getOneById(Integer languageId) {
-		
-		return languageMapper.mapOfEntity(languageRepository.findById(languageId).get());
-	}
+    @Override
+    @Transactional
+    public LanguageDto saveLanguage(final CreateLanguageForm languageForm) {
 
-	@Override
-	public void deleteLanguage(Integer languageId) {
-		
-		languageRepository.deleteById(languageId);	
-	}
+        Language language = new Language();
+        language.setName(languageForm.name());
+        language.setCreatedDate(LocalDateTime.now());
 
-	@Override
-	public LanguageDTO updateLanguage(Integer languageId,LanguageDTO lang) {
-		Optional<Language> languageEntity = languageRepository.findById(languageId);
-		Language savedEntity = languageEntity.get();
-		savedEntity.setLanguageName(lang.getLanguageName());
-		//savedEntity.setLanguageImageIcon(lang.getLanguageImageIcon());
-		savedEntity.setLanguageCreatedDate(lang.getLanguageCreatedDate());
-		languageRepository.save(savedEntity);
-		LanguageDTO dto = languageMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+        return mapToDto(languageRepository.save(language));
+    }
 
+    @Override
+    public LanguageDto findLanguage(final UUID uuid) {
+        return languageRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(""));
+    }
+
+    @Override
+    @Transactional
+    public void deleteLanguage(final UUID uuid) {
+        languageRepository.deleteByUuid(uuid);
+    }
+
+    @Override
+    @Transactional
+    public void updateLanguage(final UUID uuid, final UpdateLanguageForm languageForm) {
+        Language language = languageRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+
+        language.setName(languageForm.name());
+        //savedEntity.setLanguageImageIcon(lang.getLanguageImageIcon());
+        language.setCreatedDate(languageForm.createdDate());
+    }
+
+    LanguageDto mapToDto(final Language language) {
+        return new LanguageDto(language.getName(), language.getCreatedDate());
+    }
 }
