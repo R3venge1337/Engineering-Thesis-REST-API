@@ -9,15 +9,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 
-
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "game")
+@Table(name = "statisticResult")
 @FieldNameConstants
-class Game extends AbstractUUIDEntity {
+class GameplayResultStatisticResult extends AbstractUUIDEntity {
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "statistic_result_score")
+    private String statisticResults;
 }

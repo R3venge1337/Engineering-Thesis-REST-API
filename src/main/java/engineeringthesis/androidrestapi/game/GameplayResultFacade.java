@@ -1,28 +1,27 @@
 package engineeringthesis.androidrestapi.game;
 
-import engineeringthesis.androidrestapi.game.dto.GameplayResultDTO;
+import engineeringthesis.androidrestapi.game.dto.CreateGameplayResultForm;
+import engineeringthesis.androidrestapi.game.dto.GameplayResultDto;
+import engineeringthesis.androidrestapi.game.dto.UpdateGameplayResultForm;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface GameplayResultFacade {
 	
-	List<GameplayResultDTO> getAllGameplayResults();
+	List<GameplayResultDto> getAllGameplayResults();
+
+	List<GameplayResultDto> getAllGameplayResultsByGameplayId(final UUID uuid);
 	
-	List<GameplayResultDTO> getAllGameplayResultsByGameplayId(Integer gameplayId);
+	List<GameplayResultDto>getAllUserResultsByGuestId(final String guestUUID);
 	
-	List<GameplayResultDTO>getAllUserResultsByGuestId(String guestUUID);
+	List<GameplayResultDto>getAllUserResultsByGameName(final String gameName);
 	
-	List<GameplayResultDTO>getAllUserResultsByGameName(String gameName);
+	GameplayResultDto saveGameplayResults(final CreateGameplayResultForm resultForm);
+
+	void updateGameplayResults(final UUID uuid, final UpdateGameplayResultForm resultForm);
 	
-	GameplayResultDTO saveGameplayResults(GameplayResultDTO result);
-	
-	GameplayResultDTO getOneByName(String name);
-	
-	GameplayResultDTO getOneById(Integer resultId);
-	
-	GameplayResultDTO updateGameplayResults(Integer resultId,GameplayResultDTO result);
-	
-	void deleteGameplayResults(Integer resultId);
+	void deleteGameplayResults(final UUID uuid);
 	
 	
 }

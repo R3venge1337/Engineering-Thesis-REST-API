@@ -1,22 +1,22 @@
 package engineeringthesis.androidrestapi.game;
 
-import engineeringthesis.androidrestapi.game.dto.GameplayDTO;
+import engineeringthesis.androidrestapi.game.dto.CreateGameplayForm;
+import engineeringthesis.androidrestapi.game.dto.GameplayDto;
+import engineeringthesis.androidrestapi.game.dto.UpdateGameplayForm;
 
 import java.util.List;
-
+import java.util.UUID;
 
 
 public interface GameplayFacade {
 
-	List<GameplayDTO> getAllGameplay();
+	List<GameplayDto> getAllGameplay();
 	
-	GameplayDTO saveGameplay(GameplayDTO gameplayObj);
+	GameplayDto saveGameplay(final CreateGameplayForm gameplayForm);
+
+	GameplayDto findGameplay(final UUID uuid);
 	
-	GameplayDTO getOneByName(String name);
+	void updateGameplay(final UUID uuid, final UpdateGameplayForm gameplayForm);
 	
-	GameplayDTO getOneById(Integer gameplayId);
-	
-	GameplayDTO updateGameplay(Integer gameplayId,GameplayDTO gameplayObj);
-	
-	void deleteGameplay(Integer gameMatchId);
+	void deleteGameplay(final UUID uuid);
 }

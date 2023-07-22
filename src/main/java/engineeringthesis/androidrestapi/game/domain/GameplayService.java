@@ -1,71 +1,61 @@
 package engineeringthesis.androidrestapi.game.domain;
 
-import java.util.List;
-import java.util.Optional;
-
+import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.game.GameplayFacade;
-import engineeringthesis.androidrestapi.game.dto.GameplayDTO;
+import engineeringthesis.androidrestapi.game.dto.CreateGameplayForm;
+import engineeringthesis.androidrestapi.game.dto.GameplayDto;
+import engineeringthesis.androidrestapi.game.dto.UpdateGameplayForm;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Transactional
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import java.util.List;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 class GameplayService implements GameplayFacade {
 
-	
-	
-	private final GameplayRepository gameplayRepository;
-	private final GameplayMapper gameplayMapper;
-	
-	@Override
-	public List<GameplayDTO> getAllGameplay() {
-		
-		return  gameplayMapper.mapOfCollection(gameplayRepository.findAll());
-	}
+    private final GameplayRepository gameplayRepository;
 
-	@Override
-	public GameplayDTO saveGameplay(GameplayDTO gameMatch) {
-		
-		Gameplay gamePlayEntity = gameplayMapper.mapOfDTO(gameMatch);
-		Gameplay savedEntity = gameplayRepository.save(gamePlayEntity);
-		return  gameplayMapper.mapOfEntity(savedEntity);
-	}
+    @Override
+    public List<GameplayDto> getAllGameplay() {
+        return gameplayRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
 
-	@Override
-	public GameplayDTO getOneByName(String name) {
-		
-		return null;
-	}
+    @Override
+    @Transactional
+    public GameplayDto saveGameplay(final CreateGameplayForm gameplayForm) {
+        Gameplay gameplay = new Gameplay();
 
-	@Override
-	public GameplayDTO getOneById(Integer gameMatchId) {
-		
-		return  gameplayMapper.mapOfEntity(gameplayRepository.findById(gameMatchId).get());
-	}
-	
-	@Override
-	public GameplayDTO updateGameplay(Integer gameplayId, GameplayDTO gameplayObj) {
-		
-		Optional<Gameplay> gameMatch = gameplayRepository.findById(gameplayId);
-		Gameplay savedEntity = gameMatch.get();
-		savedEntity.setGameMatchDataStart(gameplayObj.getGameMatchDataStart());
-		savedEntity.setGameMatchDataEnd(gameplayObj.getGameMatchDataEnd());
-		gameplayRepository.save(savedEntity);
-		GameplayDTO dto = gameplayMapper.mapOfEntity(savedEntity);
-		return dto;
-	}
+        return mapToDto(gameplayRepository.save(gameplay));
+    }
 
-	@Override
-	public void deleteGameplay(Integer gameMatchId) {
-		 
-		gameplayRepository.deleteById(gameMatchId);
-	}
+    @Override
+    public GameplayDto findGameplay(final UUID uuid) {
+        return gameplayRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(""));
+    }
 
+    @Override
+    @Transactional
+    public void updateGameplay(final UUID uuid, final UpdateGameplayForm gameplayForm) {
+        Gameplay gameplay = gameplayRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException(""));
+		/*
+		gameplay.setGameMatchDataStart(gameplayForm.getGameMatchDataStart());
+		gameplay.setGameMatchDataEnd(gameplayForm.getGameMatchDataEnd());
+		 */
+    }
 
-	
+    @Override
+    @Transactional
+    public void deleteGameplay(final UUID uuid) {
+        gameplayRepository.deleteByUuid(uuid);
+    }
 
+    GameplayDto mapToDto(final Gameplay gameplay) {
+        return new GameplayDto(null, null, null,null,null, gameplay.getStartDate(), gameplay.getEndDate());
+    }
 }
