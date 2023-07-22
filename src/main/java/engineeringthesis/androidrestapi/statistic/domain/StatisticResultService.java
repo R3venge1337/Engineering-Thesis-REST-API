@@ -47,7 +47,7 @@ class StatisticResultService implements StatisticResultFacade {
         StatisticResult statisticResult = statisticResultRepository.findByUuid(uuid)
                 .orElseThrow(() -> new NotFoundException(""));
 
-        statisticResult.setResult(resultForm.statisticResults());
+        statisticResult.setResult(resultForm.result());
     }
 
     @Override
