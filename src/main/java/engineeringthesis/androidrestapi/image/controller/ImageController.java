@@ -1,7 +1,6 @@
 package engineeringthesis.androidrestapi.image.controller;
 
 import engineeringthesis.androidrestapi.image.ImageFacade;
-import engineeringthesis.androidrestapi.image.dto.CreateImageForm;
 import engineeringthesis.androidrestapi.image.dto.ImageDto;
 import engineeringthesis.androidrestapi.image.dto.UpdateImageForm;
 import jakarta.servlet.http.HttpServletRequest;
