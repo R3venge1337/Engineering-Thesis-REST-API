@@ -1,26 +1,27 @@
 package engineeringthesis.androidrestapi.image.domain;
 
+import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 
 
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "image")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
-class Image {
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id_pk")
-	private Integer imageId;
+@FieldNameConstants
+class Image extends AbstractUUIDEntity {
 	
-	@Column(name = "image_download_uri")
-	private String imageDownloadUri;
+	@Column(name = "download_uri")
+	private String downloadUri;
 	
 	@Column(name = "is_new", columnDefinition="BIT")
 	private boolean isNew;
@@ -38,7 +39,4 @@ class Image {
 	@JoinColumn(name="ntfs_image_id_fk")
 	//@Column(name = "ntfs_image_id_fk" , columnDefinition="uniqueidentifier")
 	private ImageFileTable imageFileTable;
-	
-	
-	
 }

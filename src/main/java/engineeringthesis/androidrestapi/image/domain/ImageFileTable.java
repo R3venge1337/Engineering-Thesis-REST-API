@@ -2,7 +2,12 @@ package engineeringthesis.androidrestapi.image.domain;
 import java.time.OffsetDateTime;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JavaType;
+import org.hibernate.type.descriptor.java.ByteArrayJavaType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -17,9 +22,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "ntfs_image")
-@Data
-@NoArgsConstructor @AllArgsConstructor
-@Builder
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 class ImageFileTable {
 	
 	@Id
@@ -29,15 +34,18 @@ class ImageFileTable {
 	private String streamId;
 	
 	@Column(name = "file_stream" , columnDefinition="uniqueidentifier")
-	private byte[] fileStream;
+	@JavaType(ByteArrayJavaType.class )
+	private Byte[] fileStream;
 	
 	@Column(name = "name",columnDefinition = "NVARCHAR")
 	private String imageFileTableName;
 	
 	@Column(name = "path_locator",columnDefinition = "VARBINARY")
+	@JavaType(ByteArrayJavaType.class )
 	private Byte[] pathLocator;
 	
 	@Column(name = "parent_path_locator",columnDefinition = "VARBINARY")
+	@JavaType(ByteArrayJavaType.class )
 	private Byte[] parentPathLocator;
 	
 	@Column(name = "file_type",columnDefinition = "NVARCHAR")
