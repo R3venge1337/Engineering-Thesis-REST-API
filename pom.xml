@@ -17,7 +17,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<sqlserver>12.2.0.jre11</sqlserver>
-		<swagger>1.7.0</swagger>
+		<swagger>2.1.0</swagger>
 		<jsonwebtoken>0.11.5</jsonwebtoken>
 		<oauth>3.11.0</oauth>
 		<lombok>1.18.26</lombok>
@@ -125,10 +125,11 @@
    		 <artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		 <!-- -->
+
 		<!-- Swagger OpenDoc-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-ui</artifactId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${swagger}</version>
 		</dependency>
 		<!-- -->
