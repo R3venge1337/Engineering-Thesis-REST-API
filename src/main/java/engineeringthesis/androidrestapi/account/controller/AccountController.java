@@ -38,7 +38,7 @@ class AccountController {
 
     @GetMapping(ROOT)
     PageDto<AccountDto> findAccounts(@RequestBody final AccountFilterForm filterForm, final PageableRequest pageableRequest) {
-        return accountFacade.getAllAccounts(filterForm, pageableRequest);
+        return accountFacade.findAllAccounts(filterForm, pageableRequest);
     }
 
     @GetMapping(value = ROOT, params = "expiredAge")

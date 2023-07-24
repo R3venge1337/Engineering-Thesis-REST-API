@@ -4,22 +4,25 @@ package engineeringthesis.androidrestapi.account;
 import java.util.List;
 import java.util.UUID;
 
-import engineeringthesis.androidrestapi.account.dto.AccountForm;
-import org.springframework.data.domain.Sort;
+import engineeringthesis.androidrestapi.account.dto.CreateAccountForm;
+import engineeringthesis.androidrestapi.account.dto.UpdateAccountForm;
+import engineeringthesis.androidrestapi.account.dto.AccountFilterForm;
 
 import engineeringthesis.androidrestapi.account.dto.AccountDto;
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
 
 public interface AccountFacade {
-		
-	List<AccountDto> getAllAccounts(final Integer page, final Integer size, final Sort.Direction sort);
-	
-	AccountDto saveAccount(final AccountForm account);
-	
-	AccountDto findAccount(final String name);
 
-	void updateAccount(final UUID uuid, final AccountForm accountForm);
-	
-	List<AccountDto> getExpiredAccounts(final Integer  accountExpiredAge);
-	
-	void deleteAccount(final UUID uuid);
+    PageDto<AccountDto> findAllAccounts(final AccountFilterForm filterForm, final PageableRequest pageableRequest);
+
+    AccountDto saveAccount(final CreateAccountForm createForm);
+
+    AccountDto findAccount(final String name);
+
+    void updateAccount(final UUID uuid, final UpdateAccountForm updateForm);
+
+    List<AccountDto> findExpiredAccounts(final Integer accountExpiredAge);
+
+    void deleteAccount(final UUID uuid);
 }
