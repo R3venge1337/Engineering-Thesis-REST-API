@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class AccountConfiguration {
 
     @Bean
-    AccountFacade accountFacade(final AccountRepository accountRepository, final PasswordEncoder passwordEncoder){
-        return new AccountService(accountRepository, passwordEncoder);
+    AccountFacade accountFacade(final AccountRepository accountRepository, final AccountRoleRepository accountRoleRepository, final PasswordEncoder passwordEncoder) {
+        return new AccountService(accountRepository, accountRoleRepository, passwordEncoder);
     }
 }
