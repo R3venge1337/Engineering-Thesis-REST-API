@@ -27,7 +27,7 @@ class RoleService implements RoleFacade {
 
     @Override
     public RoleDto getOneRoleByName(final String roleName) {
-        return mapToDto(roleRepository.findByRoleName(ROLE_PREFIX + roleName));
+        return mapToDto(roleRepository.findByName(ROLE_PREFIX + roleName));
     }
 
     @Override

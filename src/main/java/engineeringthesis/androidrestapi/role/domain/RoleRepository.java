@@ -4,5 +4,5 @@ import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository
 
 interface RoleRepository extends UUIDAwareJpaRepository<Role, Integer> {
 
-    Role findByRoleName(final String roleName);
+    Role findByName(final String name);
 }

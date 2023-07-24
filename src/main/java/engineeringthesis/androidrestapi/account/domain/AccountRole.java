@@ -32,15 +32,15 @@ class AccountRole extends AbstractUUIDEntity {
             orphanRemoval = true
     )
     @Setter(AccessLevel.NONE)
-    List<Account> users = new ArrayList<>();
+    List<Account> accounts = new ArrayList<>();
 
     public void addRole(final Account account) {
-        users.add(account);
+        accounts.add(account);
         account.setRole(this);
     }
 
     public void removeRole(final Account account) {
-        users.remove(account);
+        accounts.remove(account);
         account.setRole(null);
     }
 }

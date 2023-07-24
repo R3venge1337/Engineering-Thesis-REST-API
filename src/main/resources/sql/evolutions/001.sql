@@ -37,7 +37,7 @@ GO
 -------Account---------------
 ---------------------------
 CREATE TABLE dbo.account (
-    id int NOT NULL IDENTITY(1,1),
+    id int IDENTITY(1,1) NOT NULL,
     nickname varchar(100) NOT NULL,
 	password varchar(255) NOT NULL,
 	date_created datetime NOT NULL,
