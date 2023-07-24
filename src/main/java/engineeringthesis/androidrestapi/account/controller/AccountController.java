@@ -2,59 +2,70 @@ package engineeringthesis.androidrestapi.account.controller;
 
 import engineeringthesis.androidrestapi.account.AccountFacade;
 import engineeringthesis.androidrestapi.account.dto.AccountDto;
-import engineeringthesis.androidrestapi.account.dto.AccountForm;
+import engineeringthesis.androidrestapi.account.dto.AccountFilterForm;
+import engineeringthesis.androidrestapi.account.dto.CreateAccountForm;
+import engineeringthesis.androidrestapi.account.dto.UpdateAccountForm;
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
+import static engineeringthesis.androidrestapi.account.controller.AccountController.Routes.ROOT;
+import static engineeringthesis.androidrestapi.account.controller.AccountController.Routes.ROOT_UUID;
+
 @RestController
-@RequestMapping(value = "/api/accounts")
 @RequiredArgsConstructor
 class AccountController {
 
     private final AccountFacade accountFacade;
-    private static final int MAX_SIZE = 20;
 
-    @GetMapping
-    List<AccountDto> getAllAccounts(@RequestParam(required = false) final Integer page, final Sort.Direction sort) {
-        return accountFacade.getAllAccounts(page, MAX_SIZE, sort);
+    static final class Routes {
+        static final String ROOT = "/accounts";
+        static final String ROOT_UUID = ROOT + "/{uuid}";
     }
 
-    @GetMapping(params = "accountExpiredAge")
-    List<AccountDto> getExpiredAccounts(@RequestParam(required = false) final Integer accountExpiredAge) {
-        return accountFacade.getExpiredAccounts(accountExpiredAge);
+    @GetMapping(ROOT)
+    PageDto<AccountDto> findAccounts(@RequestBody final AccountFilterForm filterForm, final PageableRequest pageableRequest) {
+        return accountFacade.getAllAccounts(filterForm, pageableRequest);
     }
 
-    @GetMapping(params = "accountName")
-    AccountDto getAccountByName(@RequestParam("accountName") final String accountName) {
-        return accountFacade.findAccount(accountName);
+    @GetMapping(value = ROOT, params = "expiredAge")
+    List<AccountDto> findExpiredAccounts(@RequestParam final Integer expiredAge) {
+        return accountFacade.findExpiredAccounts(expiredAge);
     }
 
-    @PostMapping
-    AccountDto saveAccount(@RequestBody final AccountForm accountObj) {
-        return accountFacade.saveAccount(accountObj);
+    @GetMapping(value = ROOT, params = "name")
+    AccountDto findAccount(@RequestParam final String name) {
+        return accountFacade.findAccount(name);
     }
 
-    @PutMapping(value = "/{uuid}")
+    @PostMapping(ROOT)
+    @ResponseStatus(HttpStatus.CREATED)
+    AccountDto saveAccount(@RequestBody final CreateAccountForm createForm) {
+        return accountFacade.saveAccount(createForm);
+    }
+
+    @PutMapping(value = ROOT_UUID)
     void updateAccount(@PathVariable final UUID uuid,
-                       @RequestBody final AccountForm accountForm) {
-        accountFacade.updateAccount(uuid, accountForm);
+                       @RequestBody final UpdateAccountForm updateForm) {
+        accountFacade.updateAccount(uuid, updateForm);
     }
 
-    @DeleteMapping(value = "/{uuid}")
+    @DeleteMapping(value = ROOT_UUID)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteAccount(@PathVariable final UUID uuid) {
         accountFacade.deleteAccount(uuid);
     }
-
 }
