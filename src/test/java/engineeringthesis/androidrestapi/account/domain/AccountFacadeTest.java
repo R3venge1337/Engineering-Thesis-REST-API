@@ -45,10 +45,8 @@ class AccountFacadeTest {
         void shouldReturnWhenFound() {
             //given
             final CreateAccountForm accountForm = createAccountForm();
-            final Account account = accountRepository.save(new Account());
-            account.setName("adamczyk97");
-            final AccountRole save = createAccountRoleWithName();
-            account.setRole(save);
+            final Account account = createAccountWithName();
+            createAccountRoleWithName();
 
             //when
             final AccountDto returnedAccount = accountFacade.findAccount(accountForm.name());
@@ -83,8 +81,7 @@ class AccountFacadeTest {
         void shouldThrowNotUniqueException() {
             //given
             final CreateAccountForm accountForm = createAccountForm();
-            final Account account = accountRepository.save(new Account());
-            account.setName("adamczyk97");
+            createAccountWithName();
 
             //when
             //trying to run create with same user
@@ -228,6 +225,12 @@ class AccountFacadeTest {
         final AccountRole role = accountRoleRepository.save(new AccountRole());
         role.setName("ROLE_ADMIN");
         return role;
+    }
+
+    private Account createAccountWithName() {
+        final Account account = accountRepository.save(new Account());
+        account.setName("adamczyk97");
+        return account;
     }
 
     private static String createPassword() {
