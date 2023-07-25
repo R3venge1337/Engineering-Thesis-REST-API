@@ -45,8 +45,9 @@ class AccountFacadeTest {
         void shouldReturnWhenFound() {
             //given
             final CreateAccountForm accountForm = createAccountForm();
+            final AccountRole accountRole = createAccountRoleWithName();
             final Account account = createAccountWithName();
-            createAccountRoleWithName();
+            account.setRole(accountRole);
 
             //when
             final AccountDto returnedAccount = accountFacade.findAccount(accountForm.name());
