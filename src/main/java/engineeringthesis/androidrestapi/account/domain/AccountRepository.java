@@ -1,15 +1,17 @@
 package engineeringthesis.androidrestapi.account.domain;
 
 import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
-interface AccountRepository extends UUIDAwareJpaRepository<Account, Integer> {
+interface AccountRepository extends UUIDAwareJpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
+    Boolean existsByName(final String name);
 
-    @Query("SELECT a FROM Account a WHERE a.name = :accountName")
-    Account findByAccountName(final String accountName);
+    Optional<Account> findByName(final String name);
 
-    @Query("SELECT a FROM Account a WHERE YEAR(current_date) - YEAR(a.accountCreatedDate) > :accountExpiredAge")
-    List<Account> findExpiredAccounts(final Integer accountExpiredAge);
+    @Query("SELECT a FROM Account a WHERE YEAR(current_date) - YEAR(a.createdDate) > :expiredAge")
+    List<Account> findExpiredAccounts(final Integer expiredAge);
 }

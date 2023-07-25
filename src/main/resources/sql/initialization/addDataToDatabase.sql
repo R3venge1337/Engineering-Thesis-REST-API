@@ -1,7 +1,7 @@
 --use BazaPracaInz
 --GO
 ------------------------------------------------------------------------------
--- Dodanie plików do folderu Audio 
+-- Dodanie plikï¿½w do folderu Audio 
 ------------------------------------------------------------------------------
 /*
 INSERT INTO dbo.ntfs_audio
@@ -10,7 +10,7 @@ SELECT 'Original (requiem For A Dream) [Mp3glu.org].mp3',* FROM OPENROWSET(BULK 
 GO
 */
  ------------------------------------------------------------------------------
--- Dodanie plików do folderu Images
+-- Dodanie plikï¿½w do folderu Images
 ------------------------------------------------------------------------------
 /*
 INSERT INTO dbo.ntfs_image
@@ -44,37 +44,53 @@ GO
 --exec dbo.selectImageFullPath 'aerobics.jpg';
 --GO
 
-CREATE  PROCEDURE dbo.addRole
+ALTER PROCEDURE dbo.addRole
+@Par_id INT,
 @Par_roleName VARCHAR(50)
 AS
 BEGIN
+	SET NOCOUNT ON;
+
+-- Generate a random UUID (version 4) using NEWID()
+    DECLARE @uuid UNIQUEIDENTIFIER = NEWID();
+
 	INSERT dbo.role
-	(role_name,role_date_created)
+	(id, uuid, name,date_created)
 	VALUES
-	(@Par_roleName,CONVERT(DATETIME,GETDATE(),103));
+	(@Par_id,@uuid,@Par_roleName,CONVERT(DATETIME,GETDATE(),103));
 END
 GO
 
-exec dbo.addRole 'ROLE_administrator'
-exec dbo.addRole 'ROLE_nauczyciel'
-exec dbo.addRole 'ROLE_dziecko'
+exec dbo.addRole 1,'ROLE_ADMIN'
+exec dbo.addRole 2,'ROLE_TEACHER'
+exec dbo.addRole 3,'ROLE_CHILD'
 GO
 
-CREATE  PROCEDURE dbo.addAccount
+ALTER PROCEDURE dbo.addAccount
+@Par_id INT,
 @Par_accountName VARCHAR(50),
 @Par_accountPassword VARCHAR(255),
 @Par_accountEmail VARCHAR(50),
 @Par_roleIdFK INT
 AS
 BEGIN
-	INSERT dbo.account
-	(account_name,account_password,account_date_created,account_email,role_id_fk)
+	SET NOCOUNT ON;
+
+    -- Generate a random UUID (version 4) using NEWID()
+    DECLARE @uuid UNIQUEIDENTIFIER = NEWID();
+
+    INSERT dbo.account
+	(id, uuid,name,password,date_created,email,is_active,role_id_fk)
 	VALUES
-	(@Par_accountName,@Par_accountPassword,CONVERT(DATETIME,GETDATE(),103),@Par_accountEmail,@Par_roleIdFK);
+	(@Par_id, @uuid,@Par_accountName,@Par_accountPassword,CONVERT(DATETIME,GETDATE(),103),@Par_accountEmail,1,@Par_roleIdFK);
 END
 GO
----haslo admin123!Z
-exec dbo.addAccount 'admin','$2a$10$31cydj1.qtzugr1s5CNJveL9k5iX1PbmulhdG0G0kqPjUalKXDuFi','admin@wp.pl',1
+
+---password admin123!Z
+exec dbo.addAccount 1,'admin','$2a$10$31cydj1.qtzugr1s5CNJveL9k5iX1PbmulhdG0G0kqPjUalKXDuFi','admin@wp.pl',1
+GO
+
+exec dbo.addAccount 2,'test','$2a$10$31cydj1.qtzugr1s5CNJveL9k5iX1PbmulhdG0G0kqPjUalKXDuFi','test@wp.pl',1
 GO
 
 CREATE  PROCEDURE dbo.addLanguage
@@ -84,7 +100,7 @@ CREATE  PROCEDURE dbo.addLanguage
 AS
 BEGIN
 	INSERT dbo.language
-	(language_name,language_date_created,is_new,is_accepted)
+	(name,date_created,is_new,is_accepted)
 	VALUES
 	(@Par_languageName,CONVERT(DATETIME,GETDATE(),103), @Par_isNew, @Par_isAccepted);
 END
@@ -101,14 +117,14 @@ CREATE PROCEDURE dbo.addCategory
 AS
 BEGIN
 	INSERT dbo.category
-	(category_name,language_id_fk,is_new,is_accepted)
+	(name,language_id_fk,is_new,is_accepted)
 	VALUES
 	(@Par_categoryName ,@Par_languageInt,@Par_isNew,@Par_isAccepted);
 END
 GO
 
 exec dbo.addCategory 'Sport',1,0,0
-exec dbo.addCategory 'Zwierzêta',1,0,0
+exec dbo.addCategory 'Zwierzï¿½ta',1,0,0
 GO
 
 CREATE PROCEDURE dbo.addCategoryToTeacher
@@ -132,13 +148,13 @@ CREATE PROCEDURE dbo.addStatistic
 AS
 BEGIN
 	INSERT dbo.statistic
-	(statistic_name,is_new,is_accepted)
+	(name,is_new,is_accepted)
 	VALUES
 	(@Par_statisticName,@Par_isNew,@Par_isAccepted);
 END
 GO
 
-exec dbo.addStatistic 'B³êdy',0,0
+exec dbo.addStatistic 'BÅ‚Ä™dy',0,0
 exec dbo.addStatistic 'Czas w rozgrywce',0,0
 GO
 
@@ -154,7 +170,7 @@ CREATE  PROCEDURE dbo.addWord
 AS
 BEGIN
 	INSERT dbo.word
-	(word_name,word_download_uri,category_id_fk,language_id_fk,image_id_fk,audio_id_fk,is_new,is_accepted)
+	(name,download_uri,category_id_fk,language_id_fk,image_id_fk,audio_id_fk,is_new,is_accepted)
 	VALUES
 	(@Par_wordName,@Par_wordURL,@Par_categoryIdFK,@Par_languageIdFK,@Par_imageIdFK,@Par_audioIdFK,@Par_isNew,@Par_isAccepted);
 END
@@ -168,7 +184,7 @@ CREATE  PROCEDURE dbo.addImage
 AS
 BEGIN
 	INSERT dbo.image
-	(ntfs_image_id_fk,image_download_uri,is_new,is_accepted)
+	(ntfs_image_id_fk,download_uri,is_new,is_accepted)
 	VALUES
 	(@Par_ntfs_id_fk,@Par_image_download_uri,@Par_isNew,@Par_isAccepted);
 END
@@ -185,7 +201,7 @@ CREATE  PROCEDURE dbo.addTeacher
 AS
 BEGIN
 	INSERT dbo.teacher
-	(teacher_name,teacher_surname,teacher_profession,teacher_year_of_birth,teacher_city,language_id_fk,account_id_fk)
+	(name,surname,profession,year_of_birth,city,language_id_fk,account_id_fk)
 	VALUES
 	(@Par_teacher_name,@Par_teacher_surname,@Par_teacher_profession,@Par_teacher_year_of_birth,@Par_teacher_city,@Par_language_id_fk,@Par_account_id_fk);
 END
@@ -198,7 +214,7 @@ CREATE  PROCEDURE dbo.addGame
 AS
 BEGIN
 	INSERT dbo.game
-	(game_name,is_new,is_accepted)
+	(name,is_new,is_accepted)
 	VALUES
 	(@Par_gameName,@Par_isNew,@Par_isAccepted);
 END
@@ -212,7 +228,7 @@ CREATE  PROCEDURE dbo.addAudio
 AS
 BEGIN
 	INSERT dbo.audio
-	(ntfs_audio_id_fk,audio_download_uri,is_new,is_accepted)
+	(ntfs_audio_id_fk,download_uri,is_new,is_accepted)
 	VALUES
 	(@Par_ntfs_id_fk,@Par_audio_download_uri,@Par_isNew,@Par_isAccepted);
 END
@@ -277,7 +293,7 @@ GO
 -- Kategoria Sport
 ---------------------------------
 ------------------------------------------
---Dodanie kluczy do plików audio o sporcie
+--Dodanie kluczy do plikï¿½w audio o sporcie
 ----------------------------------------
 DECLARE @idAudioFiletable uniqueidentifier
 SELECT @idAudioFiletable =  stream_id FROM  dbo.ntfs_audio WHERE name = 'aerobics.m4a'
@@ -495,7 +511,7 @@ GO
 /*
 INSERT INTO dbo.ntfs_image
 ([name],[file_stream])
-SELECT 'aerobics.jpg',* FROM OPENROWSET(BULK N'D:\Studia\Praca inzynierska\Grafika do slów\Sport\aerobics.jpg', SINGLE_BLOB) AS FileData
+SELECT 'aerobics.jpg',* FROM OPENROWSET(BULK N'D:\Studia\Praca inzynierska\Grafika do slï¿½w\Sport\aerobics.jpg', SINGLE_BLOB) AS FileData
 GO
 
 --SELECT  * FROM  dbo.ntfs_image WHERE name = 'aerobics.jpg'
@@ -504,10 +520,10 @@ GO
 GO
 */
 ------------------------------
--- Kategoria Zwierzêta
+-- Kategoria Zwierzï¿½ta
 ---------------------------------
 ------------------------------------------
---Dodanie kluczy do zdjêæ o zwierzêtach
+--Dodanie kluczy do zdjï¿½ï¿½ o zwierzï¿½tach
 ----------------------------------------
 DECLARE @idimageFiletable uniqueidentifier
 SELECT @idimageFiletable =  stream_id FROM  dbo.ntfs_image WHERE name = 'dog.jpg'
@@ -560,10 +576,10 @@ exec dbo.addImage @idimageFiletable,'https://192.168.1.24/api/images/downloadFil
 GO
 
 -----------------------------------------
--- Kategoria Zwierzêta
+-- Kategoria Zwierzï¿½ta
 -----------------------------------------
 -----------------------------------------------
---Dodanie kluczy do plików audio o zwierzetach
+--Dodanie kluczy do plikï¿½w audio o zwierzetach
 -------------------------------------------------
 DECLARE @idAudioFiletable uniqueidentifier
 SELECT @idAudioFiletable =  stream_id FROM  dbo.ntfs_audio WHERE name = 'dog.m4a'
@@ -620,7 +636,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -636,7 +652,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -652,7 +668,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -668,7 +684,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -684,7 +700,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -700,7 +716,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -716,7 +732,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -732,7 +748,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -748,7 +764,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -764,7 +780,7 @@ SELECT @idLang = language_id_pk FROM language WHERE language_name = 'Angielski'
 PRINT @idLang
 
 DECLARE @idCat INT 
-SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzêta'
+SELECT @idCat = category_id_pk FROM category WHERE category_name = 'Zwierzï¿½ta'
 PRINT @idCat
 
 DECLARE @idimage int
@@ -775,11 +791,11 @@ PRINT @idimage
 exec dbo.addWord 'pig','https://192.168.1.24/api/images/downloadFile/pigWord.jpg',@idCat,@idLang,@idimage,@idAudio,0,0
 GO
 /*
-INSERT INTO dbo.ntfs_image (name,is_directory,is_archive) VALUES ('Zwierzêta', 1, 0);
+INSERT INTO dbo.ntfs_image (name,is_directory,is_archive) VALUES ('Zwierzï¿½ta', 1, 0);
 GO
 */
 /*
-INSERT INTO dbo.ntfs_audio(name,is_directory,is_archive) VALUES ('Zwierzêta', 1, 0);
+INSERT INTO dbo.ntfs_audio(name,is_directory,is_archive) VALUES ('Zwierzï¿½ta', 1, 0);
 GO
 */
 
@@ -809,7 +825,7 @@ DECLARE @path hierarchyid
 SELECT @path =  path_locator FROM  dbo.ntfs_image WHERE name = 'Sport'
 
 SELECT @img = CAST(BulkColumn AS VARBINARY(MAX)) 
-FROM OPENROWSET(BULK 'D:\Studia\Praca inzynierska\Grafika do slów\Sport\aerobics.jpg', SINGLE_BLOB ) AS x
+FROM OPENROWSET(BULK 'D:\Studia\Praca inzynierska\Grafika do slï¿½w\Sport\aerobics.jpg', SINGLE_BLOB ) AS x
 INSERT INTO dbo.ntfs_image(name, file_stream)
 SELECT 'aerobics.jpg', @img
 
@@ -834,7 +850,7 @@ exec dbo.addGame 'Select And Adjust',0,0
 --haslo do nauczyciela testowego: teacherTest1
 exec dbo.addAccount 'teacherTest','$2a$10$r1s1zG46DRdZJjny/HBR7OHG64xIywSW5J6AZpN.FUpVsTipxuLM2','teacherTest@wp.pl',2
 GO
-exec dbo.addTeacher 'Tomasz','Kowalski','Informatyk',1990,'Poznañ',1,2
+exec dbo.addTeacher 'Tomasz','Kowalski','Informatyk',1990,'Poznaï¿½',1,2
 GO
 
 exec dbo.addCategoryToTeacher 1,1,0,1

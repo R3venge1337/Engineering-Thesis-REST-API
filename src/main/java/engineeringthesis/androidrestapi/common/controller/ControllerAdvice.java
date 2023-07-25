@@ -8,6 +8,7 @@ import engineeringthesis.androidrestapi.common.exception.NotUniqueException;
 import engineeringthesis.androidrestapi.common.exception.PasswordDoesNotMatchException;
 import engineeringthesis.androidrestapi.common.validation.ErrorDto;
 import engineeringthesis.androidrestapi.common.validation.ValidationException;
+import engineeringthesis.androidrestapi.security.dto.LoggedUserData;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

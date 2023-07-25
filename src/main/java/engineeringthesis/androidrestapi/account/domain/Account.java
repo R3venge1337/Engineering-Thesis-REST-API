@@ -1,17 +1,18 @@
 package engineeringthesis.androidrestapi.account.domain;
 
-import java.time.LocalDateTime;
-
 import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,25 +22,22 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 @FieldNameConstants
 class Account extends AbstractUUIDEntity {
 
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "password")
-	private String password;
-	
-	@Column(name = "date_created")
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)  
-	@JsonSerialize(using = LocalDateTimeSerializer.class)  
-	@DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-	private LocalDateTime createdDate;
-	
-	@Column(name = "email")
-	private String email;
+    @Column(name = "name")
+    private String name;
 
-	@Column(name = "is_active")
-	private Boolean isActive;
-	
-	@ManyToOne
-	@JoinColumn(name = "role_id_fk")
-	private AccountRole role;
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "date_created")
+    private LocalDateTime createdDate;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id_fk")
+    private AccountRole role;
 }
