@@ -7,6 +7,7 @@ import engineeringthesis.androidrestapi.account.dto.CreateAccountForm;
 import engineeringthesis.androidrestapi.account.dto.UpdateAccountForm;
 import engineeringthesis.androidrestapi.common.controller.PageDto;
 import engineeringthesis.androidrestapi.common.controller.PageableRequest;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,14 +47,14 @@ class AccountController {
         return accountFacade.findExpiredAccounts(expiredAge);
     }
 
-    @GetMapping(value = ROOT, params = "name")
-    AccountDto findAccount(@RequestParam final String name) {
-        return accountFacade.findAccount(name);
+    @GetMapping(value = ROOT_UUID)
+    AccountDto findAccount(@PathVariable final UUID uuid) {
+        return accountFacade.findAccount(uuid);
     }
 
     @PostMapping(ROOT)
     @ResponseStatus(HttpStatus.CREATED)
-    AccountDto saveAccount(@RequestBody final CreateAccountForm createForm) {
+    UuidDto saveAccount(@RequestBody final CreateAccountForm createForm) {
         return accountFacade.saveAccount(createForm);
     }
 

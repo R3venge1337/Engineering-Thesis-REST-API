@@ -5,6 +5,7 @@ import engineeringthesis.androidrestapi.account.dto.AccountDto;
 import engineeringthesis.androidrestapi.account.dto.AccountRoleDto;
 import engineeringthesis.androidrestapi.account.dto.CreateAccountForm;
 import engineeringthesis.androidrestapi.account.dto.UpdateAccountForm;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
 import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.common.exception.NotUniqueException;
 import engineeringthesis.androidrestapi.common.validation.ErrorDto;
@@ -35,22 +36,21 @@ class AccountFacadeTest {
         @Test
         void shouldThrowNotFound() {
             //given
-            final String accountName = "adamczyk97";
+            final UUID uuid = UUID.randomUUID();
 
             //when //then
-            assertThrows(NotFoundException.class, () -> accountFacade.findAccount(accountName));
+            assertThrows(NotFoundException.class, () -> accountFacade.findAccount(uuid));
         }
 
         @Test
         void shouldReturnWhenFound() {
             //given
-            final CreateAccountForm accountForm = createAccountForm();
             final AccountRole accountRole = createAccountRoleWithName();
             final Account account = createAccountWithName();
             account.setRole(accountRole);
 
             //when
-            final AccountDto returnedAccount = accountFacade.findAccount(accountForm.name());
+            final AccountDto returnedAccount = accountFacade.findAccount(account.getUuid());
 
             //then
             assertEquals(account.getUuid(), returnedAccount.uuid());
@@ -100,10 +100,10 @@ class AccountFacadeTest {
             createAccountRoleWithName();
 
             //when
-            accountFacade.saveAccount(accountForm);
+            final UuidDto uuidDto = accountFacade.saveAccount(accountForm);
 
             //then
-            assertThat(accountFacade.findAccount(accountForm.name()))
+            assertThat(accountFacade.findAccount(uuidDto.uuid()))
                     .hasFieldOrPropertyWithValue(Account.Fields.name, accountForm.name())
                     .hasFieldOrPropertyWithValue(Account.Fields.email, accountForm.email())
                     .hasFieldOrPropertyWithValue(Account.Fields.role, accountForm.role().name())
@@ -152,13 +152,13 @@ class AccountFacadeTest {
             createAccountRoleWithName();
             final CreateAccountForm createForm = new CreateAccountForm("adamczyk97", "test", createEmail(), true, new AccountRoleDto("ROLE_ADMIN"));
             final UpdateAccountForm updateForm = new UpdateAccountForm("adamczyk97", "test", createEmail(), true, new AccountRoleDto("ROLE_ADMIN"));
-            final AccountDto accountDto = accountFacade.saveAccount(createForm);
+            final UuidDto uuidDto = accountFacade.saveAccount(createForm);
 
             //when
-            accountFacade.updateAccount(accountDto.uuid(), updateForm);
+            accountFacade.updateAccount(uuidDto.uuid(), updateForm);
 
             //then
-            assertThat(accountFacade.findAccount(updateForm.name()))
+            assertThat(accountFacade.findAccount(uuidDto.uuid()))
                     .hasFieldOrPropertyWithValue(Account.Fields.name, updateForm.name())
                     .hasFieldOrPropertyWithValue(Account.Fields.role, updateForm.role().name())
                     .hasFieldOrPropertyWithValue(Account.Fields.isActive, updateForm.active());
@@ -170,13 +170,13 @@ class AccountFacadeTest {
             createAccountRoleWithName();
             final CreateAccountForm createAccountForm = createAccountForm();
             final UpdateAccountForm updateAccountForm = updateAccountForm();
-            final AccountDto accountDto = accountFacade.saveAccount(createAccountForm);
+            final UuidDto uuidDto = accountFacade.saveAccount(createAccountForm);
 
             //when
-            accountFacade.updateAccount(accountDto.uuid(), updateAccountForm);
+            accountFacade.updateAccount(uuidDto.uuid(), updateAccountForm);
 
             //then
-            assertThat(accountFacade.findAccount(updateAccountForm.name()))
+            assertThat(accountFacade.findAccount(uuidDto.uuid()))
                     .hasFieldOrPropertyWithValue(Account.Fields.name, updateAccountForm.name())
                     .hasFieldOrPropertyWithValue(Account.Fields.role, updateAccountForm.role().name())
                     .hasFieldOrPropertyWithValue(Account.Fields.isActive, updateAccountForm.active());
@@ -190,13 +190,13 @@ class AccountFacadeTest {
             //given
             createAccountRoleWithName();
             final CreateAccountForm accountForm = createAccountForm();
-            final AccountDto accountDto = accountFacade.saveAccount(accountForm);
+            final UuidDto uuidDto = accountFacade.saveAccount(accountForm);
 
             //when
-            accountFacade.deleteAccount(accountDto.uuid());
+            accountFacade.deleteAccount(uuidDto.uuid());
 
             final NotFoundException exception =
-                    catchThrowableOfType(() -> accountFacade.findAccount(accountDto.name()), NotFoundException.class);
+                    catchThrowableOfType(() -> accountFacade.findAccount(uuidDto.uuid()), NotFoundException.class);
             // then
             assertThat(exception).isInstanceOf(NotFoundException.class);
         }
