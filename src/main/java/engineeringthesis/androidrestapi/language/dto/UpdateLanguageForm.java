@@ -1,6 +1,6 @@
 package engineeringthesis.androidrestapi.language.dto;
 
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotBlank;
 
-public record UpdateLanguageForm(String name, LocalDateTime createdDate) {
+public record UpdateLanguageForm(@NotBlank String name) {
 }

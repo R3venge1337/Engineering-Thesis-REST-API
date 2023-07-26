@@ -1,4 +1,6 @@
 package engineeringthesis.androidrestapi.language.dto;
 
-public record CreateLanguageForm(String name) {
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateLanguageForm(@NotBlank String name) {
 }
