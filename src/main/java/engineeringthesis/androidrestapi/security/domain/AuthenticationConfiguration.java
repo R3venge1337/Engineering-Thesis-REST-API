@@ -17,52 +17,52 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 class AuthenticationConfiguration {
 
-  @Value("${jwt.secret.key}")
-  private String jwtSecretKey;
+    @Value("${jwt.secret.key}")
+    private String jwtSecretKey;
 
-  @Bean
-  UserDetailsService userDetailsService(final AccountFacade accountFacade) {
-    return username -> {
-      final AccountDto dto = accountFacade.findAccount(username);
-      return new AuthorizationUser(dto);
-    };
-  }
+    @Bean
+    UserDetailsService userDetailsService(final AccountFacade accountFacade) {
+        return username -> {
+            final AccountDto dto = accountFacade.findAccountByName(username);
+            return new AuthorizationUser(dto);
+        };
+    }
 
-  @Bean
-  AuthenticationProvider authenticationProvider(final AccountFacade accountFacade) {
-    final DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-    daoAuthenticationProvider.setUserDetailsService(userDetailsService(accountFacade));
-    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-    return daoAuthenticationProvider;
-  }
+    @Bean
+    AuthenticationProvider authenticationProvider(final AccountFacade accountFacade) {
+        final DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService(accountFacade));
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
 
-  @Bean
-  PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  AuthenticationManager authenticationManager(final org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
+    @Bean
+    AuthenticationManager authenticationManager(final org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-  @Bean
-  JwtUtils jwtUtils() {
-    return new JwtUtils(jwtSecretKey);
-  }
+    @Bean
+    JwtUtils jwtUtils() {
+        return new JwtUtils(jwtSecretKey);
+    }
 
-  @Bean
-  AuthenticationFacade authenticationFacade(final AccountFacade accountFacade, final JwtUtils jwtUtils, final AuthenticationManager authenticationManager) {
-    return new AuthenticationService(accountFacade, jwtUtils, authenticationManager);
-  }
+    @Bean
+    AuthenticationFacade authenticationFacade(final AccountFacade accountFacade, final JwtUtils jwtUtils, final AuthenticationManager authenticationManager) {
+        return new AuthenticationService(accountFacade, jwtUtils, authenticationManager);
+    }
 
-  @Bean
-  PasswordFacade passwordFacade(final PasswordEncoder passwordEncoder) {
-    return new PasswordService(passwordEncoder);
-  }
+    @Bean
+    PasswordFacade passwordFacade(final PasswordEncoder passwordEncoder) {
+        return new PasswordService(passwordEncoder);
+    }
 
-  @Bean
-  JwtAuthenticationFilter jwtAuthenticationFilter(){
-    return new JwtAuthenticationFilter(jwtUtils());
-  }
+    @Bean
+    JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtUtils());
+    }
 }
