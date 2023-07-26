@@ -1,58 +1,65 @@
 package engineeringthesis.androidrestapi.role.controller;
 
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
 import engineeringthesis.androidrestapi.role.RoleFacade;
 import engineeringthesis.androidrestapi.role.dto.CreateRoleForm;
 import engineeringthesis.androidrestapi.role.dto.RoleDto;
+import engineeringthesis.androidrestapi.role.dto.RoleFilterForm;
 import engineeringthesis.androidrestapi.role.dto.UpdateRoleForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
+import static engineeringthesis.androidrestapi.role.controller.RoleController.Routes.ROOT;
+import static engineeringthesis.androidrestapi.role.controller.RoleController.Routes.ROOT_UUID;
+
 @RestController
-@RequestMapping(value = "/api/roles")
 @RequiredArgsConstructor
 class RoleController {
 
-    private final RoleFacade roleServiceImpl;
+    private final RoleFacade roleFacade;
 
-    @GetMapping
-    List<RoleDto> getAllRoles() {
-        return roleServiceImpl.getAllRoles();
+    static final class Routes {
+        static final String ROOT = "/roles";
+        static final String ROOT_UUID = ROOT + "/{uuid}";
     }
 
-    @GetMapping(value = "/{uuid}")
+    @GetMapping(ROOT)
+    PageDto<RoleDto> findAllRoles(@RequestBody final RoleFilterForm filterForm, final PageableRequest pageableRequest) {
+        return roleFacade.findAllRoles(filterForm, pageableRequest);
+    }
+
+    @GetMapping(value = ROOT_UUID)
     RoleDto findRole(@PathVariable final UUID uuid) {
-        return roleServiceImpl.findRole(uuid);
+        return roleFacade.findRole(uuid);
     }
 
-    @GetMapping(params = "name")
-    RoleDto getRoleByName(@RequestParam("name") final String roleName) {
-        return roleServiceImpl.getOneRoleByName(roleName);
+    @PostMapping(ROOT)
+    @ResponseStatus(HttpStatus.CREATED)
+    UuidDto saveRole(@RequestBody final CreateRoleForm roleForm) {
+        return roleFacade.saveRole(roleForm);
     }
 
-    @PostMapping
-    RoleDto saveRole(@RequestBody final CreateRoleForm roleForm) {
-        return roleServiceImpl.saveRole(roleForm);
-    }
-
-    @PutMapping("/{uuid}")
+    @PutMapping(ROOT_UUID)
     void updateRole(@PathVariable final UUID uuid, @RequestBody final UpdateRoleForm roleForm) {
-        roleServiceImpl.updateRole(uuid, roleForm);
+        roleFacade.updateRole(uuid, roleForm);
     }
 
-    @DeleteMapping
+    @DeleteMapping(ROOT_UUID)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteRole(@PathVariable final UUID uuid) {
-        roleServiceImpl.deleteRole(uuid);
+        roleFacade.deleteRole(uuid);
     }
 
 }
