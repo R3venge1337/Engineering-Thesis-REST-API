@@ -29,7 +29,7 @@ class InMemoryAccountRepository extends EmptyUuidInMemoryRepository<Account, Lon
     }
 
     @Override
-    public Optional<Account> findByName(final String name) {
+    public Optional<Account> findAccountByName(final String name) {
         return map.values().stream().filter(a -> a.getName().equals(name)).findFirst();
     }
 
