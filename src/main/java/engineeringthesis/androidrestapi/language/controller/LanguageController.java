@@ -47,13 +47,13 @@ class LanguageController {
 
     @PostMapping(ROOT)
     @ResponseStatus(HttpStatus.CREATED)
-    UuidDto saveLanguage(@RequestBody final CreateLanguageForm languageForm) {
-        return languageFacade.saveLanguage(languageForm);
+    UuidDto saveLanguage(@RequestBody final CreateLanguageForm createForm) {
+        return languageFacade.saveLanguage(createForm);
     }
 
     @PutMapping(ROOT_UUID)
-    void updateLanguage(@PathVariable final UUID uuid, @RequestBody final UpdateLanguageForm languageForm) {
-        languageFacade.updateLanguage(uuid, languageForm);
+    void updateLanguage(@PathVariable final UUID uuid, @RequestBody final UpdateLanguageForm updateForm) {
+        languageFacade.updateLanguage(uuid, updateForm);
     }
 
     @DeleteMapping(ROOT_UUID)

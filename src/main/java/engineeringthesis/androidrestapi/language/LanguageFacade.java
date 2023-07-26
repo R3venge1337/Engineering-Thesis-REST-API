@@ -14,11 +14,11 @@ public interface LanguageFacade {
 
     PageDto<LanguageDto> findLanguages(final LanguageFilterForm filterForm, final PageableRequest pageableRequest);
 
-    UuidDto saveLanguage(final CreateLanguageForm languageForm);
+    UuidDto saveLanguage(final CreateLanguageForm createForm);
 
     LanguageDto findLanguage(final UUID uuid);
 
-    void updateLanguage(final UUID uuid, final UpdateLanguageForm languageForm);
+    void updateLanguage(final UUID uuid, final UpdateLanguageForm createForm);
 
     void deleteLanguage(final UUID uuid);
 }

@@ -46,12 +46,12 @@ class LanguageService implements LanguageFacade {
 
     @Override
     @Transactional
-    public UuidDto saveLanguage(final CreateLanguageForm languageForm) {
-        DtoValidator.validate(languageForm);
-        checkUnique(languageForm.name());
+    public UuidDto saveLanguage(final CreateLanguageForm createForm) {
+        DtoValidator.validate(createForm);
+        checkUnique(createForm.name());
 
         final Language language = new Language();
-        language.setName(languageForm.name());
+        language.setName(createForm.name());
         language.setCreatedDate(LocalDateTime.now());
 
         return new UuidDto(languageRepository.save(language).getUuid());
@@ -66,15 +66,15 @@ class LanguageService implements LanguageFacade {
 
     @Override
     @Transactional
-    public void updateLanguage(final UUID uuid, final UpdateLanguageForm languageForm) {
-        DtoValidator.validate(languageForm);
+    public void updateLanguage(final UUID uuid, final UpdateLanguageForm updateForm) {
+        DtoValidator.validate(updateForm);
 
         final Language language = languageRepository.findByUuid(uuid)
-                .orElseThrow(() -> new NotFoundException(LANGUAGE_NOT_EXIST, languageForm.name()));
+                .orElseThrow(() -> new NotFoundException(LANGUAGE_NOT_EXIST, updateForm.name()));
 
-        checkUnique(languageForm.name(), language.getName());
+        checkUnique(updateForm.name(), language.getName());
 
-        language.setName(languageForm.name());
+        language.setName(updateForm.name());
     }
 
     @Override

@@ -55,10 +55,10 @@ class LanguageFacadeTest {
         @Test
         void shouldThrowValidationException() {
             //given
-            final CreateLanguageForm languageForm = IncorrectCreateLanguageForm();
+            final CreateLanguageForm createForm = IncorrectCreateLanguageForm();
             //when
             final ValidationException exception =
-                    catchThrowableOfType(() -> languageFacade.saveLanguage(languageForm), ValidationException.class);
+                    catchThrowableOfType(() -> languageFacade.saveLanguage(createForm), ValidationException.class);
 
             //then
             assertThat(exception.getErrorDtos())
@@ -70,13 +70,13 @@ class LanguageFacadeTest {
         @Test
         void shouldThrowNotUniqueException() {
             //given
-            final CreateLanguageForm languageForm = createLanguageForm();
+            final CreateLanguageForm createForm = createLanguageForm();
             createLanguageWithName();
 
             //when
             //trying to run create with same user
             final NotUniqueException exception =
-                    catchThrowableOfType(() -> languageFacade.saveLanguage(languageForm), NotUniqueException.class);
+                    catchThrowableOfType(() -> languageFacade.saveLanguage(createForm), NotUniqueException.class);
 
             //then
             assertThat(exception).isInstanceOf(NotUniqueException.class);
@@ -85,15 +85,15 @@ class LanguageFacadeTest {
         @Test
         void shouldSave() {
             //given
-            final CreateLanguageForm languageForm = createLanguageForm();
+            final CreateLanguageForm createForm = createLanguageForm();
             createLanguageForm();
 
             //when
-            final UuidDto uuidDto = languageFacade.saveLanguage(languageForm);
+            final UuidDto uuidDto = languageFacade.saveLanguage(createForm);
 
             //then
             assertThat(languageFacade.findLanguage(uuidDto.uuid()))
-                    .hasFieldOrPropertyWithValue(Language.Fields.name, languageForm.name());
+                    .hasFieldOrPropertyWithValue(Language.Fields.name, createForm.name());
         }
     }
 
@@ -102,11 +102,11 @@ class LanguageFacadeTest {
         @Test
         void shouldThrowValidationException() {
             //given
-            final UpdateLanguageForm languageForm = IncorrectUpdateLanguageForm();
+            final UpdateLanguageForm updateForm = IncorrectUpdateLanguageForm();
 
             //when
             final ValidationException exception =
-                    catchThrowableOfType(() -> languageFacade.updateLanguage(UUID.randomUUID(), languageForm), ValidationException.class);
+                    catchThrowableOfType(() -> languageFacade.updateLanguage(UUID.randomUUID(), updateForm), ValidationException.class);
 
             //then
             assertThat(exception.getErrorDtos())
@@ -118,11 +118,11 @@ class LanguageFacadeTest {
         @Test
         void shouldThrowNotFoundException() {
             //given
-            final UpdateLanguageForm updateLanguageForm = updateLanguageForm();
+            final UpdateLanguageForm updateForm = updateLanguageForm();
 
             //when
             final NotFoundException exception =
-                    catchThrowableOfType(() -> languageFacade.updateLanguage(UUID.randomUUID(), updateLanguageForm), NotFoundException.class);
+                    catchThrowableOfType(() -> languageFacade.updateLanguage(UUID.randomUUID(), updateForm), NotFoundException.class);
 
             //then
             assertThat(exception).isInstanceOf(NotFoundException.class);
@@ -164,8 +164,8 @@ class LanguageFacadeTest {
         @Test
         void shouldDeleteUser() {
             //given
-            final CreateLanguageForm languageForm = createLanguageForm();
-            final UuidDto uuidDto = languageFacade.saveLanguage(languageForm);
+            final CreateLanguageForm createForm = createLanguageForm();
+            final UuidDto uuidDto = languageFacade.saveLanguage(createForm);
 
             //when
             languageFacade.deleteLanguage(uuidDto.uuid());
