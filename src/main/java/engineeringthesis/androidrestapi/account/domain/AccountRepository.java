@@ -10,7 +10,7 @@ import java.util.Optional;
 interface AccountRepository extends UUIDAwareJpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
     Boolean existsByName(final String name);
 
-    Optional<Account> findByName(final String name);
+    Optional<Account> findAccountByName(final String name);
 
     @Query("SELECT a FROM Account a WHERE YEAR(current_date) - YEAR(a.createdDate) > :expiredAge")
     List<Account> findExpiredAccounts(final Integer expiredAge);

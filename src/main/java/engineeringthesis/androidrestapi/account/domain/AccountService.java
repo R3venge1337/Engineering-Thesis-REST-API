@@ -9,6 +9,7 @@ import engineeringthesis.androidrestapi.account.dto.UpdateAccountForm;
 import engineeringthesis.androidrestapi.common.controller.PageDto;
 import engineeringthesis.androidrestapi.common.controller.PageableRequest;
 import engineeringthesis.androidrestapi.common.controller.PageableUtils;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
 import engineeringthesis.androidrestapi.common.exception.NotFoundException;
 import engineeringthesis.androidrestapi.common.exception.NotUniqueException;
 import engineeringthesis.androidrestapi.common.validation.DtoValidator;
@@ -55,7 +56,7 @@ class AccountService implements AccountFacade {
 
     @Override
     @Transactional
-    public AccountDto saveAccount(final CreateAccountForm accountForm) {
+    public UuidDto saveAccount(final CreateAccountForm accountForm) {
         DtoValidator.validate(accountForm);
         checkUnique(accountForm.name());
 
@@ -71,14 +72,21 @@ class AccountService implements AccountFacade {
 
         accountRole.addRole(account);
 
-        return mapToDto(accountRepository.save(account));
+        return new UuidDto(accountRepository.save(account).getUuid());
     }
 
     @Override
-    public AccountDto findAccount(final String name) {
-        return accountRepository.findByName(name)
+    public AccountDto findAccountByName(final String name) {
+        return accountRepository.findAccountByName(name)
                 .map(this::mapToDto)
-                .orElseThrow(() -> new NotFoundException(ACCOUNT_NOT_EXIST));
+                .orElseThrow(() -> new NotFoundException(ACCOUNT_NOT_EXIST, name));
+    }
+
+    @Override
+    public AccountDto findAccount(final UUID uuid) {
+        return accountRepository.findByUuid(uuid)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new NotFoundException(ACCOUNT_NOT_EXIST, uuid));
     }
 
     @Override
@@ -87,7 +95,7 @@ class AccountService implements AccountFacade {
         DtoValidator.validate(accountForm);
 
         final Account account = accountRepository.findByUuid(uuid)
-                .orElseThrow(() -> new NotFoundException(ACCOUNT_NOT_EXIST));
+                .orElseThrow(() -> new NotFoundException(ACCOUNT_NOT_EXIST, uuid));
 
         final AccountRole accountRole = accountRoleRepository.findByName(accountForm.role().name())
                 .orElseThrow(() -> new NotFoundException(ACCOUNT_ROLE_NOT_EXIST, accountForm.role().name()));
