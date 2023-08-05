@@ -17,7 +17,7 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 class ChildAccount extends AbstractUUIDEntity {
 
-    @Column(name = "name")
+    @Column(name = "nickname")
     private String name;
 
     @Column(name = "password")

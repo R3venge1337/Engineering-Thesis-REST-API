@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 interface ChildRepository extends UUIDAwareJpaRepository<Child, Integer> {
 
-    @Query("SELECT c FROM Child c INNER JOIN c.accountChild acc  WHERE acc.name = :accountName")
+    @Query("SELECT c FROM Child c INNER JOIN c.accountChild acc  WHERE acc.nickname = :accountName")
     Child getChildWithAccount(final String accountName);
 
 }

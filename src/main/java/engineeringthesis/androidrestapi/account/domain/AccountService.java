@@ -64,7 +64,7 @@ class AccountService implements AccountFacade {
                 .orElseThrow(() -> new NotFoundException(ACCOUNT_ROLE_NOT_EXIST, accountForm.role().name()));
 
         final Account account = new Account();
-        account.setName(accountForm.name());
+        account.setNickname(accountForm.name());
         account.setEmail(accountForm.email());
         account.setIsActive(accountForm.active());
         account.setPassword(passwordEncoder.encode(accountForm.password()));
@@ -100,9 +100,9 @@ class AccountService implements AccountFacade {
         final AccountRole accountRole = accountRoleRepository.findByName(accountForm.role().name())
                 .orElseThrow(() -> new NotFoundException(ACCOUNT_ROLE_NOT_EXIST, accountForm.role().name()));
 
-        checkUnique(accountForm.name(), account.getName());
+        checkUnique(accountForm.name(), account.getNickname());
 
-        account.setName(accountForm.name());
+        account.setNickname(accountForm.name());
         account.setPassword(passwordEncoder.encode(accountForm.password()));
         account.setEmail(accountForm.email());
         account.setIsActive(accountForm.active());
@@ -123,7 +123,7 @@ class AccountService implements AccountFacade {
     }
 
     AccountDto mapToDto(final Account account) {
-        return new AccountDto(account.getUuid(), account.getName(), account.getPassword(), account.getEmail(), account.getIsActive(), account.getCreatedDate(), account.getRole().getName());
+        return new AccountDto(account.getUuid(), account.getNickname(), account.getPassword(), account.getEmail(), account.getIsActive(), account.getCreatedDate(), account.getRole().getName());
     }
 
     private void checkUnique(final String formLogin, final String entityLogin) {
@@ -134,7 +134,7 @@ class AccountService implements AccountFacade {
 
     void checkUnique(final String login) {
         if (accountRepository.existsByName(login)) {
-            throw new NotUniqueException(Account.Fields.name, ACCOUNT_FOUND_BY_LOGIN);
+            throw new NotUniqueException(Account.Fields.nickname, ACCOUNT_FOUND_BY_LOGIN);
         }
     }
 

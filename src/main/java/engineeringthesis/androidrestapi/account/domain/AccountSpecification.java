@@ -24,7 +24,7 @@ class AccountSpecification implements Specification<Account> {
     public Predicate toPredicate(Root<Account> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         final List<Predicate> predicates = new ArrayList<>();
 
-        addLikePredicate(criteriaBuilder, predicates, root.get(Account.Fields.name), specificationForm.name());
+        addLikePredicate(criteriaBuilder, predicates, root.get(Account.Fields.nickname), specificationForm.nickname());
         addLikePredicate(criteriaBuilder, predicates, root.get(Account.Fields.email), specificationForm.email());
 
         addEqualPredicate(criteriaBuilder, predicates, root.get(Account.Fields.isActive), specificationForm.isActive());
