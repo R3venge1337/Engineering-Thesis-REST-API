@@ -1,4 +1,7 @@
 package engineeringthesis.androidrestapi.child.dto;
 
-public record CreateChildForm(String childName, String childSurname, Short childYearBirth, String childCity) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateChildForm(@NotBlank String name, @NotBlank String surname, @NotNull Short childYearBirth, @NotBlank String city, @NotNull ChildAccountDto account) {
 }
