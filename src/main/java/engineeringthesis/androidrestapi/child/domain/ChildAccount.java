@@ -3,6 +3,9 @@ package engineeringthesis.androidrestapi.child.domain;
 import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,7 +21,7 @@ import lombok.experimental.FieldNameConstants;
 class ChildAccount extends AbstractUUIDEntity {
 
     @Column(name = "nickname")
-    private String name;
+    private String nickname;
 
     @Column(name = "password")
     private String password;
@@ -28,5 +31,9 @@ class ChildAccount extends AbstractUUIDEntity {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id_fk")
+    private ChildRole role;
 }
 
