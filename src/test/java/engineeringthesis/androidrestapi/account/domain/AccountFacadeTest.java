@@ -70,7 +70,7 @@ class AccountFacadeTest {
             //then
             assertThat(exception.getErrorDtos())
                     .containsExactlyInAnyOrder(
-                            new ErrorDto("name", ValidationMessage.MUST_NOT_BE_BLANK),
+                            new ErrorDto("nickname", ValidationMessage.MUST_NOT_BE_BLANK),
                             new ErrorDto("password", ValidationMessage.MUST_NOT_BE_BLANK),
                             new ErrorDto("email", ValidationMessage.MUST_NOT_BE_BLANK),
                             new ErrorDto("active", ValidationMessage.MUST_NOT_BE_NULL),
@@ -104,7 +104,7 @@ class AccountFacadeTest {
 
             //then
             assertThat(accountFacade.findAccount(uuidDto.uuid()))
-                    .hasFieldOrPropertyWithValue(Account.Fields.name, accountForm.name())
+                    .hasFieldOrPropertyWithValue(Account.Fields.nickname, accountForm.name())
                     .hasFieldOrPropertyWithValue(Account.Fields.email, accountForm.email())
                     .hasFieldOrPropertyWithValue(Account.Fields.role, accountForm.role().name())
                     .hasFieldOrPropertyWithValue(Account.Fields.isActive, accountForm.active());
@@ -125,7 +125,7 @@ class AccountFacadeTest {
             //then
             assertThat(exception.getErrorDtos())
                     .containsExactlyInAnyOrder(
-                            new ErrorDto("name", ValidationMessage.MUST_NOT_BE_BLANK),
+                            new ErrorDto("nickname", ValidationMessage.MUST_NOT_BE_BLANK),
                             new ErrorDto("password", ValidationMessage.MUST_NOT_BE_BLANK),
                             new ErrorDto("email", ValidationMessage.MUST_NOT_BE_BLANK),
                             new ErrorDto("role", ValidationMessage.MUST_NOT_BE_NULL),
@@ -159,7 +159,7 @@ class AccountFacadeTest {
 
             //then
             assertThat(accountFacade.findAccount(uuidDto.uuid()))
-                    .hasFieldOrPropertyWithValue(Account.Fields.name, updateForm.name())
+                    .hasFieldOrPropertyWithValue(Account.Fields.nickname, updateForm.name())
                     .hasFieldOrPropertyWithValue(Account.Fields.role, updateForm.role().name())
                     .hasFieldOrPropertyWithValue(Account.Fields.isActive, updateForm.active());
         }
@@ -177,7 +177,7 @@ class AccountFacadeTest {
 
             //then
             assertThat(accountFacade.findAccount(uuidDto.uuid()))
-                    .hasFieldOrPropertyWithValue(Account.Fields.name, updateAccountForm.name())
+                    .hasFieldOrPropertyWithValue(Account.Fields.nickname, updateAccountForm.name())
                     .hasFieldOrPropertyWithValue(Account.Fields.role, updateAccountForm.role().name())
                     .hasFieldOrPropertyWithValue(Account.Fields.isActive, updateAccountForm.active());
         }
@@ -230,7 +230,7 @@ class AccountFacadeTest {
 
     private Account createAccountWithName() {
         final Account account = accountRepository.save(new Account());
-        account.setName("adamczyk97");
+        account.setNickname("adamczyk97");
         return account;
     }
 

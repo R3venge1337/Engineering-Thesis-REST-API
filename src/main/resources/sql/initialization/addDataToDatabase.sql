@@ -49,8 +49,6 @@ ALTER PROCEDURE dbo.addRole
 @Par_roleName VARCHAR(50)
 AS
 BEGIN
-	SET NOCOUNT ON;
-
 -- Generate a random UUID (version 4) using NEWID()
     DECLARE @uuid UNIQUEIDENTIFIER = NEWID();
 
@@ -74,8 +72,6 @@ ALTER PROCEDURE dbo.addAccount
 @Par_roleIdFK INT
 AS
 BEGIN
-	SET NOCOUNT ON;
-
     -- Generate a random UUID (version 4) using NEWID()
     DECLARE @uuid UNIQUEIDENTIFIER = NEWID();
 
@@ -94,19 +90,23 @@ exec dbo.addAccount 2,'test','$2a$10$31cydj1.qtzugr1s5CNJveL9k5iX1PbmulhdG0G0kqP
 GO
 
 CREATE  PROCEDURE dbo.addLanguage
+@Par_id INT,
 @Par_languageName VARCHAR(50),
 @Par_isNew BIT,
 @Par_isAccepted BIT
 AS
 BEGIN
+    -- Generate a random UUID (version 4) using NEWID()
+    DECLARE @uuid UNIQUEIDENTIFIER = NEWID();
+
 	INSERT dbo.language
-	(name,date_created,is_new,is_accepted)
+	(id, uuid, name,date_created,is_new,is_accepted)
 	VALUES
-	(@Par_languageName,CONVERT(DATETIME,GETDATE(),103), @Par_isNew, @Par_isAccepted);
+	(@Par_id,@uuid, @Par_languageName,CONVERT(DATETIME,GETDATE(),103), @Par_isNew, @Par_isAccepted);
 END
 GO
 
-exec dbo.addLanguage 'Angielski',0,0
+exec dbo.addLanguage 1,'Angielski',0,0
 GO
 
 CREATE PROCEDURE dbo.addCategory

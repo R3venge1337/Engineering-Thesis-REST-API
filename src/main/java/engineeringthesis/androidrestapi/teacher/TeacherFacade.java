@@ -1,25 +1,26 @@
 package engineeringthesis.androidrestapi.teacher;
 
-import engineeringthesis.androidrestapi.teacher.dto.CreateTeacherForm;
-import engineeringthesis.androidrestapi.teacher.dto.TeacherDto;
-import engineeringthesis.androidrestapi.teacher.dto.UpdateTeacherForm;
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
+import engineeringthesis.androidrestapi.teacher.dto.*;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface TeacherFacade {
 
-	List<TeacherDto> getAllTeachers();
+	PageDto<TeacherDto> findTeachers(final TeacherFilterForm filterForm, final PageableRequest pageableRequest);
 
 	TeacherDto findTeacher(final UUID uuid);
 	
-	TeacherDto saveTeacher(final CreateTeacherForm teacherForm);
+	UuidDto saveTeacher(final CreateTeacherForm teacherForm);
 
 	void updateTeacher(final UUID uuid, UpdateTeacherForm teacherForm);
 	
 	void deleteTeacher(final UUID uuid);
 	
-	List<TeacherDto> getTeachersByLanguageName(final String languageName);
+	List<TeacherDto> findTeachersByLanguageName(final String languageName);
 	
-	TeacherDto getTeacherWithAccount(final String accountName);
+	TeacherWithAccountDto findTeacherWithAccount(final UUID uuid);
 }

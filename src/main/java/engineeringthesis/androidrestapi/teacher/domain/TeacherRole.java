@@ -1,4 +1,4 @@
-package engineeringthesis.androidrestapi.child.domain;
+package engineeringthesis.androidrestapi.teacher.domain;
 
 import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
 import jakarta.persistence.Column;
@@ -9,24 +9,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 
+@Entity
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@Entity
-@Table(name = "account")
 @FieldNameConstants
-class ChildAccount extends AbstractUUIDEntity {
+@Table(name = "role")
+class TeacherRole extends AbstractUUIDEntity {
 
-    @Column(name = "nickname")
+    @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "is_active")
-    private Boolean isActive;
 }
-
