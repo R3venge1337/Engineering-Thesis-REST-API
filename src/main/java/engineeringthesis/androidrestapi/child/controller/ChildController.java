@@ -1,52 +1,61 @@
 package engineeringthesis.androidrestapi.child.controller;
 
-import java.util.List;
+import engineeringthesis.androidrestapi.child.ChildFacade;
+import engineeringthesis.androidrestapi.child.dto.*;
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
-import engineeringthesis.androidrestapi.child.ChildFacade;
-import engineeringthesis.androidrestapi.child.dto.ChildDto;
-import engineeringthesis.androidrestapi.child.dto.CreateChildForm;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import lombok.RequiredArgsConstructor;
+import static engineeringthesis.androidrestapi.child.controller.ChildController.Routes.*;
 
 @RestController
-@RequestMapping(value = "/api/children")
 @RequiredArgsConstructor
 class ChildController {
 
-	private final ChildFacade childFacade;
+    private final ChildFacade childFacade;
 
-	@GetMapping
-	List<ChildDto> getAllChildren() {
-		return childFacade.getAllChild();
-	}
+    static final class Routes {
+        static final String ROOT = "/children";
 
-	@PostMapping
-    ChildDto saveChild(@RequestBody final CreateChildForm childForm) {
-		return childFacade.saveChild(childForm);
-	}
+        static final String ROOT_UUID = ROOT + "/{uuid}";
 
-	@PutMapping("/{uuid}")
-    ChildDto updateChild(@PathVariable final UUID uuid, @RequestBody final CreateChildForm childForm) {
-		return childFacade.updateChild(uuid, childForm);
-	}
+        static final String ROOT_ACCOUNTS = ROOT_UUID + "/accounts";
+    }
 
-	@DeleteMapping("/{uuid}")
-	void deleteChild(@PathVariable final UUID uuid) {
-		childFacade.deleteChild(uuid);
-	}
+    @GetMapping(ROOT)
+    PageDto<ChildDto> findChildren(@RequestBody final ChildFilterForm filterForm, final PageableRequest pageableRequest) {
+        return childFacade.findChildren(filterForm, pageableRequest);
+    }
 
-	@GetMapping("/{uuid}/accounts")
-    ChildDto getChildWithAccount(@PathVariable final UUID uuid, @RequestParam final String accountName) {
-		return childFacade.getChildWithAccount(uuid, accountName);
-	}
+    @GetMapping(ROOT_UUID)
+    ChildDto findChild(@PathVariable final UUID uuid) {
+        return childFacade.findChild(uuid);
+    }
+
+    @PostMapping(ROOT)
+    @ResponseStatus(HttpStatus.CREATED)
+    UuidDto saveChild(@RequestBody final CreateChildForm createForm) {
+        return childFacade.saveChild(createForm);
+    }
+
+    @PutMapping(ROOT_UUID)
+    void updateChild(@PathVariable final UUID uuid, @RequestBody final UpdateChildForm updateForm) {
+        childFacade.updateChild(uuid, updateForm);
+    }
+
+    @DeleteMapping(ROOT_UUID)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteChild(@PathVariable final UUID uuid) {
+        childFacade.deleteChild(uuid);
+    }
+
+    @GetMapping(ROOT_ACCOUNTS)
+    ChildWithAccountDto findChildWithAccount(@PathVariable final UUID uuid, @RequestParam final String accountName) {
+        return childFacade.findChildWithAccount(uuid, accountName);
+    }
 }
