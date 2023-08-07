@@ -11,12 +11,10 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-import static engineeringthesis.androidrestapi.common.repository.PredicateUtils.addEqualPredicate;
-import static engineeringthesis.androidrestapi.common.repository.PredicateUtils.addLikePredicate;
-import static engineeringthesis.androidrestapi.common.repository.PredicateUtils.buildAndPredicates;
+import static engineeringthesis.androidrestapi.common.repository.PredicateUtils.*;
 
 @RequiredArgsConstructor
-public class TeacherSpecification implements Specification<Teacher> {
+class TeacherSpecification implements Specification<Teacher> {
 
     private final TeacherFilterForm specificationForm;
 
