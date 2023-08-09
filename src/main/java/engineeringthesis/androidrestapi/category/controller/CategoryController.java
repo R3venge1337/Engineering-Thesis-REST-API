@@ -2,53 +2,60 @@ package engineeringthesis.androidrestapi.category.controller;
 
 import engineeringthesis.androidrestapi.category.CategoryFacade;
 import engineeringthesis.androidrestapi.category.dto.CategoryDto;
+import engineeringthesis.androidrestapi.category.dto.CategoryFilterForm;
 import engineeringthesis.androidrestapi.category.dto.CreateCategoryForm;
 import engineeringthesis.androidrestapi.category.dto.UpdateCategoryForm;
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
+
+import static engineeringthesis.androidrestapi.category.controller.CategoryController.Routes.ROOT;
+import static engineeringthesis.androidrestapi.category.controller.CategoryController.Routes.ROOT_UUID;
 
 
 @RestController
-@RequestMapping(value = "/api/categories")
 @RequiredArgsConstructor
 class CategoryController {
 
     private final CategoryFacade categoryService;
 
-    @GetMapping
-    List<CategoryDto> getAllCategories() {
-        return categoryService.getAllCategories();
+    static final class Routes {
+        static final String ROOT = "/categories";
+
+        static final String ROOT_UUID = ROOT + "/{uuid}";
     }
 
-    @GetMapping(value = "/languages/{languageName}")
-    List<CategoryDto> getAllCategoriesByLanguage(@PathVariable final String languageName) {
-        return categoryService.getAllCategoriesByLanguage(languageName);
+    @GetMapping(ROOT)
+    PageDto<CategoryDto> findAllCategories(final CategoryFilterForm filterForm, final PageableRequest pageableRequest) {
+        return categoryService.findAllCategories(filterForm, pageableRequest);
     }
 
-    @GetMapping(params = "name")
-    CategoryDto getCategoryByName(@RequestParam final String name) {
-        return categoryService.getCategoryByName(name);
-    }
-
-    @GetMapping(value = "/{uuid}")
+    @GetMapping(ROOT_UUID)
     CategoryDto findCategory(@PathVariable final UUID uuid) {
         return categoryService.findCategory(uuid);
     }
 
     @PostMapping
-    CategoryDto saveCategory(@RequestBody final CreateCategoryForm categoryForm) {
+    UuidDto saveCategory(@RequestBody final CreateCategoryForm categoryForm) {
         return categoryService.saveCategory(categoryForm);
     }
 
-    @PutMapping(value = "/{uuid}")
+    @PutMapping(ROOT_UUID)
     void updateCategory(@PathVariable final UUID uuid, @RequestBody final UpdateCategoryForm categoryForm) {
         categoryService.updateCategory(uuid, categoryForm);
     }
 
-    @DeleteMapping(value = "/{uuid}")
+    @DeleteMapping(ROOT_UUID)
     void deleteCategory(@PathVariable final UUID uuid) {
         categoryService.deleteCategory(uuid);
     }
