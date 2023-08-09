@@ -32,8 +32,6 @@ class CategoryLanguage extends AbstractUUIDEntity {
     //private String languageImageIcon;
 
     @Column(name = "date_created")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
     private LocalDateTime createdDate;
 }
