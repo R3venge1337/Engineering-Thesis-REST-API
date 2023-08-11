@@ -1,4 +1,4 @@
 package engineeringthesis.androidrestapi.audio.dto;
 
-public record UpdateAudioForm(String downloadUri) {
+public record CreateAudioForm(String downloadUri) {
 }

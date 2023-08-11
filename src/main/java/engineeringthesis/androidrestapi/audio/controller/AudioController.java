@@ -2,13 +2,17 @@ package engineeringthesis.androidrestapi.audio.controller;
 
 import engineeringthesis.androidrestapi.audio.AudioFacade;
 import engineeringthesis.androidrestapi.audio.dto.AudioDto;
+import engineeringthesis.androidrestapi.audio.dto.AudioFilterForm;
 import engineeringthesis.androidrestapi.audio.dto.UpdateAudioForm;
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,46 +21,54 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
+import static engineeringthesis.androidrestapi.audio.controller.AudioController.Routes.ROOT;
+import static engineeringthesis.androidrestapi.audio.controller.AudioController.Routes.ROOT_UUID;
+
 @RestController
-@RequestMapping(value = "/api/audio")
 @RequiredArgsConstructor
 class AudioController {
 
     private final AudioFacade audioFacade;
     private static final Logger logger = LoggerFactory.getLogger(AudioController.class);
 
-    @GetMapping
-    List<AudioDto> getAllAudioFiles() {
-        return audioFacade.getAllAudio();
+    static final class Routes {
+        static final String ROOT = "/audios";
+        static final String ROOT_UUID = ROOT + "/{uuid}";
     }
 
-    @GetMapping(value = "/{uuid}")
-    AudioDto getAudio(@PathVariable final UUID uuid) {
+    @GetMapping(ROOT)
+    PageDto<AudioDto> findAudios(@RequestBody final AudioFilterForm filterForm, final PageableRequest pageableRequest) {
+        return audioFacade.findAudios(filterForm, pageableRequest);
+    }
+
+    @GetMapping(ROOT_UUID)
+    AudioDto findAudio(@PathVariable final UUID uuid) {
         return audioFacade.findAudio(uuid);
     }
 
-    @PostMapping
+    @PostMapping(ROOT)
+    @ResponseStatus(HttpStatus.CREATED)
     AudioDto saveAudioFile(@RequestParam("file") final MultipartFile file) {
         return audioFacade.saveAudio(file);
     }
 
-    @PutMapping(value = "/{uuid}")
+    @PutMapping(ROOT_UUID)
     void updateAudioFile(
             @PathVariable final UUID uuid,
             @RequestBody final UpdateAudioForm audioForm) {
         audioFacade.updateAudio(uuid, audioForm);
     }
 
-    @DeleteMapping(value = "/{audioId}")
+    @DeleteMapping(ROOT_UUID)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteAudioFile(@PathVariable final UUID uuid) {
         audioFacade.deleteAudio(uuid);
     }

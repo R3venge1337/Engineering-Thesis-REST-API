@@ -13,8 +13,8 @@ class InMemoryAccountRepository extends EmptyUuidInMemoryRepository<Account, Lon
     private final ConcurrentHashMap<UUID, Account> map = new ConcurrentHashMap<>();
 
     @Override
-    public Boolean existsByName(String name) {
-        return map.entrySet().stream().anyMatch(c -> c.getValue().getName().equals(name));
+    public Boolean existsByNickname(String name) {
+        return map.entrySet().stream().anyMatch(c -> c.getValue().getNickname().equals(name));
     }
 
     @Override
@@ -29,8 +29,8 @@ class InMemoryAccountRepository extends EmptyUuidInMemoryRepository<Account, Lon
     }
 
     @Override
-    public Optional<Account> findAccountByName(final String name) {
-        return map.values().stream().filter(a -> a.getName().equals(name)).findFirst();
+    public Optional<Account> findAccountByNickname(final String name) {
+        return map.values().stream().filter(a -> a.getNickname().equals(name)).findFirst();
     }
 
     @Override

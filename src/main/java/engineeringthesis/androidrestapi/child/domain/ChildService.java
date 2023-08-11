@@ -140,7 +140,7 @@ class ChildService implements ChildFacade {
     }
 
     void checkUnique(final String login) {
-        if (accountRepository.existsByName(login)) {
+        if (accountRepository.existsByNickname(login)) {
             throw new NotUniqueException(ChildAccount.Fields.nickname, CHILD_EXIST);
         }
     }
