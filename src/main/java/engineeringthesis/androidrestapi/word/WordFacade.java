@@ -1,24 +1,24 @@
 package engineeringthesis.androidrestapi.word;
 
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
 import engineeringthesis.androidrestapi.word.dto.CreateWordForm;
 import engineeringthesis.androidrestapi.word.dto.UpdateWordForm;
 import engineeringthesis.androidrestapi.word.dto.WordDto;
-import org.springframework.data.domain.Page;
+import engineeringthesis.androidrestapi.word.dto.WordFilterForm;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface WordFacade {
 
-    List<WordDto> getAllWords();
+    PageDto<WordDto> findWords(final WordFilterForm filterForm, final PageableRequest pageableRequest);
 
-    WordDto saveWord(final CreateWordForm wordForm);
+    UuidDto saveWord(final CreateWordForm wordForm);
 
-    WordDto getWordByName(final String wordName);
-
-    WordDto updateWord(final UUID uuid, final UpdateWordForm wordForm);
+    void updateWord(final UUID uuid, final UpdateWordForm wordForm);
 
     void deleteWord(final UUID uuid);
 
-    Page<WordDto> getWordsByCategoryName(final String categoryName, final Integer pageNumber, final Integer size);
+    PageDto<WordDto> getWordsByCategoryName(final String categoryName, final PageableRequest pageableRequest);
 }

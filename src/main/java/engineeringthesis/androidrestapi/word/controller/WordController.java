@@ -1,59 +1,69 @@
 package engineeringthesis.androidrestapi.word.controller;
 
+import engineeringthesis.androidrestapi.common.controller.PageDto;
+import engineeringthesis.androidrestapi.common.controller.PageableRequest;
+import engineeringthesis.androidrestapi.common.controller.UuidDto;
 import engineeringthesis.androidrestapi.word.WordFacade;
 import engineeringthesis.androidrestapi.word.dto.CreateWordForm;
 import engineeringthesis.androidrestapi.word.dto.UpdateWordForm;
 import engineeringthesis.androidrestapi.word.dto.WordDto;
+import engineeringthesis.androidrestapi.word.dto.WordFilterForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
+import static engineeringthesis.androidrestapi.word.controller.WordController.Routes.ROOT;
+import static engineeringthesis.androidrestapi.word.controller.WordController.Routes.ROOT_CATEGORIES;
+import static engineeringthesis.androidrestapi.word.controller.WordController.Routes.ROOT_UUID;
+
 @RestController
-@RequestMapping(value = "/api/words")
 @RequiredArgsConstructor
 class WordController {
 
     private final WordFacade wordServiceImpl;
 
-    @GetMapping
-    List<WordDto> getAllWords() {
-        return wordServiceImpl.getAllWords();
+    static final class Routes {
+        static final String ROOT = "/words";
+        static final String ROOT_UUID = ROOT + "/{uuid}";
+
+        static final String ROOT_CATEGORIES = ROOT + "/categories";
     }
 
-    @GetMapping(params = "name")
-    WordDto getWordByName(@RequestParam(required = false) final String name) {
-        return wordServiceImpl.getWordByName(name);
+    @GetMapping(ROOT)
+    PageDto<WordDto> findWords(@RequestBody final WordFilterForm filterForm, final PageableRequest pageableRequest) {
+        return wordServiceImpl.findWords(filterForm, pageableRequest);
     }
 
-    @PostMapping
-    WordDto saveWord(@RequestBody final CreateWordForm wordForm) {
+    @PostMapping(ROOT)
+    @ResponseStatus(HttpStatus.CREATED)
+    UuidDto saveWord(@RequestBody final CreateWordForm wordForm) {
         return wordServiceImpl.saveWord(wordForm);
     }
 
-    @PutMapping(value = "/{uuid}")
-    WordDto updateWord(@PathVariable final UUID uuid, @RequestBody final UpdateWordForm wordForm) {
-        return wordServiceImpl.updateWord(uuid, wordForm);
+    @PutMapping(ROOT_UUID)
+    void updateWord(@PathVariable final UUID uuid, @RequestBody final UpdateWordForm wordForm) {
+        wordServiceImpl.updateWord(uuid, wordForm);
     }
 
-    @DeleteMapping(value = "/{uuid}")
-    void deleteWordById(@PathVariable final UUID uuid) {
+    @DeleteMapping(ROOT_UUID)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteWord(@PathVariable final UUID uuid) {
         wordServiceImpl.deleteWord(uuid);
     }
 
-    @GetMapping(value = "/categories")
-    List<WordDto> getAllWordsFromCategory(@RequestParam("categoryName") final String categoryName,
-                                          @RequestParam("pageNumber") final Integer pageNumber, @RequestParam("size") final Integer size) {
-        return wordServiceImpl.getWordsByCategoryName(categoryName, pageNumber, size).toList();
+    @GetMapping(ROOT_CATEGORIES)
+    PageDto<WordDto> getAllWordsFromCategory(@RequestParam final String categoryName, @RequestParam final PageableRequest pageableRequest) {
+        return wordServiceImpl.getWordsByCategoryName(categoryName, pageableRequest);
     }
 
 }
