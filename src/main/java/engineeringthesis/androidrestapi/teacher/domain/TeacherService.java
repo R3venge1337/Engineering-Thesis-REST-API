@@ -182,7 +182,7 @@ class TeacherService implements TeacherFacade {
     }
 
     void checkUnique(final String login) {
-        if (accountRepository.existsByName(login)) {
+        if (accountRepository.existsByNickname(login)) {
             throw new NotUniqueException(TeacherAccount.Fields.nickname, TEACHER_ACCOUNT_EXIST);
         }
     }

@@ -77,7 +77,7 @@ class AccountService implements AccountFacade {
 
     @Override
     public AccountDto findAccountByName(final String name) {
-        return accountRepository.findAccountByName(name)
+        return accountRepository.findAccountByNickname(name)
                 .map(this::mapToDto)
                 .orElseThrow(() -> new NotFoundException(ACCOUNT_NOT_EXIST, name));
     }
@@ -133,7 +133,7 @@ class AccountService implements AccountFacade {
     }
 
     void checkUnique(final String login) {
-        if (accountRepository.existsByName(login)) {
+        if (accountRepository.existsByNickname(login)) {
             throw new NotUniqueException(Account.Fields.nickname, ACCOUNT_FOUND_BY_LOGIN);
         }
     }
