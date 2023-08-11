@@ -1,9 +1,5 @@
 package engineeringthesis.androidrestapi.game.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import engineeringthesis.androidrestapi.common.entity.AbstractUUIDEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,22 +33,12 @@ class Gameplay extends AbstractUUIDEntity {
     @OneToOne
     @JoinColumn(name = "category_id_fk")
     private GameplayCategory category;
-	
-	/*
-	@OneToOne
-	@JoinColumn(name = "child_id_fk")
-	private ChildEntity childId;
-	*/
 
     @Column(name = "starting_date")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
     private LocalDateTime startDate;
 
     @Column(name = "ending_date")
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
     private LocalDateTime endDate;
 
