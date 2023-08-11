@@ -19,27 +19,17 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 class Audio extends AbstractUUIDEntity {
 
-	//@Column(name = "ntfs_audio_id_fk" , columnDefinition="uniqueidentifier")
-	//private String ntfsAudioFileId;
-	
 	@Column(name = "download_uri")
 	private String downloadUri;
-	
-	/*
-	@OneToOne
-	@JoinColumn(name = "word_id_fk")
-	private Word word;
-	*/
-	
-	@Column(name = "is_new", columnDefinition="BIT")
+
+	@Column(name = "is_new")
 	private Boolean isNew;
 	
-	@Column(name = "is_accepted", columnDefinition="BIT")
+	@Column(name = "is_accepted")
 	private Boolean isAccepted;
 	
 	@OneToOne
 	@JoinColumn(name="ntfs_audio_id_fk")
-	//@Column(name = "ntfs_image_id_fk" , columnDefinition="uniqueidentifier")
 	private AudioFileTable audioFileTable;
 	
 }
