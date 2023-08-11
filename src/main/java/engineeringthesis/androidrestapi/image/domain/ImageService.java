@@ -79,8 +79,12 @@ class ImageService implements ImageFacade {
     @Override
     @Transactional
     public void updateImage(final UUID uuid, final UpdateImageForm imageForm) {
-        Image image = imageReposiitory.findByUuid(uuid)
+        DtoValidator.validate(imageForm);
+
+        final Image image = imageReposiitory.findByUuid(uuid)
                 .orElseThrow(() -> new NotFoundException(""));
+
+        image.setDownloadUri(imageForm.downloadUri());
     }
 
     @Override
