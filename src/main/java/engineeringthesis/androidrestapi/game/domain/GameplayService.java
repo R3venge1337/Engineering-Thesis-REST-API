@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 
 import java.util.UUID;
 
+import static engineeringthesis.androidrestapi.game.domain.GameplayService.ErrorMessages.GAMEPLAY_NOT_EXIST;
+
 @RequiredArgsConstructor
 class GameplayService implements GameplayFacade {
 
@@ -54,7 +56,7 @@ class GameplayService implements GameplayFacade {
     public GameplayDto findGameplay(final UUID uuid) {
         return gameplayRepository.findByUuid(uuid)
                 .map(this::mapToDto)
-                .orElseThrow(() -> new NotFoundException(""));
+                .orElseThrow(() -> new NotFoundException(GAMEPLAY_NOT_EXIST));
     }
 
     @Override
@@ -63,7 +65,7 @@ class GameplayService implements GameplayFacade {
         DtoValidator.validate(updateForm);
 
         final Gameplay gameplay = gameplayRepository.findByUuid(uuid)
-                .orElseThrow(() -> new NotFoundException(""));
+                .orElseThrow(() -> new NotFoundException(GAMEPLAY_NOT_EXIST));
 		/*
 		gameplay.setGameMatchDataStart(gameplayForm.getGameMatchDataStart());
 		gameplay.setGameMatchDataEnd(gameplayForm.getGameMatchDataEnd());
