@@ -22,6 +22,17 @@ import java.time.LocalDateTime;
 @FieldNameConstants
 class Gameplay extends AbstractUUIDEntity {
 
+    @Column(name = "starting_date")
+    @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    private LocalDateTime startDate;
+
+    @Column(name = "ending_date")
+    @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
+    private LocalDateTime endDate;
+
+    @Column(name = "quest_uuid_fk")
+    private String questUUID;
+
     @OneToOne
     @JoinColumn(name = "language_id_fk")
     private GameplayLanguage language;
@@ -33,15 +44,4 @@ class Gameplay extends AbstractUUIDEntity {
     @OneToOne
     @JoinColumn(name = "category_id_fk")
     private GameplayCategory category;
-
-    @Column(name = "starting_date")
-    @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-    private LocalDateTime startDate;
-
-    @Column(name = "ending_date")
-    @DateTimeFormat(pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX")
-    private LocalDateTime endDate;
-
-    @Column(name = "quest_uuid_fk")
-    private String questUUID;
 }
