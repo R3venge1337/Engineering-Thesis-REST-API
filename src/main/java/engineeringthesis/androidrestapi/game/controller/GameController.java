@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,6 +55,7 @@ class GameController {
     void updateGame(@PathVariable final UUID uuid, @RequestBody final UpdateGameForm gameForm) {
         gameFacade.updateGame(uuid, gameForm);
     }
+
     @DeleteMapping(ROOT_UUID)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteGame(@PathVariable final UUID uuid) {
