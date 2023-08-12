@@ -26,7 +26,6 @@ import static engineeringthesis.androidrestapi.game.controller.GameController.Ro
 import static engineeringthesis.androidrestapi.game.controller.GameController.Routes.ROOT_UUID;
 
 @RestController
-@RequestMapping(value = "/api/games")
 @RequiredArgsConstructor
 class GameController {
 
