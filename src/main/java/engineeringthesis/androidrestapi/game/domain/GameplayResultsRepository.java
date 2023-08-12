@@ -1,16 +1,18 @@
 package engineeringthesis.androidrestapi.game.domain;
 
 import engineeringthesis.androidrestapi.common.repository.UUIDAwareJpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.UUID;
 
-interface GameplayResultsRepository extends UUIDAwareJpaRepository<GameplayResult, Integer> {
+interface GameplayResultsRepository extends UUIDAwareJpaRepository<GameplayResult, Long>, JpaSpecificationExecutor<GameplayResult> {
 
     @Query("SELECT r FROM GameplayResult r INNER JOIN r.gameplay g WHERE g.uuid = :uuid")
-    List<GameplayResult> findByGameplayUuid(@Param("uuid") final UUID uuid);
+    Page<GameplayResult> findByGameplayUuid(@Param("uuid") final UUID uuid);
 
 
     @Query(value = "SELECT * FROM gameplay_result\r\n"
